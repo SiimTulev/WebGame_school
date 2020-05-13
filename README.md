@@ -3,6 +3,7 @@ Needed programs to start WebGame: MySql Workbench, Visual Studio 2019
 Steps to make it work in your visual studio:
 
 1. Open program by clicking on WebGame.csproj
+
 1.1 Right click on "Solution 'WebGame' on "Solution Explorer"
 
 1.2 Click "Restore NuGet Packages"
