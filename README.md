@@ -12,7 +12,7 @@ Steps to make it work in your visual studio:
 
 3. Open "Models/WebGame/webgameContext.cs"
 
-3.1 Change row 46 exactly same as you changed "appsettings.json" string.
+3.1 Change row 46 exactly same as you changed string on "appsettings.json".
 
 4. Open "Package Manager Console" 
 
