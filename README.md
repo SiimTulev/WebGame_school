@@ -1,4 +1,4 @@
-Needed programs to start WebGame: MySql Workbench, Visual Studio 2019
+Needed programs to start WebGame: MySql Workbench 8.0, Visual Studio 2019
 
 Steps to make it work in your visual studio:
 
