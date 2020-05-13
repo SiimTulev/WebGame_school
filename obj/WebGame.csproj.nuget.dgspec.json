@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\C#\\WebGame_database\\WebGame_127_Migraton_works_some_UI_updates\\WebGame.csproj": {}
+    "C:\\C#\\WebGame_database\\WebGame\\WebGame_school\\WebGame.csproj": {}
   },
   "projects": {
-    "C:\\C#\\WebGame_database\\WebGame_127_Migraton_works_some_UI_updates\\WebGame.csproj": {
+    "C:\\C#\\WebGame_database\\WebGame\\WebGame_school\\WebGame.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\C#\\WebGame_database\\WebGame_127_Migraton_works_some_UI_updates\\WebGame.csproj",
+        "projectUniqueName": "C:\\C#\\WebGame_database\\WebGame\\WebGame_school\\WebGame.csproj",
         "projectName": "WebGame",
-        "projectPath": "C:\\C#\\WebGame_database\\WebGame_127_Migraton_works_some_UI_updates\\WebGame.csproj",
+        "projectPath": "C:\\C#\\WebGame_database\\WebGame\\WebGame_school\\WebGame.csproj",
         "packagesPath": "C:\\Users\\Yorwet\\.nuget\\packages\\",
-        "outputPath": "C:\\C#\\WebGame_database\\WebGame_127_Migraton_works_some_UI_updates\\obj\\",
+        "outputPath": "C:\\C#\\WebGame_database\\WebGame\\WebGame_school\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Microsoft\\Xamarin\\NuGet\\",
