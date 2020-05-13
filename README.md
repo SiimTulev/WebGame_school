@@ -9,7 +9,7 @@ Steps to make it work in your visual studio:
 
 2. Open appsettings.json. Make "WebGame" string suitable for your MySql Workbench.
 
-3.Open "Models/WebGame/webgameContext.cs"
+3. Open "Models/WebGame/webgameContext.cs"
 
 3.1 Change row 46 exactly same as you changed "appsettings.json" string.
 
