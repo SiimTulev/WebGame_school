@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
@@ -8,21 +8,21 @@ namespace WebGame.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "__efmigrationshistory",
-                columns: table => new
-                {
-                    MigrationId = table.Column<string>(type: "varchar(20)", maxLength: 85, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4")
-                        .Annotation("MySql:Collation", "utf8mb4_0900_ai_ci"),
-                    ProductVersion = table.Column<string>(type: "varchar(32)", maxLength: 85, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4")
-                        .Annotation("MySql:Collation", "utf8mb4_0900_ai_ci")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PRIMARY", x => x.MigrationId);
-                });
+            //migrationBuilder.CreateTable(
+            //    name: "__efmigrationshistory",
+            //    columns: table => new
+            //    {
+            //        MigrationId = table.Column<string>(type: "varchar(20)", maxLength: 85, nullable: false)
+            //            .Annotation("MySql:CharSet", "utf8mb4")
+            //            .Annotation("MySql:Collation", "utf8mb4_0900_ai_ci"),
+            //        ProductVersion = table.Column<string>(type: "varchar(32)", maxLength: 85, nullable: false)
+            //            .Annotation("MySql:CharSet", "utf8mb4")
+            //            .Annotation("MySql:Collation", "utf8mb4_0900_ai_ci")
+            //    },
+            //    constraints: table =>
+            //    {
+            //        table.PrimaryKey("PRIMARY", x => x.MigrationId);
+            //    });
 
             migrationBuilder.CreateTable(
                 name: "aspnetroles",
