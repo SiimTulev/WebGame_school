@@ -19,11 +19,9 @@
 @await Component.InvokeAsync("OverallStats", new { worldId = ViewBag.WorldId, playerId = ViewBag.PlayerIdWhoClicks })
 
 <div class="OverallStats">
-
     @{
         if (ViewBag.IsWinner != true)
         {
-
             <h1 class="ReadyLBL">
                 @{
                     if (you.Contains("NOT"))
@@ -45,7 +43,6 @@
                 }
 
             </h1>
-
             <div class="buttons">
                 <div class="content-3d Ready">
                     <a asp-action="PlayerReady" asp-route-worldId="@ViewBag.WorldId" class="btn-3d green">Ready</a>
@@ -78,33 +75,6 @@
         }
     }
 </div>
-</div>
-
-@*<div class="wrapper">
-        <div class="box1">One</div>
-        <div class="box2">Two</div>
-        <div class="box3">Three</div>
-        <div class="box4">Four</div>
-        <div class="box5">five</div>
-        <div class="box6">six</div>
-        <div class="box7">seven</div>
-        <div class="box8">eight</div>
-
-        <div class="box9">nine</div>
-        <div class="box10">ten</div>
-        <div class="box11">eleven</div>
-        <div class="box12">twelve</div>
-        <div class="box13">thirteen</div>
-        <div class="box14">fourteen</div>
-        <div class="box15">fifteen</div>
-        <div class="box16">sixteen</div>
-
-
-    </div>*@
-
-
-@*<table class="table">*@
-@*<tbody>*@
 @{
     string color = "red";
 }
@@ -154,85 +124,11 @@
                     <a class="upgrade">Def: @Defence -> @nxtDefence</a>
                     <br />
                     <a class="upgrade">Borns: @item.TowerLvl% -> @nxtTowerLvl% </a>
-
                 }
             }
         </div>
-
-
-
-
-        @*< tr >
-            < td >
-            @Html.DisplayFor(modelItem => item.Id)
-            </ td >
-            < td >
-            @Html.DisplayFor(modelItem => item.TowerId)
-            </ td >
-            < td >
-            @Html.DisplayFor(modelItem => item.Owner)
-            </ td >
-            < td >
-            @Html.DisplayFor(modelItem => item.Attack)
-            </ td >
-            < td >
-            @Html.DisplayFor(modelItem => item.Defence)
-            </ td >
-            < td >
-            @Html.DisplayFor(modelItem => item.Player1Id)
-            </ td >
-
-            < td >
-            @Html.DisplayFor(modelItem => item.Player2Id)
-            </ td >
-
-            < td >
-            @Html.DisplayFor(modelItem => item.WorldId)
-            </ td >
-            < td >
-
-            < a class="btn btn-danger" asp-action="CreateArmyMission" asp-route-playerIdWhoClicks="@ViewBag.PlayerIdWhoClicks" asp-route-accountId="@Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))" asp-route-Owner="@item.Owner" asp-route-WorldId="@item.WorldId" asp-route-SelectedTower="@item.TowerId" asp-route-player1Id="@item.Player1Id" asp-route-player2Id="@item.Player2Id">Move</a>*@
-
-
-
-        @*@{*@
-        //if (User.Identity.IsAuthenticated) // If account is logged in
-        //{
-        //    int TowerLvl = item.TowerLvl;
-        //    int Defence = (item.TowerLvl) * 5;
-        //    int costs = (item.TowerLvl + 1) * 100;
-        //    int nxtTowerLvl = item.TowerLvl + 1;
-        //    int nxtDefence = (item.TowerLvl + 1) * 5;
-
-
-        @*if (item.Owner == ViewBag.PlayerIdWhoClicks)
-            {
-
-            <br />
-            <a class="btn btn-success" asp-action="UpgradeTower" asp-route-accountId="@Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))" asp-route-id="@item.TowerId" asp-route-owner="@item.Owner" asp-route-player1Id="@item.Player1Id" asp-route-player2Id="@item.Player2Id" asp-route-worldId="@item.WorldId">Upgrade tower</a>
-            <br />
-            <a class="upgrade">Costs: @costs</a>
-            <br />
-            <a class="upgrade">Next level: @item.TowerLvl -> @nxtTowerLvl</a>
-            <br />
-            <a class="upgrade">Next Defence: @Defence -> @nxtDefence</a>
-            <br />
-            <a class="upgrade">People borns: @item.TowerLvl% -> @nxtTowerLvl% </a>
-
-            }*@
-        @*
-            }*@
     }
-    @*</td>*@
-    @*</tr>*@
-
 </div>
-
-
-
-@*</tbody>*@
-@*</table>*@
-
 
 <style>
 
@@ -387,14 +283,6 @@
         background-color: black;
         z-index: 1;
     }
-    /*@@media (max-width:1588px) { // Just For case
-            .PlayerNames {
-                font-size:30px;
-                margin-left:-10%;
-                margin: -4px;
-                padding: 10px;
-            }
-        }*/
 
     .Stats1 {
         font-size: 30px;
@@ -447,8 +335,6 @@
             font-size: 20px;
         }
     }
-
-
 
     .NOT {
         color: red;
@@ -519,9 +405,7 @@
 
     .box1 {
         grid-column-start: 1;
-        /* grid-column-end: 1; /* Pikema kasti tegemiseks*/
         grid-row-start: 2;
-        /*grid-row-end: 2; /* Pikema kasti tegemiseks*/
     }
 
     .box2 {

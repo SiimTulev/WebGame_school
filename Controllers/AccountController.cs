@@ -16,11 +16,7 @@ namespace WebGame.Controllers
     {
         private UserManager<AppUser> UserMgr { get; }
         private SignInManager<AppUser> SignInMgr { get; }
-
-        //private readonly UserManager<ApplicationUser> _userManager;
-        //private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly webgameContext _context;
-
 
         public AccountController(webgameContext context, UserManager<AppUser> userManager,
             SignInManager<AppUser> signInManager)
@@ -41,13 +37,8 @@ namespace WebGame.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Login(string returnUrl = null)
         {
-
             await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
-
-
-            // ViewData["ReturnUrl"] = returnUrl;
             return View();
-
         }
 
         [HttpPost]
@@ -60,12 +51,10 @@ namespace WebGame.Controllers
             {
                 var result = await SignInMgr.PasswordSignInAsync(model.UserName, model.Password, false, false);
 
-
                 if (result.Succeeded)
                 {
                     //return RedirectToLocal(returnUrl);
                     return RedirectToAction("SelectGame", "Game");
-
                 }
                 else
                 {
@@ -73,11 +62,8 @@ namespace WebGame.Controllers
                     return View(model);
                 }
             }
-
             return View(model);
         }
-
-
 
         [HttpGet]
         [AllowAnonymous]
@@ -93,18 +79,14 @@ namespace WebGame.Controllers
         public async Task<IActionResult> Register(Playeraccount playerAccount, RegisterViewModel model, string returnUrl = null)
         {
             ViewData["ReturnUrl"] = returnUrl;
-
             try
             {
-
                 AppUser user = await UserMgr.FindByNameAsync(model.UserName);
                 if (user == null)
                 {
                     user = new AppUser();
                     user.UserName = model.UserName;
                     user.Email = model.Email;
-
-
 
                     IdentityResult result = await UserMgr.CreateAsync(user, model.Password);
 
@@ -115,15 +97,11 @@ namespace WebGame.Controllers
                     _context.Add(playerAccount);
                     await _context.SaveChangesAsync();
 
-                    //ViewBag.Message = "User was created";
-
                     // automatic login
                     var login = await SignInMgr.PasswordSignInAsync(model.UserName, model.Password, false, false);
                     if (result.Succeeded)
                     {
                         ViewBag.FirstLogin = true;
-                        //return RedirectToLocal(returnUrl);
-                        //return RedirectToAction(nameof(GameController.Tutorial), "");
                         return RedirectToAction(nameof(GameController.Tutorial), "", new { FirstLogin = true });
                     }
                     else
@@ -131,7 +109,6 @@ namespace WebGame.Controllers
                         ViewBag.Error = "Something went wrong. Try Again!";
                         return View();
                     }
-
                 }
                 else
                 {
@@ -146,8 +123,6 @@ namespace WebGame.Controllers
             return View();
 
         }
-
-
 
         private IActionResult RedirectToLocal(string returnUrl)
         {

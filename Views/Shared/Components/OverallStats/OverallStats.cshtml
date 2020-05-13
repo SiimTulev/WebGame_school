@@ -2,41 +2,43 @@
 @{
     ViewData["Title"] = "OverallStats";
 }
-    <div class="MenuStats">
-        <a> <span class="people" id="people">People now: (@ViewBag.PeopleNow) @ViewBag.PeopleGrowing @ViewBag.SoonReturning </span></a>
-        <br />
-        <a><span id="gold">Gold now:   (@ViewBag.FindPlayerGold) + Gold from towers (@ViewBag.goldForTowers) </span></a>
-        
-    </div>
+<div class="MenuStats">
+    <a> <span class="people" id="people">People now: (@ViewBag.PeopleNow) @ViewBag.PeopleGrowing @ViewBag.SoonReturning </span></a>
+    <br />
+    <a><span id="gold">Gold now:   (@ViewBag.FindPlayerGold) + Gold from towers (@ViewBag.goldForTowers) </span></a>
+
+</div>
 <style>
-    .MenuStats{
-        left:15.2%;
-        right:30%;
-        top:41.8px;
-        position:fixed;
+    .MenuStats {
+        left: 15.2%;
+        right: 30%;
+        top: 41.8px;
+        position: fixed;
         z-index: 1;
-        padding:0px;
-    }
-     
-    #people{
-        color:red;
+        padding: 0px;
     }
 
-     #gold{
-        color:darkgoldenrod;
+    #people {
+        color: red;
     }
-     a{
-         font-size:20px;
-     }
-     @@media (max-width:929px) {
-            a {
-                font-size:18px;
-            }
-        }
-     @@media (max-width:688px) {
-            a {
-                font-size:16px;
-            }
-        }
 
+    #gold {
+        color: darkgoldenrod;
+    }
+
+    a {
+        font-size: 20px;
+    }
+
+    @@media (max-width:929px) {
+        a {
+            font-size: 18px;
+        }
+    }
+
+    @@media (max-width:688px) {
+        a {
+            font-size: 16px;
+        }
+    }
 </style>

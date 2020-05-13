@@ -14,7 +14,6 @@ namespace WebGame.ViewModel
 
         public List<int> TowerId { get; set; }
 
-        // [Range(0, TowerAttack - 1, ErrorMessage = "You don't have that many people in army {1}")]
         public List<int> TowerAttack { get; set; }
         public int mainBaseAttack { get; set; }
         public List<int> xCord { get; set; }

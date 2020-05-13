@@ -41,7 +41,6 @@ namespace WebGame.Controllers
             }
             return View();
         }
-        //[HttpPost("Game/UpgradeTower/id")]
         public async Task<IActionResult> UpgradeTower(int id, TowerViewModel towerViewModel) // SAFE tänu playerId kontrollile?
         {
             if (!User.Identity.IsAuthenticated) // If account is logged in
@@ -72,8 +71,6 @@ namespace WebGame.Controllers
                 await _context.SaveChangesAsync();
             }
             return RedirectToAction("MainGame", new { Player1Id = towerViewModel.Player1Id, Player2Id = towerViewModel.Player2Id, WorldId = towerViewModel.WorldId, accountId = (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))) });
-
-
         }
 
         [HttpGet("Game/CancelArmyMovement/{worldId}/{PlayerIdWhoClicks}/{player1Id}/{player2Id}")]
@@ -151,7 +148,6 @@ namespace WebGame.Controllers
             _context.Add(attdef);
             _context.AttDef.Remove(movement); // kas on vaja AttDef osa?
             await _context.SaveChangesAsync();
-            //{ worldId}/{ PlayerIdWhoClicks}/{ player1Id}/{ player2Id}
             return RedirectToAction("CancelArmyMovement", new { worldId = worldId, PlayerIdWhoClicks = owner, player1Id = player1Id, player2Id = player2Id });
         }
 
@@ -182,7 +178,7 @@ namespace WebGame.Controllers
                     player.WorldId = findEmptyWorld; // UUS
                     player.Gold = 1000;
                     _context.Add(player);
-                    await _context.SaveChangesAsync(); // Peab siin salvestama VIST, kuna muidu ei saa player.PlayerId-ga leida hiljem tehtud ID-d
+                    await _context.SaveChangesAsync();
 
                     var maxWPlayerId = _context.Player.Max(x => x.PlayerId); // Find max PlayerId 
 
@@ -211,11 +207,11 @@ namespace WebGame.Controllers
                         }
                         tower_.Add(new Tower { TowerId = 0, WorldId = newMaxWorldId, Owner = player.PlayerId, TowerName = baseName[i], Attack = 100, Defence = 5, LocationX = xCord[i], LocationY = yCord[i], TowerLvl = 1 });
                     }
-                    _context.AddRange(tower_); // don't remember exaxct syntaxt but this should be faster way
+                    _context.AddRange(tower_);
                     await _context.SaveChangesAsync();
                 }
                 // CREATE NEW WORLD, PlayerId & Towers
-                else // Võibolla peaks turvalisemaks tegema, et kontrollida, kas playeri, worldi ja toweri andmebaas saab ikka õiged Owneri, PlayerId'e jms andmed. Kui näiteks mitu inimest korraga vajutavad New game?
+                else
                 {
                     world.WorldId = 0; // AutoIncrement
                     world.Player1Id = 0;
@@ -257,7 +253,7 @@ namespace WebGame.Controllers
                         }
                         tower_.Add(new Tower { TowerId = 0, WorldId = world.WorldId, Owner = player.PlayerId, TowerName = baseName[i], Attack = 100, Defence = 5, LocationX = xCord[i], LocationY = yCord[i], TowerLvl = 1 });
                     }
-                    _context.AddRange(tower_); // don't remember exaxct syntaxt but this should be faster way
+                    _context.AddRange(tower_);
                     await _context.SaveChangesAsync();
                 }
             }
@@ -269,7 +265,7 @@ namespace WebGame.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> MainGame(int accountCheck, int player1Id, int player2Id, int? worldId, int? error) // SAFE
+        public async Task<IActionResult> MainGame(int accountCheck, int player1Id, int player2Id, int? worldId, int? error)
         {
             if (!User.Identity.IsAuthenticated) // If account is logged in
             {
@@ -320,9 +316,6 @@ namespace WebGame.Controllers
 
                 ViewBag.Winner = "Player " + PlayeraccountNameWin.AccountName + " won the game!";
                 ViewBag.IsWinner = true;
-            }
-            else // ON SIIA ÜLDSE MIDAGI VAJA?
-            {
             }
             var playerIdWhoClicks = (from d in _context.Player
                                      where d.WorldId == worldId && d.AccountId == (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier)))
@@ -557,8 +550,6 @@ namespace WebGame.Controllers
                 }
                 _context.AttDef.RemoveRange(_context.AttDef.Where(x => x.WorldId == worldId && x.RoundsToArrive <= 0));
 
-                // MAYBE SCHEDULED TASK - CONSOLE APP WHICH CHECKS IF(ld.Player1Ready == true && ld.Player2Ready == true){ world.Player1Ready = false;  world.Player2Ready = false; }
-
                 world.Player1Ready = false;
                 world.Player2Ready = false;
 
@@ -775,11 +766,7 @@ namespace WebGame.Controllers
                     throw;
                 }
             }
-
             return RedirectToAction("MainGame", new { Player1Id = towerViewModel.Player1Id, Player2Id = towerViewModel.Player2Id, WorldId = towerViewModel.WorldId, accountId = (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))) });
-
-            // saan seda kasutada ehk security kontrollimiseks? Ja vaadata, mis URLi kasutab, kui saadab armeed?
-            // string page = HttpContext.Request.Query["page"].ToString();
         }
 
         [HttpGet("Game/CreateArmyMission/{worldId}/{Owner}/{player1Id}/{player2Id}/{SelectedTower}")]
@@ -789,8 +776,7 @@ namespace WebGame.Controllers
             {
                 return RedirectToAction(nameof(SelectGame));
             }
-
-            // MainGame tagasi minemiseks vajalikud andmed
+            // Important for going back to MainGame
             ViewBag.Player1Id = player1Id;
             ViewBag.Player2Id = player2Id;
 
@@ -814,10 +800,9 @@ namespace WebGame.Controllers
 
             if (User.Identity.IsAuthenticated) // If account is logged in
             {
-                var playerId = (from d in _context.Player // VÕIBOLLA TEKIB ERROR SELLEST, ET KUI KASUTAJA POLE LOGITUD SISSE. SIIS PEAB SEE OLEMA ÜLEVAL POOL
+                var playerId = (from d in _context.Player
                                 where d.AccountId == (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))) && d.WorldId == worldId //&& d.PlayerId == Owner
                                 select d.PlayerId).FirstOrDefault();
-
 
                 ViewBag.playerId = playerId;
 
@@ -831,7 +816,7 @@ namespace WebGame.Controllers
 
                     List<Tower> towerList2 = new List<Tower>();
                     towerList2 = (from product in _context.Tower
-                                  where product.Owner == playerIdWhoClicks && product.WorldId == worldId // Owner osa pole vaja, asendan playerIdWhoClicks'iga
+                                  where product.Owner == playerIdWhoClicks && product.WorldId == worldId
                                   select product).ToList();
                     ViewBag.ListofTower = towerList2;
 
@@ -866,7 +851,7 @@ namespace WebGame.Controllers
                             counter++;
                         }
                     }
-                    ViewBag.Arrival = arrival; // Selle abil saadan need View ja Views ütleb, millal armee jõuab kohale. SIis ei pea ka Post'is enam seda kontrollima?
+                    ViewBag.Arrival = arrival;
 
                     List<int> LoggedInPlayerTowers = new List<int>();
                     foreach (var item in towerList2) // Add TowerId-s to another List, so it's faster loading
@@ -912,7 +897,6 @@ namespace WebGame.Controllers
                         arrival[i] = roundsToArrives_X[i] + roundsToArrives_Y[i];
                     }
                     ViewBag.Arrival = arrival; // Selle abil saadan need View ja Views ütleb, millal armee jõuab kohale. SIis ei pea ka Post'is enam seda kontrollima?
-
                     return View();
                 }
 
@@ -927,7 +911,6 @@ namespace WebGame.Controllers
         {
             if (!User.Identity.IsAuthenticated) // If account is logged in
             {
-                //return NotFound();
                 return View();
             }
             try
@@ -974,18 +957,8 @@ namespace WebGame.Controllers
             ViewBag.playerNames1 = playerNames1;
             ViewBag.playerNames2 = playerNames2;
 
-            ////////////////////
-            ///
-            //var playerIds = (from d in _context.Player
-            //                 where d.AccountId == (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier)))
-            //                 select d.PlayerId).ToList();
-
-            // GET LOGGED IN ACCOUNT PLAYERID
-
-
             List<string> youReady = new List<string>();
             List<string> enemyReady = new List<string>();
-
 
             foreach (var world in worlds)
             {
@@ -994,43 +967,32 @@ namespace WebGame.Controllers
                     if (playerIds.Contains(world.Player1Id) && world.Player1Id == world.Player1Id && world.Player1Ready == true)
                     {
                         youReady.Add("YOU ARE READY");
-                        enemyReady.Add("ENEMY IS NOT READY"); // vaadata, ega see tagurpidi ei hakka siis lisama, kuna mul uuemad ülevalpool
-                        //ViewBag.You = "YOU ARE READY";
-                        //ViewBag.Enemy = "ENEMY IS NOT READY";
+                        enemyReady.Add("ENEMY IS NOT READY");
                     }
                     else if (!playerIds.Contains(world.Player1Id) && world.Player1Id == world.Player1Id && world.Player1Ready == true)
                     {
                         youReady.Add("YOU ARE NOT READY");
-                        enemyReady.Add("ENEMY IS READY"); // vaadata, ega see tagurpidi ei hakka siis lisama, kuna mul uuemad ülevalpool
-                        //ViewBag.You = "YOU ARE NOT READY";
-                        //ViewBag.Enemy = "ENEMY IS READY";
+                        enemyReady.Add("ENEMY IS READY");
                     }
                     else if (playerIds.Contains(world.Player2Id) && world.Player2Id == world.Player2Id && world.Player2Ready == true)
                     {
                         youReady.Add("YOU ARE READY");
-                        enemyReady.Add("ENEMY IS NOT READY"); // vaadata, ega see tagurpidi ei hakka siis lisama, kuna mul uuemad ülevalpool
-                        //ViewBag.You = "YOU ARE READY";
-                        //ViewBag.Enemy = "ENEMY IS NOT READY";
+                        enemyReady.Add("ENEMY IS NOT READY");
                     }
                     else if (!playerIds.Contains(world.Player2Id) && world.Player2Id == world.Player2Id && world.Player2Ready == true)
                     {
                         youReady.Add("YOU ARE NOT READY");
-                        enemyReady.Add("ENEMY IS READY"); // vaadata, ega see tagurpidi ei hakka siis lisama, kuna mul uuemad ülevalpool
-                        //ViewBag.You = "YOU ARE NOT READY";
-                        //ViewBag.Enemy = "ENEMY IS READY";
+                        enemyReady.Add("ENEMY IS READY");
                     }
                 }
                 else if (world.Player1Ready == false && world.Player2Ready == false) // CHECK IF BOTH ARE NOT READY
                 {
                     youReady.Add("YOU ARE NOT READY");
-                    enemyReady.Add("ENEMY IS NOT READY"); // vaadata, ega see tagurpidi ei hakka siis lisama, kuna mul uuemad ülevalpool
-                    //ViewBag.You = "YOU ARE NOT READY";
-                    //ViewBag.Enemy = "ENEMY IS NOT READY";
+                    enemyReady.Add("ENEMY IS NOT READY");
                 }
             }
             ViewBag.You = youReady;
             ViewBag.Enemy = enemyReady;
-            ////////////////////////
 
             List<string> winnerNames = new List<string>();
 
@@ -1051,7 +1013,6 @@ namespace WebGame.Controllers
 
             if (worlds.Count <= 0)
             {
-                // ViewBag.Tutorial = "To find a player to play with, click FIND GAME";
                 ViewBag.Tutorial = 1;
                 return View();
             }

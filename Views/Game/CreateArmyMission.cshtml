@@ -17,11 +17,7 @@
 </div>
 
 <div class="form">
-
-
-
     <h1 style="font-size:30px;" class="btn btn-danger nav-link">Create army mission</h1>
-
     <div>
         <a class="btn btn-info" asp-action="MainGame" asp-route-player1Id="@ViewBag.Player1Id" asp-route-player2Id="@ViewBag.Player2Id" asp-route-worldId="@ViewBag.WorldId" asp-route-accountCheck="@Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))">Back to map</a>
     </div>
@@ -35,10 +31,7 @@
 
             int selectedTower = @ViewBag.SelectedTower;
             int SelectedWorldId = @ViewBag.WorldId;
-            //int PlayerId = @ViewBag.Owner;
-            //int PlayerId = @ViewBag.playerIds;
             var loggedInPlayerTowers = @ViewBag.loggedInPlayerTowers;
-            // if (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier)) == ViewBag.Owner) /*@*  Defender UI*@*/
 
             var arrival = @ViewBag.Arrival;
 
@@ -69,7 +62,6 @@
                                             int towerId = item.TowerId;
                                             <div class="form-group">
                                                 @item.TowerName
-                                                @* <input asp-for="Tower.Attack" value="@item.Attack" class="form-control" />*@
 
                                                 @{ int maxSend = @item.Attack - 1; }
                                                 <input asp-for="TowerAttack[counter]" value="0" class="form-control" />
@@ -77,16 +69,7 @@
                                                 <input type="hidden" asp-for="TowerId[counter]" value="@item.TowerId" />
                                                 <br />
                                                 <a>Arrival -> @arrival[counter]</a>
-                                                @* @{Model.arrivingTime[counter] = arrival[counter]; }*@
                                                 <input type="hidden" asp-for="arrivingTime[counter]" value="@arrival[counter]" />
-
-                                                @*@{
-                                                                             int roundsToArriveCheckX = item.xCord[i] - Convert.ToInt32(idWhereArmyGoes.LocationX);
-                                                    int roundsToArriveCheckY = editViewModel.yCord[i] - Convert.ToInt32(idWhereArmyGoes.LocationY);
-
-                                                                        }*@
-
-                                                @*<input type="hidden" asp-for="TowerId[counter]" value=@item.TowerId[towerId] class="form-control" /> TowerID peame siia saama*@
                                             </div>
                                             <input type="hidden" asp-for="xCord[counter]" value="@item.LocationX" class="form-control" /> @* HIDE IT*@
                                             <input type="hidden" asp-for="yCord[counter]" value="@item.LocationY" class="form-control" /> @* HIDE IT*@
@@ -94,13 +77,8 @@
                                         }
                                     }
                                     <a>Army moves together</a>
-                                    @*<input type="checkbox" data-val="true" data-val-required="The connected field is required." id="connected" name="connected" value="true">
-                                        <input name="connected" type="hidden" value="false">*@ <!-- kas seda on vaja? Ja kas data-val-required ka vaja?-->
-
                                     <input class="tgl tgl-flip" id="cb5" name="connected" value="true" type="checkbox" />
                                     <label class="tgl-btn" data-tg-off="Nope" data-tg-on="Yeah!" for="cb5"></label>
-
-
                                 }
                                 <div class="form-group">
                                     <input type="submit" value="Create" class="btn btn-primary" />
@@ -110,7 +88,6 @@
                     </div>
                 }
             }
-
             else @*  Attacker UI*@
             {
                 <div class="row">
@@ -121,7 +98,6 @@
                             <input type="hidden" asp-for="SelectedTowerId" value="@selectedTower" />
                             <input type="hidden" asp-for="SelectedWorldId" value="@SelectedWorldId" />
                             @{
-                                //var count = Enumerable.Count(ViewBag.ListofTower);
                                 int counter = 0;
 
                                 foreach (var item in ViewBag.ListofTower)
@@ -129,7 +105,6 @@
                                     int towerId = item.TowerId;
                                     <div class="form-group">
                                         @item.TowerName
-                                        @* <input asp-for="Tower.Attack" value="@item.Attack" class="form-control" />*@
                                         @{ int maxSend = @item.Attack - 1; }
                                         <input asp-for="TowerAttack[counter]" value="0" class="form-control" />
                                         MAX army to send - @maxSend
@@ -137,22 +112,15 @@
                                         <br />
                                         <a>Arrival -> @arrival[counter]</a>
                                         <input type="hidden" asp-for="arrivingTime[counter]" value="@arrival[counter]" />
-
-                                        @*<input type="hidden" asp-for="TowerId[counter]" value=@item.TowerId[towerId] class="form-control" /> TowerID peame siia saama*@
                                     </div>
                                     <input type="hidden" asp-for="xCord[counter]" value="@item.LocationX" class="form-control" /> @* HIDE IT*@
                                     <input type="hidden" asp-for="yCord[counter]" value="@item.LocationY" class="form-control" /> @* HIDE IT*@
                                     counter++;
                                 }
-
-                                @*<input type="checkbox" data-val="true" data-val-required="The IsChecked field is required." id="connected" name="connected" value="true">
-                                    <input name="connected" type="hidden" value="false">*@
                                 <a>Army moves together</a><span class="readyButton">
                                     <input class="tgl tgl-flip" id="cb5" name="connected" value="true" type="checkbox" />
                                     <label class="tgl-btn" data-tg-off="Nope" data-tg-on="Yeah!" for="cb5"></label>
                                 </span>
-
-
                             }
                             <div class="form-group">
                                 <input type="submit" value="Create" class="btn btn-primary" />
@@ -168,13 +136,9 @@
     </div>
 </div>
 
-
-
-
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
-
 
 <style>
 
@@ -183,8 +147,6 @@
         width: 70%;
         border: 3px solid #a09300;
         padding: 10px;
-    }
-
     }
 
     .readyButton {
@@ -198,13 +160,6 @@
         border-radius: 4px;
         margin-bottom: 40px;
     }
-
-
-    /*
-
-    */
-
-
 
     .tg-list {
         text-align: center;
@@ -478,7 +433,4 @@
         -webkit-transform: rotateY(20deg);
         transform: rotateY(20deg);
     }
-
-
-    /**/
 </style>

@@ -11,7 +11,6 @@ namespace WebGame.Controllers
         [Route("Error/{statusCode}")]
         public IActionResult HttpStatusCodeHandler(int statusCode)
         {
-
             ViewBag.ErrorMessage = statusCode;
 
             return View("NotFound");

@@ -20,7 +20,6 @@ namespace WebGame.ViewComponents
         {
             _context = context;
         }
-
         public async Task<IViewComponentResult> InvokeAsync(
            int playerId, int worldId)
         {
@@ -64,7 +63,7 @@ namespace WebGame.ViewComponents
                 ViewBag.SoonReturning = " + Army returning sometime (" + soonReturning + ")";
 
             string view = "OverallStats";
-            return View(view); // võibolla ViewBag ei saada edasi
+            return View(view);
         }
 
     }

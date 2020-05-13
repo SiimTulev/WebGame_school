@@ -12,8 +12,6 @@ using WebGame.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-//using WebGame.Models.WebGame;
-//using WebGame.Models.Identity;
 using Westwind.AspNetCore.LiveReload;
 using Pomelo.EntityFrameworkCore.MySql;
 using WebGame.Models.WebGame;
@@ -36,11 +34,9 @@ namespace WebGame
             services.AddRazorPages().AddRazorRuntimeCompilation();
             services.AddMvc().AddRazorRuntimeCompilation();
 
+            // For Developing only
             services.AddLiveReload(config =>
             {
-                // optional - use config instead
-                //config.LiveReloadEnabled = true;
-                //config.FolderToMonitor = Path.GetFullname(Path.Combine(Env.ContentRootPath,"..")) ;
             });
 
             ///////// IDENTITY
@@ -99,8 +95,6 @@ options.UseMySql(Configuration.GetConnectionString("WebGame"))
 
             app.UseEndpoints(endpoints =>
             {
-
-
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Game}/{action=Tutorial}/{id?}");

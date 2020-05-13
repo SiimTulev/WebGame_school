@@ -7,7 +7,6 @@ namespace WebGame.Models.GameViewModels
 {
     public class SelectGameModel
     {
-
         public int Player1Id { get; set; }
         public int Player2Id { get; set; }
         public int WorldId { get; set; }
