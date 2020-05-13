@@ -1,0 +1,152 @@
+﻿@model IEnumerable<WebGame.Models.WebGame.World>
+
+
+@using System;
+@using System.Collections.Generic;
+@using System.Linq;
+@using System.Threading.Tasks;
+@using Microsoft.AspNetCore.Mvc;
+@using Microsoft.EntityFrameworkCore;
+@using WebGame.Models.WebGame;
+@using WebGame.ViewModel;
+@using System.Security.Claims;
+
+@{
+    ViewData["Title"] = "SelectGame";
+    var winners = ViewBag.WinnerNames;
+    var player1Name = ViewBag.playerNames1;
+    var player2Name = ViewBag.playerNames2;
+    int counterOverall = 0;
+
+    int counter = 0;
+
+    var youReady = ViewBag.You;
+    var enemyReady = ViewBag.Enemy;
+    int counterReady = 0;
+}
+
+
+
+@{
+    if (ViewBag.Tutorial == 1)
+    {
+        <h1 class="tutorial">To find a player to play with, click FIND GAME</h1>
+    }
+
+    else if (User.Identity.IsAuthenticated) // If account is logged in
+    {
+        <h1 style="font-size:30px;" class="btn btn-info nav-link text-white">World selection</h1>
+        <table class="table">
+            <tbody>
+                @foreach (var item in Model)
+                {
+
+                    if (item.GameFinished == true)
+                    {
+                        <tr class="winner">
+                            <td>
+                                <h5>Game has ended. Winner @winners[counter]</h5>
+                            </td>
+                            <td>
+                                <h5> World: @Html.DisplayFor(modelItem => item.WorldId) </h5>
+                            </td>
+                        </tr>
+                        counter++;
+                    }
+                    else
+                    {
+                        if (item.Player2Id < 1)
+                        {
+                        <td>
+                            <span class="pName">@player1Name[counterOverall]</span> VS ???
+                        </td>
+
+                        <td>
+                            <h5 class="alert alert-dark ">Searching for an enemy player</h5>
+                        </td>
+                    }
+                    else
+                    {
+                        <tr>
+                            <td>
+                                <span class="pName">@player1Name[counterOverall]</span> VS <span class="pName">@player2Name[counterOverall] </span>
+                            </td>
+                            <td class="Ready">
+                                @{
+                                    if (@youReady[counterOverall].Contains("NOT"))
+                                    {
+                                        <span class="alert alert-danger NOT">@youReady[counterOverall]</span> <br />
+                                    }
+                                    else
+                                    {
+                                        <span class="alert alert-success">
+                                            @youReady[counterOverall]
+                                        </span><br />
+                                    }
+                                    if (@enemyReady[counterOverall].Contains("NOT"))
+                                    {
+                                        <span class="alert alert-danger NOT"> @enemyReady[counterOverall]</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="alert alert-success">@enemyReady[counterOverall]</span>
+                                    }
+                                }
+                            </td>
+                            <td>
+                                <h5 class="worldNum" style="margin-top:50px;">World: @Html.DisplayFor(modelItem => item.WorldId)</h5>
+                            </td>
+
+                            <td>
+                                <a style="margin-top:50px;" class="btn btn-primary" asp-action="MainGame" asp-route-player1Id="@item.Player1Id" asp-route-player2Id="@item.Player2Id" asp-route-worldId="@item.WorldId" asp-route-accountCheck="@Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))">Join World</a>
+                            </td>
+                        </tr>
+                    }
+                }
+                counterOverall++;
+            }
+                </tbody>
+            </table>
+        }
+}
+
+
+
+
+<style>
+
+    .alert {
+        display: inline-block;
+    }
+
+    .tutorial {
+        color: red;
+    }
+
+    .NOT {
+        color: red;
+    }
+
+    .Ready {
+        color: green;
+        font-size: 16px;
+    }
+
+    .pName {
+        color: green;
+        font-size: 25px;
+    }
+
+    .winner {
+        background-color: red;
+        color: greenyellow;
+    }
+
+    .searching {
+        color: red;
+    }
+
+    .worldNum {
+        color: green;
+    }
+</style>

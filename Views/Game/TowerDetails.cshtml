@@ -1,0 +1,47 @@
+﻿@model WebGame.Models.WebGame.Tower
+@*@model WebGame.ViewModel.TowerViewModel*@
+
+@{
+    ViewData["Title"] = "TowerDetails";
+}
+
+<div>
+    @await Component.InvokeAsync("OverallStats", new { worldId = ViewBag.WorldId, playerId = ViewBag.PlayerIdWhoClicks })
+</div>
+
+<h1>TowerDetails</h1>
+
+<div>
+    <h4>Tower</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Owner)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Owner)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Attack)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Attack)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Defence)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Defence)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.WorldId)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.WorldId)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="TowerEdit" asp-route-id="@Model.TowerId">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

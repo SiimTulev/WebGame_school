@@ -1,0 +1,230 @@
+﻿
+@{
+    ViewData["Title"] = "Tutorial";
+}
+
+<h1 style="font-size:30px;" class="btn btn-dark nav-link">Tutorial</h1>
+
+@{
+    if (ViewBag.FirstLogin == true)
+    {
+        <h1 style="color:red">Welcome to WebGame!</h1>
+
+    }
+
+    @if (!User.Identity.IsAuthenticated)
+    {
+        <h2>How to try out WebGame?</h2>
+        <p>First you need register account on this website.</p>
+        <p>To register, click <span class="btn btn-info text-white">Register</span> button top of the page.</p>
+    }
+    else
+    {
+
+        <h2>How to start playing the game?</h2>
+        <p>1. You need to find a enemy, to do that, top of the page click <span class="btn btn-success text-white">Find game</span> button. </p>
+        <p>2. After clicking this button, you can see that if you have found an enemy or you have been queued on <span class="btn btn-info text-white">World selection</span> page.</p>
+        <p>3. If you have found an enemy to play with, press <span class="btn btn-primary">Join World</span> button.</p>
+
+        <h2>Towers</h2>
+        <p><span class="enemy">RED</span> towers are enemy's, <span class="friendly">GREEN</span> towers are yours. If you happen to see grey tower, it means that nobody owns it. You can send your army there freely, but be cautious!.</p>
+        <br />
+
+        <h2>What to do if my plans for the next round are done?</h2>
+        <p>1. Click <span class="btn-3d green">Ready</span> button.</p>
+        <p>2. Wait for the enemy if he/she is not ready.</p>
+
+
+        <h2>How to attack?</h2>
+        <div class="space">
+            <p>1. To attack a enemy's base, press <span class="btn btn-danger move">Move</span> button</p>
+            <p>2. When you are in <span class="btn btn-danger">CreateArmyMission</span> page, you can choose the tower where you attack from.</p>
+            <p>
+                3. When you have chosen all the army for attacking the tower you chose, then you have an option to connect the army. Connecting means that
+                army goes for attack in the same round. The army, what is closer to the enemy, waits for the friendly army what is farther away. In general, connecting makes army weaker.
+            </p>
+            <p>4. After the decision if you want to connect or not, you press <span class="btn btn-primary">Create</span> button.</p>
+        </div>
+
+        <h2>How to send my army to another tower what I own?</h2>
+        <p>Do same like you are going to attack a tower. Just click the tower where you want to send your army.</p>
+
+        <h2>How to cancel attack?</h2>
+        <div class="content-3d CancelArmyMovement">
+
+            <p>1. To cancel attack you need press <span class="btn-3d red">Movements</span> button.</p>
+            <p>2. Then you can choose, what army movement you want to cancel by clicking <span class="btn btn-warning">Cancel</span> button.</p>
+            <p>3. After cancelling, you can see on top of the page written with red "<span style="color:red; font-size:20px;">People now:... + Army returning sometime (<a style="color:black; font-size:15px">[the amount of army]</a>)</span>".</p>
+        </div>
+
+        <h2>How to win the game?</h2>
+        <p>You need to get all 16 towers.</p>
+
+
+        <h2>Why upgrading towers is good?</h2>
+        <p>Tower upgrading upgrades your tower Defence level and Borning percentage.</p>
+
+        <h2>What tower defence percentage does?</h2>
+        <p>Tower defence shows the bonus strength of the army in the tower.</p>
+        <p>
+            <b>FOR EXAMPLE:</b> if somebody attacks your tower while you have army amount <b>1000</b> and Defence level is <b>10</b>.
+            <br />
+            So enemy attacks with <b>500</b> men, then actual amount of enemy army equals (<b>500 * 0.9</b>), which equals <b>450</b>.
+            <br />
+            Then the army amount in your tower after attack will be <b>1000-450=550</b>.
+        </p>
+        <p>
+            <b>PS</b> If enemy attacks with connected army, which is a lot bigger than your army,
+            <b>FOR EXAMPLE:</b> your <b>1000</b>, enemy's <b>1500</b>, then a lot of enemy's armies go waste because, the defence substracts from enemy army amount.
+            <br />
+            That gives nonconnected army advantage, because if enemy attacks with separated army,
+            <b>FOR EXAMPLE:</b>  first amount is <b>1300</b>, then another amount is <b>200</b>, so the second army will not fight, because first <b>1300</b> already destroyed the tower.
+        </p>
+
+
+        <h2> What borning percentage does?</h2>
+        <p>
+            Before army starts attacking your tower, people will be born.
+            <b>FOR EXAMPLE:</b> you have <b>1000</b> army amount, your borning percentage is <b>10</b>, then you will have <b>1000*1.1=1100</b> amount of army.
+        </p>
+
+        <h2>What exactly happens, when both players are ready?</h2>
+        <p>When both players are ready, a new round will be played, where happens many things.</p>
+        <p>
+            1. It checks how many towers you have. Each tower gives you <b>10</b> gold.
+            <br />
+            2. People will be born depending of the borning percentage level and the amount of army in the tower.
+            <br />
+            3. Army movements will be done lastly. First your army will arrive in your tower, then enemy's.
+        </p>
+
+    }
+    /*
+    Lehe disainida nii, et õpetused oleksid üksteise kõrval, iga õpetus näiteks 300px lai, kui laiust pole piisavalt, siis lähevad üksteise alla. (YOUTUBE ÕPETUS OLI)
+    */
+}
+<style>
+
+    .btn-3d.green:hover {
+        background-color: #87a86f;
+    }
+
+    .color .green {
+        background: #82c8a0;
+    }
+
+    .btn-3d.green {
+        background-color: #82c8a0;
+        box-shadow: 0 0 0 1px #82c8a0 inset, 0 0 0 2px rgba(255,255,255,0.15) inset, 0 8px 0 0 rgba(126, 194, 155, .7), 0 8px 0 1px rgba(0,0,0,.4), 0 8px 8px 1px rgba(0,0,0,0.5);
+    }
+
+        .btn-3d.green:active {
+            box-shadow: 0 0 0 1px #82c8a0 inset, 0 0 0 2px rgba(255,255,255,0.15) inset, 0 0 0 1px rgba(0,0,0,0.4);
+        }
+
+    .btn.green {
+        box-shadow: 0px 4px 0px #87a86f;
+    }
+
+        .btn.green:active {
+            box-shadow: 0 0 #87a86f;
+            background-color: #87a86f;
+        }
+
+    .btn.green, .btn-two.green {
+        background-color: #9abf7f;
+    }
+
+    .btn-gradient.green {
+        background: rgba(130,200,160,1);
+        background: -moz-linear-gradient(top, rgba(130,200,160,1) 0%, rgba(130,199,158,1) 100%);
+        background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(130,200,160,1)), color-stop(100%, rgba(130,199,158,1)));
+        background: -webkit-linear-gradient(top, rgba(130,200,160,1) 0%, rgba(130,199,158,1) 100%);
+        background: -o-linear-gradient(top, rgba(130,200,160,1) 0%, rgba(130,199,158,1) 100%);
+        background: -ms-linear-gradient(top, rgba(130,200,160,1) 0%, rgba(130,199,158,1) 100%);
+        background: linear-gradient(to bottom, rgba(130,200,160,1) 0%, rgba(124, 185, 149, 1) 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#82c8a0', endColorstr='#82c79e', GradientType=0 );
+    }
+
+        .btn-gradient.green:active {
+            background: #72B08E;
+        }
+</style>
+<style>
+    /*3D button style*/
+
+
+    .btn-3d {
+        position: relative;
+        display: inline-block;
+        font-size: 17px;
+        padding: 20px 60px;
+        color: white;
+        margin: 20px 10px 10px;
+        border-radius: 6px;
+        text-align: center;
+        transition: top .01s linear;
+        text-shadow: 0 1px 0 rgba(0,0,0,0.15);
+    }
+
+        .btn-3d:active {
+            top: 9px;
+        }
+
+    .btn.red, .btn-two.red {
+        background-color: #fa5a5a;
+    }
+
+    .btn-3d.red:hover {
+        background-color: #ff4c4b;
+    }
+
+    .btn-3d.red {
+        background-color: #e74c3c;
+        box-shadow: 0 0 0 1px #c63702 inset, 0 0 0 2px rgba(255,255,255,0.15) inset, 0 8px 0 0 #C24032, 0 8px 0 1px rgba(0,0,0,0.4), 0 8px 8px 1px rgba(0,0,0,0.5);
+    }
+
+        .btn-3d.red:active {
+            box-shadow: 0 0 0 1px #c63702 inset, 0 0 0 2px rgba(255,255,255,0.15) inset, 0 0 0 1px rgba(0,0,0,0.4);
+        }
+
+    .btn.red {
+        box-shadow: 0px 4px 0px #E04342;
+    }
+
+        .btn.red:active {
+            box-shadow: 0 0 #ff4c4b;
+            background-color: #ff4c4b;
+        }
+</style>
+
+
+<style>
+
+    p {
+        margin-bottom: 1em
+    }
+
+    .enemy {
+        border: 2px solid #ffa94d;
+        border-radius: 10px;
+        background-color: lightcoral;
+        padding: 3px;
+        color: black;
+    }
+
+    .friendly {
+        border: 2px solid #ffa94d;
+        border-radius: 10px;
+        background-color: lightgreen;
+        padding: 3px;
+        color: black;
+    }
+
+
+
+
+
+    .move {
+    }
+</style>

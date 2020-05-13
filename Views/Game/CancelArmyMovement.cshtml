@@ -1,0 +1,88 @@
+﻿@model IEnumerable<WebGame.Models.WebGame.AttDef>
+
+@using System;
+@using System.Collections.Generic;
+@using System.Security.Claims;
+
+@{
+    ViewData["Title"] = "CancelArmyMovement";
+    var towerNames = ViewBag.TowerNames;
+    int counter = 0;
+}
+
+<div>
+    @await Component.InvokeAsync("OverallStats", new { worldId = ViewBag.WorldId, playerId = ViewBag.PlayerIdWhoClicks })
+</div>
+<br />
+
+<h1 style="font-size:30px;" class="btn btn-danger nav-link text-white">Movements</h1>
+
+<div>
+    <a class="btn btn-info" asp-action="MainGame" asp-route-player1Id="@ViewBag.Player1Id" asp-route-player2Id="@ViewBag.Player2Id" asp-route-worldId="@ViewBag.WorldId" asp-route-accountCheck="@Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))">Back to map</a>
+</div>
+
+@{
+    if (ViewBag.Empty == true)
+    {
+        <h1 class="Empty">You don't have any army to stop</h1>
+    }
+    else
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        Tower Name
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Amount)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.RoundsToArrive)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @towerNames[counter]
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Amount)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.RoundsToArrive)
+                        </td>
+                        <td>
+                            <a class="btn btn-warning" asp-action="CancelArmyMovement_" asp-route-accountCheck="@Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))" asp-route-id="@item.Id" asp-route-worldId="@item.WorldId" asp-route-owner="@item.AttackerPlayerId" asp-route-player1Id="@ViewBag.Player1Id" asp-route-player2Id="@ViewBag.Player2Id">Cancel</a>
+                        </td>
+                    </tr>
+                    counter++;
+                }
+            </tbody>
+        </table>
+        <div>
+            <a class="btn btn-info" asp-action="MainGame" asp-route-player1Id="@ViewBag.Player1Id" asp-route-player2Id="@ViewBag.Player2Id" asp-route-worldId="@ViewBag.WorldId" asp-route-accountCheck="@Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))">Back to map</a>
+        </div>
+    }
+
+
+}
+
+
+
+<style>
+    .Empty {
+        color: red;
+    }
+
+    .btn-container, .container {
+        background-color: white;
+        border-radius: 4px;
+        margin-bottom: 40px;
+    }
+</style>
+

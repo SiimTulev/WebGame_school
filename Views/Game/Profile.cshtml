@@ -1,0 +1,25 @@
+﻿
+@{
+    ViewData["Title"] = "Profile";
+}
+
+<h1 style="font-size:30px;" class="btn btn-primary nav-link text-white">Profile</h1>
+
+<div class="profileStats">
+    <div class="alert alert-info" role="alert">
+        Wins: @ViewBag.Wins
+    </div>
+    <div class="alert alert-danger" role="alert">
+        Losts: @ViewBag.Losts
+    </div>
+    <div class="alert alert-success" role="alert">
+        Win percentage rate: @ViewBag.WinRate%
+    </div>
+</div>
+
+<style>
+    .profileStats {
+        position:center;
+        text-align:center;
+    }
+</style>
