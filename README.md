@@ -1,3 +1,5 @@
+You can see this game online here: http://spaceforce.eu/
+
 Needed programs to start WebGame: MySql Workbench 8.0, Visual Studio 2019
 
 Steps to make it work in your visual studio:
