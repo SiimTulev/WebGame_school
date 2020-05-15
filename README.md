@@ -2,6 +2,7 @@ You can see this game online here: http://spaceforce.eu/
 
 If you have nobody to play with, you can register 2 accounts and play with yourself! :D
 
+
 Needed programs to start WebGame: MySql Workbench 8.0, Visual Studio 2019
 
 Steps to make it work in your visual studio:
