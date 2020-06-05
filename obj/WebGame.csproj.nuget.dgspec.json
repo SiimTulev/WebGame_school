@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\C#\\WebGame_database\\WebGame\\WebGame_school\\WebGame.csproj": {}
+    "C:\\C#\\WebGame_database\\FileZillaLinuxGame\\Github\\WebGame_school\\WebGame.csproj": {}
   },
   "projects": {
-    "C:\\C#\\WebGame_database\\WebGame\\WebGame_school\\WebGame.csproj": {
+    "C:\\C#\\WebGame_database\\FileZillaLinuxGame\\Github\\WebGame_school\\WebGame.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\C#\\WebGame_database\\WebGame\\WebGame_school\\WebGame.csproj",
+        "projectUniqueName": "C:\\C#\\WebGame_database\\FileZillaLinuxGame\\Github\\WebGame_school\\WebGame.csproj",
         "projectName": "WebGame",
-        "projectPath": "C:\\C#\\WebGame_database\\WebGame\\WebGame_school\\WebGame.csproj",
+        "projectPath": "C:\\C#\\WebGame_database\\FileZillaLinuxGame\\Github\\WebGame_school\\WebGame.csproj",
         "packagesPath": "C:\\Users\\Yorwet\\.nuget\\packages\\",
-        "outputPath": "C:\\C#\\WebGame_database\\WebGame\\WebGame_school\\obj\\",
+        "outputPath": "C:\\C#\\WebGame_database\\FileZillaLinuxGame\\Github\\WebGame_school\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Microsoft\\Xamarin\\NuGet\\",
@@ -61,7 +61,7 @@
             },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
-              "version": "[3.1.0, )"
+              "version": "[3.0.0, )"
             },
             "Microsoft.EntityFrameworkCore.SqlServer": {
               "target": "Package",
@@ -71,7 +71,7 @@
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
               "target": "Package",
-              "version": "[3.1.0, )"
+              "version": "[3.0.0, )"
             },
             "Microsoft.Extensions.Logging.Debug": {
               "target": "Package",
@@ -79,7 +79,7 @@
             },
             "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
               "target": "Package",
-              "version": "[3.0.0, )"
+              "version": "[3.1.3, )"
             },
             "MySql.Data": {
               "target": "Package",
@@ -87,7 +87,7 @@
             },
             "Pomelo.EntityFrameworkCore.MySql": {
               "target": "Package",
-              "version": "[3.1.1, )"
+              "version": "[3.0.0, )"
             },
             "WestWind.AspnetCore.LiveReload": {
               "target": "Package",
@@ -111,7 +111,15 @@
             },
             {
               "name": "Microsoft.NETCore.App.Host.win-x64",
-              "version": "[3.0.1, 3.0.1]"
+              "version": "[3.0.3, 3.0.3]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Ref",
+              "version": "[3.0.0, 3.0.0]"
+            },
+            {
+              "name": "Microsoft.WindowsDesktop.App.Ref",
+              "version": "[3.0.0, 3.0.0]"
             }
           ],
           "frameworkReferences": {
@@ -122,7 +130,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "c:\\program files\\dotnet\\sdk\\3.1.100\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "c:\\program files\\dotnet\\sdk\\3.1.300\\RuntimeIdentifierGraph.json"
         }
       }
     }

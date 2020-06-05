@@ -17,9 +17,6 @@
 
 <h1 style="font-size:30px;" class="btn btn-danger nav-link text-white">Movements</h1>
 
-<div>
-    <a class="btn btn-info" asp-action="MainGame" asp-route-player1Id="@ViewBag.Player1Id" asp-route-player2Id="@ViewBag.Player2Id" asp-route-worldId="@ViewBag.WorldId" asp-route-accountCheck="@Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))">Back to map</a>
-</div>
 
 @{
     if (ViewBag.Empty == true)

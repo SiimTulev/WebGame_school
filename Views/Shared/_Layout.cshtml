@@ -10,6 +10,8 @@
     <title>@ViewData["Title"] - WebGame</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    <base href="/">
+
 </head>
 <body>
     <header class="header" id="myHeader" id="fixed-menu">
@@ -21,8 +23,8 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                    <partial name="_LoginPartial" /> @*Osa teisest HTML failist*@
                     <ul class="navbar-nav flex-grow-1">
+
 
                         @if (User.Identity.IsAuthenticated) // If account is logged in
                         {
@@ -71,6 +73,8 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @RenderSection("Scripts", required: false)
+    <script src="_framework/blazor.server.js"></script>
+
 </body>
 </html>
 
@@ -119,3 +123,4 @@
         }
     }
 </script>
+

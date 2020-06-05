@@ -1,0 +1,491 @@
+﻿@*@page "/Game/MainGameRazor/{player1Id}/{player2Id}/{worldId}/{accountCheck}"*@
+@page "/Game/MainGameRazor/{error}/{player1Id}/{player2Id}/{worldId}/{accountCheck}"
+
+@using System.Security.Claims;
+
+@using WebGame.Data
+@inject TestService TestService
+@inject NavigationManager NavigationManager
+
+@{
+    if (error != null)
+    {
+        <div class="alert alert-danger Error" role="alert">  @error</div>
+    }
+}
+
+@*@if (testmodel_ == null)
+
+    {
+        <p><em>Loading...</em></p>
+    }
+    else*@
+
+<div class="wrapper">
+    @{
+        int counter = 0;
+        string towerOwnerColor = "";
+    }
+    @foreach (var item in towers)
+    {
+        counter++;
+        string box = "box" + counter;
+        if (item.Owner == playerIdWhoClicks)
+        {
+            towerOwnerColor = "friendly";
+        }
+        else if (item.Owner == 0)
+        {
+            towerOwnerColor = "empty";
+        }
+        else
+        {
+            towerOwnerColor = "enemy";
+        }
+        <div class="@box @towerOwnerColor">
+            <h5> @item.TowerName</h5>
+
+            <a class="btn btn-danger" asp-action="CreateArmyMission" asp-route-playerIdWhoClicks="@playerIdWhoClicks" asp-route-accountId="@loggedInAccountId" asp-route-Owner="@item.Owner" asp-route-WorldId="@item.WorldId" asp-route-SelectedTower="@item.TowerId" asp-route-player1Id="@item.Player1Id" asp-route-player2Id="@item.Player2Id">Move</a>
+            @{ if (item.Owner == @playerIdWhoClicks)
+                {
+                    int TowerLvl = item.TowerLvl;
+                    int Defence = (item.TowerLvl) * 5;
+                    int costs = (item.TowerLvl + 1) * 100;
+                    int nxtTowerLvl = item.TowerLvl + 1;
+                    int nxtDefence = (item.TowerLvl + 1) * 5;
+                    <br />
+                    @*<span>Size: <a style="font-size:20px; color:red;"> @Html.DisplayFor(modelItem => item.Attack)</a></span>*@
+                    <span>Size: <a style="font-size:20px; color:red;"> @item.Attack</a></span>
+
+
+                    @*<a class="btn btn-success" @onclick="@(e => UpgradeTower(@loggedInAccountId, @item.TowerId, @item.Owner, @item.Player1Id, @item.Player2Id, @item.WorldId))">Upgrade tower</a>*@
+                    <a class="btn btn-success" href="Game/UpgradeTower/@item.TowerId/@loggedInAccountId/@item.Owner/@item.Player1Id/@item.Player2Id/@item.WorldId">Upgrade tower</a>
+
+                    @*<a class="btn btn-success" asp-action="UpgradeTower" asp-route-accountId="@loggedInAccountId" asp-route-id="@item.TowerId" asp-route-owner="@item.Owner" asp-route-player1Id="@item.Player1Id" asp-route-player2Id="@item.Player2Id" asp-route-worldId="@item.WorldId">Upgrade tower</a>*@
+                    <br />
+
+                    <a class="upgrade">Costs: @costs</a>
+                    <br />
+                    <a class="upgrade">Lvl: @item.TowerLvl -> @nxtTowerLvl</a>
+                    <br />
+                    <a class="upgrade">Def: @Defence -> @nxtDefence</a>
+                    <br />
+                    <a class="upgrade">Borns: @item.TowerLvl% -> @nxtTowerLvl% </a>
+                }
+            }
+        </div>
+    }
+</div>
+
+
+@code {
+
+    private void UpgradeTower(int accountId, int id, int owner, int player1Id, int player2Id, int worldId)
+    {
+        //Microsoft.AspNetCore.Http.Extensions.UriHelper.("newcomponent");
+        //UriHelper.NavigateTo("newcomponent");
+        //Game / UpgradeTower /{ id}/{ accountId}/{ Owner}/{ Player1Id}/{ Player2Id}/{ WorldId}
+        NavigationManager.NavigateTo("Game/UpgradeTower/" + id + "/" + accountId + "/" + owner + "/" + player1Id + "/" + player2Id + "/" + worldId);
+        //NavigationManager.NavigateTo("Game/UpgradeTower/" + id + "/" + accountId + "/" + owner + "/" + player1Id + "/" + player2Id + "/" + worldId);
+
+        //NavigationManager.NavigateTo("Game/UpgradeTower/" + towerId);
+
+    }
+
+    [Parameter]
+    public List<WebGame.ViewModel.TowerViewModel> towers { get; set; }
+
+    [Parameter]
+    public string error { get; set; }
+
+
+    [Parameter]
+    public int playerIdWhoClicks { get; set; }
+
+    [Parameter]
+    public int loggedInAccountId { get; set; }
+
+    [Parameter]
+    public int? test1 { get; set; }
+    protected override void OnInitialized()
+    {
+        test1 = test1 ?? 0;
+        //if (test1 != null)
+        //{
+        //    test1 = test1;
+        //}
+        //else
+        //{
+        //    test1 = 0;
+        //}
+
+        //base.OnInitialized();
+    }
+
+
+    private testModel[] testmodel_;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        //testmodel_ = await TestService.test2(DateTime.Now);
+        //testmodel_ = await ForecastService.test2(DateTime.Now);
+
+    }
+}
+
+
+<style>
+
+    .upgrade {
+        font-size: 17px;
+    }
+
+    .buttons {
+        margin-left: 200px;
+        text-align: center;
+        margin-top: -15px;
+    }
+
+    .Ready {
+        width: 50%;
+        height: 0px;
+    }
+
+    .CancelArmyMovement {
+        width: 120%;
+        height: 0px; /* Siis tulevad mängija nimed üksteise kõrvale*/
+    }
+
+    @@media (max-width:991px) {
+        .Ready {
+            width: 30%;
+        }
+
+        .CancelArmyMovement {
+            width: 130%;
+        }
+    }
+
+    @@media (max-width: 767px) {
+        .Ready {
+            width: 10%;
+        }
+
+        .CancelArmyMovement {
+            width: 200%;
+        }
+    }
+
+
+    .btn-container, .container {
+        background-color: white;
+        border-radius: 4px;
+        margin-bottom: 40px;
+    }
+
+    .btn-3d {
+        position: relative;
+        display: inline-block;
+        font-size: 22px;
+        padding: 20px 60px;
+        color: white;
+        margin: 20px 10px 10px;
+        border-radius: 6px;
+        text-align: center;
+        transition: top .01s linear;
+        text-shadow: 0 1px 0 rgba(0,0,0,0.15);
+    }
+
+        .btn-3d.green:hover {
+            background-color: #87a86f;
+        }
+
+    .color .green {
+        background: #82c8a0;
+    }
+
+
+    .btn-3d:active {
+        top: 9px;
+    }
+
+
+    .btn-3d.green {
+        background-color: #82c8a0;
+        box-shadow: 0 0 0 1px #82c8a0 inset, 0 0 0 2px rgba(255,255,255,0.15) inset, 0 8px 0 0 rgba(126, 194, 155, .7), 0 8px 0 1px rgba(0,0,0,.4), 0 8px 8px 1px rgba(0,0,0,0.5);
+    }
+
+        .btn-3d.green:active {
+            box-shadow: 0 0 0 1px #82c8a0 inset, 0 0 0 2px rgba(255,255,255,0.15) inset, 0 0 0 1px rgba(0,0,0,0.4);
+        }
+
+    .btn.green {
+        box-shadow: 0px 4px 0px #87a86f;
+    }
+
+        .btn.green:active {
+            box-shadow: 0 0 #87a86f;
+            background-color: #87a86f;
+        }
+
+    .btn.green, .btn-two.green {
+        background-color: #9abf7f;
+    }
+
+    .btn-gradient.green {
+        background: rgba(130,200,160,1);
+        background: -moz-linear-gradient(top, rgba(130,200,160,1) 0%, rgba(130,199,158,1) 100%);
+        background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(130,200,160,1)), color-stop(100%, rgba(130,199,158,1)));
+        background: -webkit-linear-gradient(top, rgba(130,200,160,1) 0%, rgba(130,199,158,1) 100%);
+        background: -o-linear-gradient(top, rgba(130,200,160,1) 0%, rgba(130,199,158,1) 100%);
+        background: -ms-linear-gradient(top, rgba(130,200,160,1) 0%, rgba(130,199,158,1) 100%);
+        background: linear-gradient(to bottom, rgba(130,200,160,1) 0%, rgba(124, 185, 149, 1) 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#82c8a0', endColorstr='#82c79e', GradientType=0 );
+    }
+
+        .btn-gradient.green:active {
+            background: #72B08E;
+        }
+
+    .btn.red, .btn-two.red {
+        background-color: #fa5a5a;
+    }
+
+    .btn-3d.red:hover {
+        background-color: #ff4c4b;
+    }
+
+    .btn-3d.red {
+        background-color: #e74c3c;
+        box-shadow: 0 0 0 1px #c63702 inset, 0 0 0 2px rgba(255,255,255,0.15) inset, 0 8px 0 0 #C24032, 0 8px 0 1px rgba(0,0,0,0.4), 0 8px 8px 1px rgba(0,0,0,0.5);
+    }
+
+        .btn-3d.red:active {
+            box-shadow: 0 0 0 1px #c63702 inset, 0 0 0 2px rgba(255,255,255,0.15) inset, 0 0 0 1px rgba(0,0,0,0.4);
+        }
+
+    .btn.red {
+        box-shadow: 0px 4px 0px #E04342;
+    }
+
+        .btn.red:active {
+            box-shadow: 0 0 #ff4c4b;
+            background-color: #ff4c4b;
+        }
+
+
+    .Error {
+        top: 20px;
+        font-size: 20px;
+        left: 0px;
+        margin-right: 160px;
+    }
+
+    .PlayerNames {
+        font-size: 35px;
+        color: mediumspringgreen;
+        background-color: black;
+        z-index: 1;
+    }
+
+    .Stats1 {
+        font-size: 30px;
+        left: 5%;
+        right: 70%;
+        top: 30px;
+        position: fixed;
+        z-index: 1;
+    }
+
+    @@media (max-width:1588px) {
+        .Stats1 {
+            font-size: 20px;
+            margin-left: -1%;
+        }
+    }
+
+
+
+    body {
+        font-size: 100%;
+    }
+
+    .ReadyLBL {
+        font-size: 30px;
+        color: chartreuse;
+        background-color: black;
+        top: 50px;
+        left: 60%;
+        position: fixed;
+        z-index: 1;
+    }
+
+    @@media (max-width:1588px) {
+        .ReadyLBL {
+            font-size: 23px;
+            top: 52px;
+        }
+    }
+
+    @@media (max-width:1180px) {
+        .ReadyLBL {
+            font-size: 20px;
+            top: 52px;
+        }
+    }
+
+    @@media (max-width:976px) {
+        .ReadyLBL {
+            font-size: 20px;
+        }
+    }
+
+    .NOT {
+        color: red;
+    }
+
+    .white {
+        color: white !important;
+    }
+
+    .OverallStats {
+        left: 26%;
+    }
+
+    .ReadyBTN {
+        font-size: 40px;
+        color: green;
+        margin-right: 7%;
+    }
+
+    .CancelArmyMovementBTN {
+        font-size: 40px;
+        color: red;
+    }
+
+
+    * {
+        box-sizing: border-box;
+    }
+
+    .wrapper {
+        border: 2px solid #f76707;
+        border-radius: 50px;
+        background-color: #fff4e6;
+        display: grid;
+        grid-template-columns: repeat(8, 185px); /* 12.5%*/
+        grid-template-rows: repeat(3, 260px); /* 225*/
+        width: 1480px; /*90%*/
+        position: absolute;
+        left: 50%;
+        top: 577px;
+        transform: translate(-50%, -50%);
+    }
+
+        .wrapper > .friendly {
+            border: 2px solid #ffa94d;
+            border-radius: 10px;
+            background-color: lightgreen;
+            padding: 1em;
+            color: black;
+        }
+
+        .wrapper > .enemy {
+            border: 2px solid #ffa94d;
+            border-radius: 10px;
+            background-color: lightcoral;
+            padding: 1em;
+            color: black;
+        }
+
+        .wrapper > .empty {
+            border: 2px solid #ffa94d;
+            border-radius: 10px;
+            background-color: grey;
+            padding: 1em;
+            color: black;
+        }
+
+
+    .box1 {
+        grid-column-start: 1;
+        grid-row-start: 2;
+    }
+
+    .box2 {
+        grid-column-start: 2;
+        grid-row-start: 0;
+    }
+
+    .box3 {
+        grid-column-start: 2;
+        grid-row-start: 2;
+    }
+
+    .box4 {
+        grid-column-start: 2;
+        grid-row-start: 3;
+    }
+
+    .box5 {
+        grid-column-start: 3;
+        grid-row-start: 1;
+    }
+
+    .box6 {
+        grid-column-start: 3;
+        grid-row-start: 2;
+    }
+
+    .box7 {
+        grid-column-start: 3;
+        grid-row-start: 3;
+    }
+
+    .box8 {
+        grid-column-start: 4;
+        grid-row-start: 2;
+    }
+
+    .box9 {
+        grid-column-start: 5;
+        grid-row-start: 2;
+    }
+
+    .box10 {
+        grid-column-start: 6;
+        grid-row-start: 1;
+    }
+
+    .box11 {
+        grid-column-start: 6;
+        grid-row-start: 2;
+    }
+
+    .box12 {
+        grid-column-start: 6;
+        grid-row-start: 3;
+    }
+
+    .box13 {
+        grid-column-start: 7;
+        grid-row-start: 1;
+    }
+
+    .box14 {
+        grid-column-start: 7;
+        grid-row-start: 2;
+    }
+
+    .box15 {
+        grid-column-start: 7;
+        grid-row-start: 3;
+    }
+
+    .box16 {
+        grid-column-start: 8;
+        grid-row-start: 2;
+    }
+</style>

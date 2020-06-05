@@ -113,8 +113,8 @@
                     int nxtDefence = (item.TowerLvl + 1) * 5;
                     <br />
                     <span>Size: <a style="font-size:20px; color:red;"> @Html.DisplayFor(modelItem => item.Attack)</a></span>
-
-                    <a class="btn btn-success" asp-action="UpgradeTower" asp-route-accountId="@Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))" asp-route-id="@item.TowerId" asp-route-owner="@item.Owner" asp-route-player1Id="@item.Player1Id" asp-route-player2Id="@item.Player2Id" asp-route-worldId="@item.WorldId">Upgrade tower</a>
+                    @*<a class="btn btn-success" href="/Game/UpgradeTower/12?accountId=4&amp;owner=2&amp;player1Id=1&amp;player2Id=2&amp;worldId=1">Upgrade tower</a>*@
+                    <a class="btn btn-success" asp-action="UpgradeTower" asp-route-id="@item.TowerId" asp-route-accountId="@Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))" asp-route-owner="@item.Owner" asp-route-player1Id="@item.Player1Id" asp-route-player2Id="@item.Player2Id" asp-route-worldId="@item.WorldId">Upgrade tower</a>
                     <br />
 
                     <a class="upgrade">Costs: @costs</a>

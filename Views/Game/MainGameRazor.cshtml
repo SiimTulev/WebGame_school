@@ -1,0 +1,10 @@
+﻿@using System.Security.Claims;
+
+@{
+    ViewData["Title"] = "MainGameRazor";
+}
+
+
+
+@*@(await Html.RenderComponentAsync<WebGame.Components.MainGameRazor>(RenderMode.ServerPrerendered))*@
+@(await Html.RenderComponentAsync<WebGame.Components.MainGameRazor>(RenderMode.ServerPrerendered,new { towers = ViewBag.Towers, playerIdWhoClicks = ViewBag.PlayerIdWhoClicks, loggedInAccountId = Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier)), error = @ViewBag.Error }))

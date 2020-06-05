@@ -20,6 +20,60 @@ namespace WebGame.Controllers
         {
             _context = context;
         }
+        [HttpGet("Game/MainGameRazor/{error}/{player1Id}/{player2Id}/{worldId}/{accountCheck}")]
+
+        //[HttpGet("Game/MainGameRazor/{player1Id}/{player2Id}/{worldId}/{accountCheck}")]
+
+        public async Task<IActionResult> MainGameRazor(int accountCheck, int player1Id, int player2Id, int? worldId, int? error)
+        {
+            //List<string> towerNames = new List<string>();
+
+            //for (int i = 0; i < towerIds.Count; i++)
+            //{
+            //    var towerName = (from d in _context.Tower
+            //                     where d.TowerId == Convert.ToInt32(towerIds[i])
+            //                     select d.TowerName).FirstOrDefault();
+            //    towerNames.Add(towerName);
+            //}
+
+            //ViewBag.TowerNames = towerNames;
+
+            if (error == 1)
+            {
+                ViewBag.Error = "You don't have enough money to upgrade this tower!";
+            }
+
+            var playerIdWhoClicks = (from d in _context.Player
+                                     where d.WorldId == worldId && d.AccountId == (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier)))
+                                     select d.PlayerId).FirstOrDefault();
+
+            ViewBag.PlayerIdWhoClicks = playerIdWhoClicks;
+
+            var towers = await (from ep in _context.Tower
+                                join e in _context.World on ep.WorldId equals e.WorldId
+                                //where worldTowers.Contains(ep.Owner)
+                                where e.WorldId == worldId
+                                select new TowerViewModel
+                                {
+                                    Id = ep.TowerId,
+                                    Owner = ep.Owner,
+                                    TowerId = ep.TowerId,
+                                    Attack = ep.Attack,
+                                    Defence = ep.Defence,
+                                    WorldId = e.WorldId,
+                                    Player1Id = e.Player1Id,
+                                    Player2Id = e.Player2Id,
+                                    Player1Ready = e.Player1Ready,
+                                    Player2Ready = e.Player2Ready,
+                                    TowerLvl = ep.TowerLvl,
+                                    TowerName = ep.TowerName
+                                }).ToListAsync();
+
+            ViewBag.Towers = towers;
+
+            return View(towers);
+        }
+
 
         [HttpGet("Game/Profile/{accountId}")]
         public async Task<IActionResult> Profile(int accountId) // SAFE
@@ -41,7 +95,14 @@ namespace WebGame.Controllers
             }
             return View();
         }
-        public async Task<IActionResult> UpgradeTower(int id, TowerViewModel towerViewModel) // SAFE tänu playerId kontrollile?
+        //public async Task<IActionResult> UpgradeTower(int id, TowerViewModel towerViewModel) // SAFE tänu playerId kontrollile?
+
+
+        //Game/UpgradeTower/12?accountId=4&amp;owner=2&amp;player1Id=1&amp;player2Id=2&amp;worldId=1"
+        [HttpGet("Game/UpgradeTower/{id}/{accountId}/{owner}/{player1Id}/{player2Id}/{worldId}")]
+
+        public async Task<IActionResult> UpgradeTower(int id, int accountId, int owner, int player1Id, int player2Id, int worldId) // SAFE tänu playerId kontrollile?
+
         {
             if (!User.Identity.IsAuthenticated) // If account is logged in
             {
@@ -51,14 +112,18 @@ namespace WebGame.Controllers
             var upgradingTower = await _context.Tower.FindAsync(id);
 
             var player = (from d in _context.Player
-                          where d.AccountId == (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))) && d.WorldId == towerViewModel.WorldId && d.PlayerId == towerViewModel.Owner
+                              //where d.AccountId == (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))) && d.WorldId == towerViewModel.WorldId && d.PlayerId == towerViewModel.Owner
+                          where d.AccountId == (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))) && d.WorldId == worldId && d.PlayerId == owner
+
                           select d).FirstOrDefault();
 
             player.Gold -= (upgradingTower.TowerLvl + 1) * 100;
 
             if (player.Gold < 0)
             {
-                return RedirectToAction("MainGame", new { error = 1, Player1Id = towerViewModel.Player1Id, Player2Id = towerViewModel.Player2Id, WorldId = towerViewModel.WorldId, accountId = (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))) });
+                // return RedirectToAction("MainGame", new { error = 1, Player1Id = player1Id, Player2Id = player2Id, WorldId = worldId, accountId = (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))) });
+                return Redirect("https://localhost:44331/Game/MainGameRazor/1/" + player1Id + "/" + player2Id + "/" + worldId + "/" + accountId);
+
             }
             if (player.Gold >= 0)
             {
@@ -70,7 +135,8 @@ namespace WebGame.Controllers
 
                 await _context.SaveChangesAsync();
             }
-            return RedirectToAction("MainGame", new { Player1Id = towerViewModel.Player1Id, Player2Id = towerViewModel.Player2Id, WorldId = towerViewModel.WorldId, accountId = (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))) });
+            //return RedirectToAction("MainGame", new { Player1Id = player1Id, Player2Id = player2Id, WorldId = worldId, accountId = (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))) });
+            return Redirect("https://localhost:44331/Game/MainGameRazor/0/" + player1Id + "/" + player2Id + "/" + worldId + "/" + accountId);
         }
 
         [HttpGet("Game/CancelArmyMovement/{worldId}/{PlayerIdWhoClicks}/{player1Id}/{player2Id}")]
