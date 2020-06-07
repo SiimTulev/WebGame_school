@@ -7,19 +7,66 @@
 @inject TestService TestService
 @inject NavigationManager NavigationManager
 
-@{
-    if (error != null)
-    {
-        <div class="alert alert-danger Error" role="alert">  @error</div>
-    }
-}
+<div class="OverallStats">
+    @{
+        if (IsWinner != true)
+        {
+            <h1 class="ReadyLBL">
+                @{
+                    if (you.Contains("NOT"))
+                    {
+                        <span class="NOT">@you</span> <a class="white">-|-</a>
+                    }
+                    else
+                    {
+                        @you <a class="white">-|-</a>
+                    }
+                    if (enemy.Contains("NOT"))
+                    {
+                        <span class="NOT">@enemy</span>
+                    }
+                    else
+                    {
+                        @enemy
+                    }
+                }
 
-@*@if (testmodel_ == null)
+            </h1>
+            <div class="buttons">
+                <div class="content-3d Ready">
+                    @*<a asp-action="PlayerReady" asp-route-worldId="@ViewBag.WorldId" class="btn-3d green">Ready</a>*@
+                    <a class="btn-3d green" href="/Game/PlayerReady/@towers[0].WorldId">Ready</a>
 
-    {
-        <p><em>Loading...</em></p>
+                </div>
+
+                <div class="content-3d CancelArmyMovement">
+                    @*<a asp-action="CancelArmyMovement" asp-route-worldId="@ViewBag.WorldId" asp-route-PlayerIdWhoClicks="@ViewBag.PlayerIdWhoClicks" asp-route-player1Id="@ViewBag.Player1Id" asp-route-player2Id="@ViewBag.Player2Id" class="btn-3d red">Movements</a>*@
+                    <a class="btn-3d red" href="/Game/CancelArmyMovement/@towers[0].WorldId/@playerIdWhoClicks/@towers[0].Player1Id/@towers[0].Player2Id">Movements</a>
+
+                </div>
+            </div>
+        }
+        else
+        {
+            <h2>WINNER</h2>
+            <h1>@Winner</h1>
+            <h2>WINNER</h2>
+        }
     }
-    else*@
+</div>
+<div class="Stats1">
+    <a class="PlayerNames btn btn-primary" href="/Game/Profile/@YourId">@YourName</a>
+    VS
+    <a class="PlayerNames btn btn-primary" href="/Game/Profile/@EnemyId">@EnemyName</a>
+    <br />
+    @{
+        if (error != null)
+        {
+            <div class="alert alert-danger Error" role="alert">  @error</div>
+        }
+    }
+</div>
+
 
 <div class="wrapper">
     @{
@@ -45,7 +92,10 @@
         <div class="@box @towerOwnerColor">
             <h5> @item.TowerName</h5>
 
-            <a class="btn btn-danger" asp-action="CreateArmyMission" asp-route-playerIdWhoClicks="@playerIdWhoClicks" asp-route-accountId="@loggedInAccountId" asp-route-Owner="@item.Owner" asp-route-WorldId="@item.WorldId" asp-route-SelectedTower="@item.TowerId" asp-route-player1Id="@item.Player1Id" asp-route-player2Id="@item.Player2Id">Move</a>
+            <a class="btn btn-danger" href="/Game/CreateArmyMission/@item.WorldId/@item.Owner/@item.Player1Id/@item.Player2Id/@item.TowerId/@playerIdWhoClicks">Move</a>
+            @*<a class="btn btn-danger" asp-action="CreateArmyMission" asp-route-playerIdWhoClicks="@playerIdWhoClicks" asp-route-accountId="@loggedInAccountId" asp-route-Owner="@item.Owner" asp-route-WorldId="@item.WorldId" asp-route-SelectedTower="@item.TowerId" asp-route-player1Id="@item.Player1Id" asp-route-player2Id="@item.Player2Id">Move</a>*@
+
+
             @{ if (item.Owner == @playerIdWhoClicks)
                 {
                     int TowerLvl = item.TowerLvl;
@@ -91,6 +141,32 @@
         //NavigationManager.NavigateTo("Game/UpgradeTower/" + towerId);
 
     }
+
+    [Parameter]
+    public int YourId { get; set; } // POLE VEEL KUTSUTUD
+
+    [Parameter]
+    public string YourName { get; set; } // POLE VEEL KUTSUTUD
+
+    [Parameter]
+    public int EnemyId { get; set; } // POLE VEEL KUTSUTUD
+
+    [Parameter]
+    public string EnemyName { get; set; } // POLE VEEL KUTSUTUD
+
+    [Parameter]
+    public string Winner { get; set; } // POLE VEEL KUTSUTUD
+
+
+
+    [Parameter]
+    public bool IsWinner { get; set; }
+
+    [Parameter]
+    public string you { get; set; }
+
+    [Parameter]
+    public string enemy { get; set; }
 
     [Parameter]
     public List<WebGame.ViewModel.TowerViewModel> towers { get; set; }

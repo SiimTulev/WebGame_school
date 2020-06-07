@@ -75,9 +75,7 @@
         }
     }
 </div>
-@{
-    string color = "red";
-}
+
 
 <div class="wrapper">
     @{
@@ -102,8 +100,11 @@
         }
         <div class="@box @towerOwnerColor">
             <h5> @Html.DisplayFor(modelItem => item.TowerName)</h5>
+            <a class="btn btn-danger" asp-action="CreateArmyMission" asp-route-playerIdWhoClicks="@ViewBag.PlayerIdWhoClicks" asp-route-Owner="@item.Owner" asp-route-WorldId="@item.WorldId" asp-route-SelectedTower="@item.TowerId" asp-route-player1Id="@item.Player1Id" asp-route-player2Id="@item.Player2Id">Move</a>
 
-            <a class="btn btn-danger" asp-action="CreateArmyMission" asp-route-playerIdWhoClicks="@ViewBag.PlayerIdWhoClicks" asp-route-accountId="@Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))" asp-route-Owner="@item.Owner" asp-route-WorldId="@item.WorldId" asp-route-SelectedTower="@item.TowerId" asp-route-player1Id="@item.Player1Id" asp-route-player2Id="@item.Player2Id">Move</a>
+            @*<a class="btn btn-danger" asp-action="CreateArmyMission" asp-route-playerIdWhoClicks="@ViewBag.PlayerIdWhoClicks" asp-route-Owner="@item.Owner" asp-route-WorldId="@item.WorldId" asp-route-SelectedTower="@item.TowerId" asp-route-player1Id="@item.Player1Id" asp-route-player2Id="@item.Player2Id">Move</a>*@
+            @*<a class="btn btn-danger" asp-action="CreateArmyMission" asp-route-Owner="@item.Owner" asp-route-WorldId="@item.WorldId" asp-route-SelectedTower="@item.TowerId" asp-route-player1Id="@item.Player1Id" asp-route-player2Id="@item.Player2Id">Move</a>*@
+
             @{ if (item.Owner == ViewBag.PlayerIdWhoClicks)
                 {
                     int TowerLvl = item.TowerLvl;

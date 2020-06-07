@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "uFOy+oaS0/k7oS7scUpKyB5Ez0BrZS4JQhChCAShNz60zLE2/tA+pO9BCDKAxHyFyK0kk1r5bF5c8sHeJFlkog==",
+  "dgSpecHash": "sIrdJW7lgpuV1SwE8GbTOyyYG3k1UJggvtYesLiTovjN/FTYztQsVH0uVivXNqWjurrFolDOWHDnuOecb2qHoQ==",
   "success": true,
-  "projectFilePath": "C:\\C#\\WebGame_database\\FileZillaLinuxGame\\Github\\WebGame_school\\WebGame.csproj",
+  "projectFilePath": "C:\\C#\\WebGame_database\\FileZillaLinuxGame\\WebGame_school_AND_BLAZOR_15_error_fixed\\WebGame.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Yorwet\\.nuget\\packages\\bouncycastle.netcore\\1.8.3\\bouncycastle.netcore.1.8.3.nupkg.sha512",
     "C:\\Users\\Yorwet\\.nuget\\packages\\google.protobuf\\3.6.1\\google.protobuf.3.6.1.nupkg.sha512",

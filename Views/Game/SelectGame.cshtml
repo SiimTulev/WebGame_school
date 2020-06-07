@@ -94,12 +94,12 @@
                                 <h5 class="worldNum" style="margin-top:50px;">World: @Html.DisplayFor(modelItem => item.WorldId)</h5>
                             </td>
 
-                            <li class="nav-item">
-                                <a class="btn btn-primary nav-link text-white" asp-area="" asp-route-error="0" asp-route-player1Id="@item.Player1Id" asp-route-player2Id="@item.Player2Id" asp-route-worldId="@item.WorldId" asp-route-accountCheck="@Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))" asp-controller="Game" asp-action="MainGameRazor">Razor</a>
+                            <td class="nav-item">
+                                <a style="margin-top:50px;" class="btn btn-primary" asp-area="" asp-route-error="0" asp-route-player1Id="@item.Player1Id" asp-route-player2Id="@item.Player2Id" asp-route-worldId="@item.WorldId" asp-route-accountCheck="@Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))" asp-controller="Game" asp-action="MainGameRazor">Join World</a>
 
-                            </li>
+                            </td>
                             <td>
-                                <a style="margin-top:50px;" class="btn btn-primary" asp-action="MainGame" asp-route-player1Id="@item.Player1Id" asp-route-player2Id="@item.Player2Id" asp-route-worldId="@item.WorldId" asp-route-accountCheck="@Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))">Join World</a>
+                                <a style="margin-top:50px;" class="btn btn-primary" asp-action="MainGame" asp-route-player1Id="@item.Player1Id" asp-route-player2Id="@item.Player2Id" asp-route-worldId="@item.WorldId" asp-route-accountCheck="@Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))">Join World MVC</a>
                             </td>
                         </tr>
                     }

@@ -22,25 +22,66 @@ namespace WebGame.Controllers
         }
         [HttpGet("Game/MainGameRazor/{error}/{player1Id}/{player2Id}/{worldId}/{accountCheck}")]
 
-        //[HttpGet("Game/MainGameRazor/{player1Id}/{player2Id}/{worldId}/{accountCheck}")]
+        //[HttpGet("Game/MainGameRazor/{player1Id}/{player2Id}/{worldId}/{accountCheck}")]error
 
         public async Task<IActionResult> MainGameRazor(int accountCheck, int player1Id, int player2Id, int? worldId, int? error)
         {
-            //List<string> towerNames = new List<string>();
 
-            //for (int i = 0; i < towerIds.Count; i++)
-            //{
-            //    var towerName = (from d in _context.Tower
-            //                     where d.TowerId == Convert.ToInt32(towerIds[i])
-            //                     select d.TowerName).FirstOrDefault();
-            //    towerNames.Add(towerName);
-            //}
 
-            //ViewBag.TowerNames = towerNames;
+            if (!User.Identity.IsAuthenticated) // If account is logged in
+            {
+                return RedirectToAction(nameof(SelectGame));
+            }
+
+            var world = _context.World
+    .FirstOrDefault(m => m.WorldId == worldId);
+
+            // Security
+            if (world.Player1IdAcc != (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))) && world.Player2IdAcc != (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))))
+            {
+                return RedirectToAction("SelectGame", "Game");
+            }
+            if (world.GameFinished == true)
+            {
+                return RedirectToAction("SelectGame", "Game");
+            }
 
             if (error == 1)
             {
                 ViewBag.Error = "You don't have enough money to upgrade this tower!";
+            }
+
+
+            ViewBag.WorldId = worldId;
+
+
+            ViewBag.Player1Id = player1Id;
+            ViewBag.Player2Id = player2Id;
+            if (world.Player1IdAcc == (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))))
+            {
+                var enemyName = _context.Playeraccount.FirstOrDefault(m => m.AccountId == world.Player2IdAcc);
+                ViewBag.EnemyName = enemyName.AccountName;
+                ViewBag.EnemyId = enemyName.AccountId;
+                var yourName = _context.Playeraccount.FirstOrDefault(m => m.AccountId == world.Player1IdAcc);
+                ViewBag.YourName = yourName.AccountName;
+                ViewBag.YourId = yourName.AccountId;
+            }
+            else
+            {
+                var enemyName = _context.Playeraccount.FirstOrDefault(m => m.AccountId == world.Player1IdAcc);
+                ViewBag.EnemyName = enemyName.AccountName;
+                ViewBag.EnemyId = enemyName.AccountId;
+                var yourName = _context.Playeraccount.FirstOrDefault(m => m.AccountId == world.Player2IdAcc);
+                ViewBag.YourName = yourName.AccountName;
+                ViewBag.YourId = yourName.AccountId;
+            }
+
+            if (world.GameFinished == true)
+            {
+                var PlayeraccountNameWin = _context.Playeraccount.FirstOrDefault(m => m.AccountId == world.WinnerAccountId);
+
+                ViewBag.Winner = "Player " + PlayeraccountNameWin.AccountName + " won the game!";
+                ViewBag.IsWinner = true;
             }
 
             var playerIdWhoClicks = (from d in _context.Player
@@ -49,6 +90,77 @@ namespace WebGame.Controllers
 
             ViewBag.PlayerIdWhoClicks = playerIdWhoClicks;
 
+            var findPlayerGold = (from d in _context.Player
+                                  where d.PlayerId == playerIdWhoClicks && d.WorldId == worldId
+                                  select d.Gold).FirstOrDefault();
+
+            ViewBag.FindPlayerGold = findPlayerGold;
+
+            var loggedInPlayerTowers = (from d in _context.Tower
+                                        where d.Owner == playerIdWhoClicks && d.WorldId == worldId
+                                        select d).ToList();
+
+            int peopleGrowingPlusPeopleAlive = 0;
+            int peopleGrowing = 0;
+            int peopleNow = 0;
+            int goldForTowers = 0;
+            foreach (var tower in loggedInPlayerTowers)
+            {
+                float? peopleGrowingPercentage = (100 + tower.TowerLvl) / 100f;
+                float? peopleGrown = peopleGrowingPercentage * tower.Attack;
+                peopleNow += tower.Attack;
+                peopleGrowing += Convert.ToInt32(peopleGrown) - tower.Attack;
+                peopleGrowingPlusPeopleAlive += Convert.ToInt32(peopleGrown);
+                goldForTowers += 10;
+            }
+            ViewBag.GoldForTowers = goldForTowers;
+            ViewBag.PeopleNow = peopleNow;
+            ViewBag.PeopleGrowing = peopleGrowing;
+            ViewBag.PeopleGrowingSum = peopleGrowingPlusPeopleAlive;
+
+            ViewBag.WorldId = worldId;
+
+            var playerIds = (from d in _context.Player
+                             where d.AccountId == (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier)))
+                             select d.PlayerId).ToList();
+
+            // GET LOGGED IN ACCOUNT PLAYERID
+            if (world.Player1Ready == true ^ world.Player2Ready == true) // IF ONLY ONE OF THEM IS READY
+            {
+                if (playerIds.Contains(player1Id) && world.Player1Id == player1Id && world.Player1Ready == true)
+                {
+                    ViewBag.You = "YOU ARE READY";
+                    ViewBag.Enemy = "ENEMY IS NOT READY";
+                }
+                else if (!playerIds.Contains(player1Id) && world.Player1Id == player1Id && world.Player1Ready == true)
+                {
+                    ViewBag.You = "YOU ARE NOT READY";
+                    ViewBag.Enemy = "ENEMY IS READY";
+                }
+                else if (playerIds.Contains(player2Id) && world.Player2Id == player2Id && world.Player2Ready == true)
+                {
+                    ViewBag.You = "YOU ARE READY";
+                    ViewBag.Enemy = "ENEMY IS NOT READY";
+                }
+                else if (!playerIds.Contains(player2Id) && world.Player2Id == player2Id && world.Player2Ready == true)
+                {
+                    ViewBag.You = "YOU ARE NOT READY";
+                    ViewBag.Enemy = "ENEMY IS READY";
+                }
+            }
+            else if (world.Player1Ready == false && world.Player2Ready == false) // CHECK IF BOTH ARE NOT READY
+            {
+                ViewBag.You = "YOU ARE NOT READY";
+                ViewBag.Enemy = "ENEMY IS NOT READY";
+            }
+            else if (world.Player1Ready == true && world.Player2Ready == true) // CHECK IF BOTH ARE READY
+            {
+                world.Player1Ready = false;
+                world.Player2Ready = false;
+                _context.Update(world);
+                _context.SaveChanges();
+            }
+            ///////
             var towers = await (from ep in _context.Tower
                                 join e in _context.World on ep.WorldId equals e.WorldId
                                 //where worldTowers.Contains(ep.Owner)
@@ -484,6 +596,7 @@ namespace WebGame.Controllers
             return View(towers);
         }
 
+        [HttpGet("Game/PlayerReady/{worldId}")]
         public IActionResult PlayerReady(int worldId, TowerViewModel towerViewModel) // SAFE
         {
             if (!User.Identity.IsAuthenticated) // If account is logged in
@@ -663,10 +776,14 @@ namespace WebGame.Controllers
             _context.SaveChanges();
 
             // Go to the same URL where the "READY" was pressed
-            return RedirectToAction("MainGame", new { Player1Id = world.Player1Id, Player2Id = world.Player2Id, WorldId = world.WorldId, accountId = (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))) });
-        }
+            string checkUrl = Redirect("https://localhost:44331/Game/MainGameRazor/0/" + world.Player1Id + "/" + world.Player2Id + "/" + worldId + "/" + (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier)))).Url;
 
-        [HttpPost("Game/CreateArmyMission/{worldId}/{Owner}/{player1Id}/{player2Id}/{SelectedTower}")]
+            return Redirect("https://localhost:44331/Game/MainGameRazor/0/" + world.Player1Id + "/" + world.Player2Id + "/" + worldId + "/" + (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))));
+
+            //return RedirectToAction("MainGame", new { Player1Id = world.Player1Id, Player2Id = world.Player2Id, WorldId = world.WorldId, accountId = (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))) });
+        }
+        [HttpPost("Game/CreateArmyMission/{worldId}/{Owner}/{player1Id}/{player2Id}/{SelectedTower}/{playerIdWhoClicks}")]
+        //[HttpPost("Game/CreateArmyMission/{worldId}/{Owner}/{player1Id}/{player2Id}/{SelectedTower}")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateArmyMission(int SelectedWorldId, int Owner, bool connected, int SelectedTowerId, EditViewModel editViewModel, AttDef attdef, Tower tower, World world, TowerViewModel towerViewModel, int worldId, int player1Id, int player2Id, int SelectedTower) // EI OLE SAFE?
         {
@@ -832,10 +949,13 @@ namespace WebGame.Controllers
                     throw;
                 }
             }
-            return RedirectToAction("MainGame", new { Player1Id = towerViewModel.Player1Id, Player2Id = towerViewModel.Player2Id, WorldId = towerViewModel.WorldId, accountId = (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))) });
-        }
+            return Redirect("https://localhost:44331/Game/MainGameRazor/0/" + player1Id + "/" + player2Id + "/" + worldId + "/" + (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))));
 
-        [HttpGet("Game/CreateArmyMission/{worldId}/{Owner}/{player1Id}/{player2Id}/{SelectedTower}")]
+            //return RedirectToAction("MainGame", new { Player1Id = towerViewModel.Player1Id, Player2Id = towerViewModel.Player2Id, WorldId = towerViewModel.WorldId, accountId = (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))) });
+        }
+        [HttpGet("Game/CreateArmyMission/{worldId}/{Owner}/{player1Id}/{player2Id}/{SelectedTower}/{playerIdWhoClicks}")]
+
+        //[HttpGet("Game/CreateArmyMission/{worldId}/{Owner}/{player1Id}/{player2Id}/{SelectedTower}")]
         public async Task<IActionResult> CreateArmyMission(int playerIdWhoClicks, int? worldId, int SelectedTower, int? Owner, int player1Id, int player2Id) // SAFE VIST, AGA POST EI OLE?
         {
             if (!User.Identity.IsAuthenticated) // If account is logged in

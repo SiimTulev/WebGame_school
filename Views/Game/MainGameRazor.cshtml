@@ -4,7 +4,17 @@
     ViewData["Title"] = "MainGameRazor";
 }
 
+@await Component.InvokeAsync("OverallStats", new { worldId = ViewBag.WorldId, playerId = ViewBag.PlayerIdWhoClicks })
 
 
 @*@(await Html.RenderComponentAsync<WebGame.Components.MainGameRazor>(RenderMode.ServerPrerendered))*@
-@(await Html.RenderComponentAsync<WebGame.Components.MainGameRazor>(RenderMode.ServerPrerendered,new { towers = ViewBag.Towers, playerIdWhoClicks = ViewBag.PlayerIdWhoClicks, loggedInAccountId = Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier)), error = @ViewBag.Error }))
+@(await Html.RenderComponentAsync<WebGame.Components.MainGameRazor>(RenderMode.ServerPrerendered,new
+{ towers = ViewBag.Towers, playerIdWhoClicks = ViewBag.PlayerIdWhoClicks, loggedInAccountId = Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier)),
+    error = @ViewBag.Error, you = @ViewBag.You, enemy = @ViewBag.Enemy,
+
+    YourId = ViewBag.YourId,
+    YourName = ViewBag.YourName,
+    EnemyId = ViewBag.EnemyId,
+    EnemyName = ViewBag.EnemyName,
+    Winner = ViewBag.Winner
+}))
