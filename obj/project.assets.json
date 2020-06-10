@@ -8461,11 +8461,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\C#\\WebGame_database\\FileZillaLinuxGame\\WebGame_school_AND_BLAZOR_15_error_fixed\\WebGame.csproj",
+      "projectUniqueName": "C:\\C#\\WebGame_database\\FileZillaLinuxGame\\WebGame_school_AND_BLAZOR_20_Layout_in_the_middle\\WebGame.csproj",
       "projectName": "WebGame",
-      "projectPath": "C:\\C#\\WebGame_database\\FileZillaLinuxGame\\WebGame_school_AND_BLAZOR_15_error_fixed\\WebGame.csproj",
+      "projectPath": "C:\\C#\\WebGame_database\\FileZillaLinuxGame\\WebGame_school_AND_BLAZOR_20_Layout_in_the_middle\\WebGame.csproj",
       "packagesPath": "C:\\Users\\Yorwet\\.nuget\\packages\\",
-      "outputPath": "C:\\C#\\WebGame_database\\FileZillaLinuxGame\\WebGame_school_AND_BLAZOR_15_error_fixed\\obj\\",
+      "outputPath": "C:\\C#\\WebGame_database\\FileZillaLinuxGame\\WebGame_school_AND_BLAZOR_20_Layout_in_the_middle\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Microsoft\\Xamarin\\NuGet\\",

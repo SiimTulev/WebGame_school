@@ -29,4 +29,10 @@
     <Folder Include="Migrations\" />
   </ItemGroup>
 
+
+  <ItemGroup>
+    <None Include="wwwroot\images\greenRing.jpg" />
+    <None Include="wwwroot\images\redRing.jpg" />
+  </ItemGroup>
+
 </Project>

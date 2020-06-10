@@ -54,6 +54,8 @@
         }
     }
 </div>
+
+
 <div class="Stats1">
     <a class="PlayerNames btn btn-primary" href="/Game/Profile/@YourId">@YourName</a>
     VS
@@ -67,14 +69,20 @@
     }
 </div>
 
+<br />
+<br />
+
 
 <div class="wrapper">
+    @*<div>*@
+
     @{
         int counter = 0;
         string towerOwnerColor = "";
     }
     @foreach (var item in towers)
     {
+
         counter++;
         string box = "box" + counter;
         if (item.Owner == playerIdWhoClicks)
@@ -89,73 +97,291 @@
         {
             towerOwnerColor = "enemy";
         }
+
+        <div class="@box @towerOwnerColor">
+
+
+            @{
+                int TowerLvl;
+                int Defence;
+                int costs;
+                int nxtTowerLvl;
+                int nxtDefence;
+
+
+
+                if (item.Owner == @playerIdWhoClicks)
+                {
+                    TowerLvl = item.TowerLvl;
+                    Defence = (item.TowerLvl) * 5;
+                    costs = (item.TowerLvl + 1) * 100;
+                    nxtTowerLvl = item.TowerLvl + 1;
+                    nxtDefence = (item.TowerLvl + 1) * 5;
+
+                    @*<a class="towerBTN " @onmousedown="@(e => Friendly(e,TowerLvl, @Defence,@costs, @item.TowerId, @item.Owner, @item.Player1Id, @item.Player2Id, @item.WorldId, nxtTowerLvl, nxtDefence, @item.Attack ))">@item.TowerName</a>*@
+
+                    <div class="darken">
+                        <img src="..\images\greenRing.jpg" asp-append-version="true" alt="greenRing" style="width:10vh;" @onmousedown="@(e => Friendly(e,TowerLvl, @Defence,@costs, @item.TowerId, @item.Owner, @item.Player1Id, @item.Player2Id, @item.WorldId, nxtTowerLvl, nxtDefence, @item.Attack ))">
+
+                        <a @onmousedown="@(e => Friendly(e,TowerLvl, @Defence,@costs, @item.TowerId, @item.Owner, @item.Player1Id, @item.Player2Id, @item.WorldId, nxtTowerLvl, nxtDefence, @item.Attack ))" class="inPicture">@item.TowerName.Substring(0, 1)</a>
+
+
+
+                    </div>
+
+                }
+                else if (item.Owner != @playerIdWhoClicks && item.Owner != 0)
+                {
+                    <div class="darken">
+                        <img src="..\images\redRing.jpg" asp-append-version="true" alt="redRing" style="width:10vh;" @onmousedown="@(e=> Enemy(e, @item.TowerId, @item.Owner, @item.Player1Id, @item.Player2Id, @item.WorldId))">
+                        @*<a class="towerBTN " @onmousedown="@(e => Enemy(e, @item.TowerId, @item.Owner, @item.Player1Id, @item.Player2Id, @item.WorldId))">@item.TowerName</a>*@
+
+                        <a @onmousedown="@(e=> Enemy(e, @item.TowerId, @item.Owner, @item.Player1Id, @item.Player2Id, @item.WorldId))" class="inPicture">@item.TowerName.Substring(0, 1)</a>
+
+
+
+                    </div>
+                }
+                else if (item.Owner == 0)
+                {
+                    <div class="darken">
+
+                        <a class="towerBTN " @onmousedown="@(e => Enemy(e, @item.TowerId, @item.Owner, @item.Player1Id, @item.Player2Id, @item.WorldId))">@item.TowerName</a>
+                        <a @onmousedown="@(e=> Enemy(e, @item.TowerId, @item.Owner, @item.Player1Id, @item.Player2Id, @item.WorldId))" class="inPicture">@item.TowerName.Substring(0, 1)</a>
+
+                    </div>
+                }
+                //<button @onmousemove="@(e => ShowMessage2(e,TowerLvl, @Defence,@costs))">2</button>
+
+            }
+
+        </div>
+    }
+</div>
+@{
+    <div style="@(@showMessage2Activated ? "display:block" : "display:none")">
+
+        <a class="cord">
+
+            <button @onmousedown="@(e => CloseMessage2(e, false))">Close</button>
+
+            @if (whoOwnsTower == 1)
+            {
+                <br />
+                <a>Size: @attack</a>
+                <br />
+                <a>Costs: @costs</a>
+                <br />
+                <a>Lvl: @towerLvl->@nxtTowerLvl  </a>
+                <br />
+                <a> Def: @defence->@nxtDefence</a>
+                <br />
+                <a> Borns: @towerLvl % ->@nxtTowerLvl %</a>
+                <br />
+                <a class="btn btn-danger" href="/Game/CreateArmyMission/@worldId/@owner/@player1Id/@player2Id/@towerId/@playerIdWhoClicks">Move</a>
+
+                <a class="btn btn-success" href="Game/UpgradeTower/@towerId/@loggedInAccountId/@owner/@player1Id/@player2Id/@worldId">Upgrade tower</a>
+
+            }
+            @if (whoOwnsTower == 2)
+            {
+                <br />
+                <a class="towerLayout" href="/Game/CreateArmyMission/@worldId/@owner/@player1Id/@player2Id/@towerId/@playerIdWhoClicks">Move</a>
+
+
+            }
+
+            @if (whoOwnsTower == 0)
+            {
+                <br />
+                <a class="btn btn-danger" href="/Game/CreateArmyMission/@worldId/@owner/@player1Id/@player2Id/@towerId/@playerIdWhoClicks">Move</a>
+            }
+        </a>
+    </div>
+}
+
+
+
+@*<div class="wrapper">
+        @{
+            int counter = 0;
+            string towerOwnerColor = "";
+        }
+        @foreach (var item in towers)
+        {
+            counter++;
+            string box = "box" + counter;
+            if (item.Owner == playerIdWhoClicks)
+            {
+                towerOwnerColor = "friendly";
+            }
+            else if (item.Owner == 0)
+            {
+                towerOwnerColor = "empty";
+            }
+            else
+            {
+                towerOwnerColor = "enemy";
+            }
         <div class="@box @towerOwnerColor">
             <h5> @item.TowerName</h5>
 
             <a class="btn btn-danger" href="/Game/CreateArmyMission/@item.WorldId/@item.Owner/@item.Player1Id/@item.Player2Id/@item.TowerId/@playerIdWhoClicks">Move</a>
-            @*<a class="btn btn-danger" asp-action="CreateArmyMission" asp-route-playerIdWhoClicks="@playerIdWhoClicks" asp-route-accountId="@loggedInAccountId" asp-route-Owner="@item.Owner" asp-route-WorldId="@item.WorldId" asp-route-SelectedTower="@item.TowerId" asp-route-player1Id="@item.Player1Id" asp-route-player2Id="@item.Player2Id">Move</a>*@
 
 
             @{ if (item.Owner == @playerIdWhoClicks)
-                {
-                    int TowerLvl = item.TowerLvl;
-                    int Defence = (item.TowerLvl) * 5;
-                    int costs = (item.TowerLvl + 1) * 100;
-                    int nxtTowerLvl = item.TowerLvl + 1;
-                    int nxtDefence = (item.TowerLvl + 1) * 5;
-                    <br />
-                    @*<span>Size: <a style="font-size:20px; color:red;"> @Html.DisplayFor(modelItem => item.Attack)</a></span>*@
-                    <span>Size: <a style="font-size:20px; color:red;"> @item.Attack</a></span>
+                    {
+                        int TowerLvl = item.TowerLvl;
+                        int Defence = (item.TowerLvl) * 5;
+                        int costs = (item.TowerLvl + 1) * 100;
+                        int nxtTowerLvl = item.TowerLvl + 1;
+                        int nxtDefence = (item.TowerLvl + 1) * 5;
+                <br />
+                <span>Size: <a style="font-size:20px; color:red;"> @item.Attack</a></span>
 
 
-                    @*<a class="btn btn-success" @onclick="@(e => UpgradeTower(@loggedInAccountId, @item.TowerId, @item.Owner, @item.Player1Id, @item.Player2Id, @item.WorldId))">Upgrade tower</a>*@
-                    <a class="btn btn-success" href="Game/UpgradeTower/@item.TowerId/@loggedInAccountId/@item.Owner/@item.Player1Id/@item.Player2Id/@item.WorldId">Upgrade tower</a>
+                <a class="btn btn-success" href="Game/UpgradeTower/@item.TowerId/@loggedInAccountId/@item.Owner/@item.Player1Id/@item.Player2Id/@item.WorldId">Upgrade tower</a>
 
-                    @*<a class="btn btn-success" asp-action="UpgradeTower" asp-route-accountId="@loggedInAccountId" asp-route-id="@item.TowerId" asp-route-owner="@item.Owner" asp-route-player1Id="@item.Player1Id" asp-route-player2Id="@item.Player2Id" asp-route-worldId="@item.WorldId">Upgrade tower</a>*@
-                    <br />
+                <br />
 
-                    <a class="upgrade">Costs: @costs</a>
-                    <br />
-                    <a class="upgrade">Lvl: @item.TowerLvl -> @nxtTowerLvl</a>
-                    <br />
-                    <a class="upgrade">Def: @Defence -> @nxtDefence</a>
-                    <br />
-                    <a class="upgrade">Borns: @item.TowerLvl% -> @nxtTowerLvl% </a>
-                }
+                <a class="upgrade">Costs: @costs</a>
+                <br />
+                <a class="upgrade">Lvl: @item.TowerLvl -> @nxtTowerLvl</a>
+                <br />
+                <a class="upgrade">Def: @Defence -> @nxtDefence</a>
+                <br />
+                <a class="upgrade">Borns: @item.TowerLvl% -> @nxtTowerLvl% </a>
+                    }
             }
         </div>
-    }
-</div>
+        }
+    </div>*@
 
+<style>
+
+    /*.towerLayout {
+        border: 2px solid #f76707;
+        border-radius: 50px;
+        background-color: #fff4e6;
+        display: grid;
+        grid-template-columns: repeat(8, 185px);*/ /* 12.5%*/
+        /*grid-template-rows: repeat(3, 100px);*/ /* 225*/
+        /*width: 90%;*/ /*90%*/
+        /*position: absolute;
+        left: 50%;
+        top: 577px;
+        transform: translate(-50%, -50%);
+    }*/
+
+    .towerMenu {
+        position: sticky;
+        left: @x;
+        top: @y;
+        width: 50px;
+        height: 100px;
+    }
+
+ .cord {
+        position: fixed;
+        left: @x;
+        top: @y;
+        width: 250px;
+        height: 230px;
+        background-color:aqua;
+        }
+</style>
 
 @code {
 
-    private void UpgradeTower(int accountId, int id, int owner, int player1Id, int player2Id, int worldId)
+    private string cord;
+    private int towerLvl;
+    private int defence;
+    private int costs;
+
+    private int towerId;
+    private int owner;
+    private int player1Id;
+    private int player2Id;
+    private int worldId;
+
+    private int nxtTowerLvl;
+    private int nxtDefence;
+
+    private int? attack;
+
+    private string x;
+    private string y;
+    public bool showMessage2Activated = false;
+
+    private int whoOwnsTower = 0; // 0 = neutral, 1 = Friendly, 2 = Enemy
+
+
+    private void Enemy(MouseEventArgs e,
+   int TowerId, int Owner, int Player1Id, int Player2Id, int WorldId)
     {
-        //Microsoft.AspNetCore.Http.Extensions.UriHelper.("newcomponent");
-        //UriHelper.NavigateTo("newcomponent");
-        //Game / UpgradeTower /{ id}/{ accountId}/{ Owner}/{ Player1Id}/{ Player2Id}/{ WorldId}
-        NavigationManager.NavigateTo("Game/UpgradeTower/" + id + "/" + accountId + "/" + owner + "/" + player1Id + "/" + player2Id + "/" + worldId);
-        //NavigationManager.NavigateTo("Game/UpgradeTower/" + id + "/" + accountId + "/" + owner + "/" + player1Id + "/" + player2Id + "/" + worldId);
+        whoOwnsTower = 2;
 
-        //NavigationManager.NavigateTo("Game/UpgradeTower/" + towerId);
+        x = Convert.ToString(e.ClientX + 5) + "px";
+        y = Convert.ToString(e.ClientY + 5) + "px";
 
+
+        towerId = TowerId;
+        owner = Owner;
+        player1Id = Player1Id;
+        player2Id = Player2Id;
+        worldId = WorldId;
+        // LoggedInAccountId
+
+
+        showMessage2Activated = true;
     }
 
-    [Parameter]
-    public int YourId { get; set; } // POLE VEEL KUTSUTUD
+    private void CloseMessage2(MouseEventArgs e, bool closed)
+    {
+        showMessage2Activated = false;
+    }
+
+    private void Friendly(MouseEventArgs e,
+        int TowerLvl, int Defence, int Costs, int TowerId, int Owner, int Player1Id, int Player2Id, int WorldId, int NxtTowerLvl, int NxtDefence, int? Attack)
+    {
+        whoOwnsTower = 1;
+
+        x = Convert.ToString(e.ClientX + 5) + "px";
+        y = Convert.ToString(e.ClientY + 5) + "px";
+        towerLvl = TowerLvl;
+        defence = Defence;
+        costs = Costs;
+
+        towerId = TowerId;
+        owner = Owner;
+        player1Id = Player1Id;
+        player2Id = Player2Id;
+        worldId = WorldId;
+        // LoggedInAccountId
+        attack = Attack;
+
+        nxtTowerLvl = NxtTowerLvl;
+        nxtDefence = NxtDefence;
+
+        showMessage2Activated = true;
+    }
+
+
 
     [Parameter]
-    public string YourName { get; set; } // POLE VEEL KUTSUTUD
+    public int YourId { get; set; }
 
     [Parameter]
-    public int EnemyId { get; set; } // POLE VEEL KUTSUTUD
+    public string YourName { get; set; }
 
     [Parameter]
-    public string EnemyName { get; set; } // POLE VEEL KUTSUTUD
+    public int EnemyId { get; set; }
 
     [Parameter]
-    public string Winner { get; set; } // POLE VEEL KUTSUTUD
+    public string EnemyName { get; set; }
+
+    [Parameter]
+    public string Winner { get; set; }
 
 
 
@@ -213,6 +439,49 @@
 
 
 <style>
+
+    .darken {
+        -webkit-transition: all 1s ease;
+        -moz-transition: all 1s ease;
+        -o-transition: all 1s ease;
+        -ms-transition: all 1s ease;
+        transition: all 1s ease;
+    }
+
+        .darken:hover {
+            -webkit-filter: brightness(70%);
+            filter: brightness(70%);
+        }
+
+
+
+    .inPicture {
+        /* display: inline-block !important;
+        position: relative;*/
+        /* display: inline-block !important;
+        position: absolute;
+        padding-left: 4vh;
+        padding-top: 3vh;
+        margin-top: -7vh;*/
+        /*   margin-top: -7vh;
+        display: inline-block !important;
+        position: absolute;
+        padding-left: 4vh;*/
+        margin-top: 3vh;
+        display: inline-block !important;
+        position: absolute;
+        /* padding-left: 4vh; */
+        margin-left: -5.7vh;
+    }
+
+    .towerBTN {
+        margin-top: 20%;
+    }
+
+    .middle {
+        margin-left: 30%;
+        margin-top: -5%;
+    }
 
     .upgrade {
         font-size: 17px;
@@ -447,41 +716,86 @@
     }
 
     .wrapper {
-        border: 2px solid #f76707;
-        border-radius: 50px;
-        background-color: #fff4e6;
+        /*        border: 2px solid #f76707;*/
+        /*border-radius: 50px;*/
+        /*        background-color: #fff4e6;*/
+        /*display: grid;
+                grid-template-columns: repeat(8, 11.25%);*/ /* 12.5%  185*/
+        /*grid-template-rows: repeat(3, 22.5%);*/ /* 225   100*/
+        /*width: 90%;*/ /*90%   1480px*/
+        /*position: absolute;
+                left: 50%;
+                top: 577px;
+                transform: translate(-50%, -50%);
+                text-align: center;*/
+        /*
+                border-radius: 50px;
+                display: inline-grid;
+                grid-template-columns: repeat(8, 12.5%);
+                grid-template-rows: repeat(3, 100%);
+                width: 80%;
+                position: absolute;
+                left: 50%;
+                top: 577px;
+                transform: translate(-50%, -50%);
+                margin-: auto;
+                text-align: center;
+                */
+        /*display: grid;
+                grid-template-columns: repeat(8, 10vh);
+                grid-template-rows: repeat(3, 30.5%);
+                position: fixed;
+                left: 50%;
+                top: 577px;
+                transform: translate(-50%, -50%);
+                padding-right: 5%;
+                grid-auto-rows: minmax(100px, auto);*/
+        /*   display: grid;
+            top: 300px;
+            width: 100%;
+            position: relative;*/
+        /*        //////////////////*/
+        grid-template-columns: repeat(8,10vh);
+        /* width: 90%; */
         display: grid;
-        grid-template-columns: repeat(8, 185px); /* 12.5%*/
-        grid-template-rows: repeat(3, 260px); /* 225*/
-        width: 1480px; /*90%*/
-        position: absolute;
-        left: 50%;
-        top: 577px;
-        transform: translate(-50%, -50%);
+        top: 300px;
+        /* width: 100%; */
+        position: relative;
+        padding-left: px;
+        left: 15%;
     }
 
         .wrapper > .friendly {
-            border: 2px solid #ffa94d;
-            border-radius: 10px;
+            /*            border: 2px solid #ffa94d;
+    */ /*            border-radius: 10px;*/
             background-color: lightgreen;
-            padding: 1em;
+            /*            padding: 1em;*/
             color: black;
+            width: 10vh;
+            height: 10vh
         }
 
         .wrapper > .enemy {
-            border: 2px solid #ffa94d;
-            border-radius: 10px;
+            /*            border: 2px solid #ffa94d;
+                /*background-color: lightcoral;
+                color: black;
+                border: 2px solid #ffa94d;*/
+            /* border-radius: 10px; */
             background-color: lightcoral;
-            padding: 1em;
+            /* padding: 1em; */
             color: black;
+            width: 10vh;
+            height: 10vh
         }
 
         .wrapper > .empty {
-            border: 2px solid #ffa94d;
-            border-radius: 10px;
+            /*            border: 2px solid #ffa94d;
+                /*            border-radius: 10px;*/
             background-color: grey;
-            padding: 1em;
+            /*            padding: 1em;*/
             color: black;
+            width: 10vh;
+            height: 10vh
         }
 
 

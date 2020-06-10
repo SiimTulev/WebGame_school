@@ -35,7 +35,7 @@ namespace WebGame
             services.AddSingleton<TestService>();
 
 
-            //services.AddRazorPages().AddRazorRuntimeCompilation();
+            services.AddRazorPages().AddRazorRuntimeCompilation(); // P2RAST MAHA V6TTA?
             services.AddMvc().AddRazorRuntimeCompilation();
 
             // For Developing only
