@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\C#\\WebGame_database\\FileZillaLinuxGame\\WebGame_school_AND_BLAZOR_20_Layout_in_the_middle\\WebGame.csproj": {}
+    "C:\\C#\\WebGame_database\\FileZillaLinuxGame\\WebGame_school_AND_BLAZOR_21_Tower_display\\WebGame.csproj": {}
   },
   "projects": {
-    "C:\\C#\\WebGame_database\\FileZillaLinuxGame\\WebGame_school_AND_BLAZOR_20_Layout_in_the_middle\\WebGame.csproj": {
+    "C:\\C#\\WebGame_database\\FileZillaLinuxGame\\WebGame_school_AND_BLAZOR_21_Tower_display\\WebGame.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\C#\\WebGame_database\\FileZillaLinuxGame\\WebGame_school_AND_BLAZOR_20_Layout_in_the_middle\\WebGame.csproj",
+        "projectUniqueName": "C:\\C#\\WebGame_database\\FileZillaLinuxGame\\WebGame_school_AND_BLAZOR_21_Tower_display\\WebGame.csproj",
         "projectName": "WebGame",
-        "projectPath": "C:\\C#\\WebGame_database\\FileZillaLinuxGame\\WebGame_school_AND_BLAZOR_20_Layout_in_the_middle\\WebGame.csproj",
+        "projectPath": "C:\\C#\\WebGame_database\\FileZillaLinuxGame\\WebGame_school_AND_BLAZOR_21_Tower_display\\WebGame.csproj",
         "packagesPath": "C:\\Users\\Yorwet\\.nuget\\packages\\",
-        "outputPath": "C:\\C#\\WebGame_database\\FileZillaLinuxGame\\WebGame_school_AND_BLAZOR_20_Layout_in_the_middle\\obj\\",
+        "outputPath": "C:\\C#\\WebGame_database\\FileZillaLinuxGame\\WebGame_school_AND_BLAZOR_21_Tower_display\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Microsoft\\Xamarin\\NuGet\\",

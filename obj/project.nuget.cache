@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "WJcOUSH/Nab2e43bM87e54xsjNjeRsRh2dItGxpy36VEBs93x8O/+5fwzAsZE4yghganW0nqQPEtl4dDBPB5Ew==",
+  "dgSpecHash": "sd52OPK91nw0v82bgIUjtedaI2xw8167l4Zd+BoQ/nEMsVG0JCLZr2Nozj9yoHGANA0HxR0ecqvwigIgObQzkA==",
   "success": true,
-  "projectFilePath": "C:\\C#\\WebGame_database\\FileZillaLinuxGame\\WebGame_school_AND_BLAZOR_20_Layout_in_the_middle\\WebGame.csproj",
+  "projectFilePath": "C:\\C#\\WebGame_database\\FileZillaLinuxGame\\WebGame_school_AND_BLAZOR_21_Tower_display\\WebGame.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Yorwet\\.nuget\\packages\\bouncycastle.netcore\\1.8.3\\bouncycastle.netcore.1.8.3.nupkg.sha512",
     "C:\\Users\\Yorwet\\.nuget\\packages\\google.protobuf\\3.6.1\\google.protobuf.3.6.1.nupkg.sha512",
