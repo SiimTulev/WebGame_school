@@ -13,17 +13,31 @@ namespace WebGame
 {
     public class Program
     {
+        //    public static void Main(string[] args)
+        //    {
+        //        CreateWebHostBuilder(args).Build().Run();
+
+        //    }
+
+
+        //    public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
+        //       WebHost.CreateDefaultBuilder(args)
+        //       .UseStartup<Startup>()
+        //       .UseUrls("http://localhost:5003");
+
+        //}
+
         public static void Main(string[] args)
         {
-            CreateWebHostBuilder(args).Build().Run();
-
+            CreateHostBuilder(args).Build().Run();
         }
 
-
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
-           WebHost.CreateDefaultBuilder(args)
-           .UseStartup<Startup>()
-           .UseUrls("http://localhost:5003");
-
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    //webBuilder.UseSetting(WebHostDefaults.DetailedErrorsKey, "true");
+                    webBuilder.UseStartup<Startup>();
+                });
     }
 }

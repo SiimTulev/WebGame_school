@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\C#\\WebGame_database\\FileZillaLinuxGame\\WebGame_school_AND_BLAZOR_20_Layout_in_the_middle\\WebGame.csproj": {}
+    "C:\\C#\\WebGame_database\\FileZillaLinuxGame\\WebGame_Blazor_SignalR_8_Doing_MainGame_in_blazor\\WebGame_school_AND_BLAZOR_21_Tower_display\\WebGame.csproj": {}
   },
   "projects": {
-    "C:\\C#\\WebGame_database\\FileZillaLinuxGame\\WebGame_school_AND_BLAZOR_20_Layout_in_the_middle\\WebGame.csproj": {
+    "C:\\C#\\WebGame_database\\FileZillaLinuxGame\\WebGame_Blazor_SignalR_8_Doing_MainGame_in_blazor\\WebGame_school_AND_BLAZOR_21_Tower_display\\WebGame.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\C#\\WebGame_database\\FileZillaLinuxGame\\WebGame_school_AND_BLAZOR_20_Layout_in_the_middle\\WebGame.csproj",
+        "projectUniqueName": "C:\\C#\\WebGame_database\\FileZillaLinuxGame\\WebGame_Blazor_SignalR_8_Doing_MainGame_in_blazor\\WebGame_school_AND_BLAZOR_21_Tower_display\\WebGame.csproj",
         "projectName": "WebGame",
-        "projectPath": "C:\\C#\\WebGame_database\\FileZillaLinuxGame\\WebGame_school_AND_BLAZOR_20_Layout_in_the_middle\\WebGame.csproj",
+        "projectPath": "C:\\C#\\WebGame_database\\FileZillaLinuxGame\\WebGame_Blazor_SignalR_8_Doing_MainGame_in_blazor\\WebGame_school_AND_BLAZOR_21_Tower_display\\WebGame.csproj",
         "packagesPath": "C:\\Users\\Yorwet\\.nuget\\packages\\",
-        "outputPath": "C:\\C#\\WebGame_database\\FileZillaLinuxGame\\WebGame_school_AND_BLAZOR_20_Layout_in_the_middle\\obj\\",
+        "outputPath": "C:\\C#\\WebGame_database\\FileZillaLinuxGame\\WebGame_Blazor_SignalR_8_Doing_MainGame_in_blazor\\WebGame_school_AND_BLAZOR_21_Tower_display\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Microsoft\\Xamarin\\NuGet\\",
@@ -43,6 +43,18 @@
       "frameworks": {
         "netcoreapp3.0": {
           "dependencies": {
+            "Dapper": {
+              "target": "Package",
+              "version": "[2.0.35, )"
+            },
+            "Microsoft.AspNet.Providers.Core": {
+              "target": "Package",
+              "version": "[2.0.0, )"
+            },
+            "Microsoft.AspNetCore.Components.Authorization": {
+              "target": "Package",
+              "version": "[3.0.0, )"
+            },
             "Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore": {
               "target": "Package",
               "version": "[3.0.0, )"
@@ -56,6 +68,10 @@
               "version": "[3.0.0, )"
             },
             "Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation": {
+              "target": "Package",
+              "version": "[3.0.0, )"
+            },
+            "Microsoft.AspNetCore.SignalR.Client": {
               "target": "Package",
               "version": "[3.0.0, )"
             },
@@ -130,7 +146,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "c:\\program files\\dotnet\\sdk\\3.1.300\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "c:\\program files\\dotnet\\sdk\\3.1.301\\RuntimeIdentifierGraph.json"
         }
       }
     }

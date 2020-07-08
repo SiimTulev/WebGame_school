@@ -6,7 +6,6 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using WebGame.Models.GameViewModels;
 using WebGame.Models.WebGame;
-//using Microsoft.EntityFrameworkCore;
 
 
 
@@ -62,7 +61,9 @@ namespace WebGame.ViewComponents
             if (soonReturning > 0)
                 ViewBag.SoonReturning = " + Army returning sometime (" + soonReturning + ")";
 
+            //string view = "OverallStats";
             string view = "OverallStats";
+
             return View(view);
         }
 

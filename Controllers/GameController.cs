@@ -90,6 +90,15 @@ namespace WebGame.Controllers
 
             ViewBag.PlayerIdWhoClicks = playerIdWhoClicks;
 
+            if (playerIdWhoClicks == player1Id) // For SignalR function Dynamic OverallStats update
+            {
+                ViewBag.EnemyPlayerId = player2Id;
+            }
+            else
+            {
+                ViewBag.EnemyPlayerId = player1Id;
+            }
+
             var findPlayerGold = (from d in _context.Player
                                   where d.PlayerId == playerIdWhoClicks && d.WorldId == worldId
                                   select d.Gold).FirstOrDefault();
@@ -234,7 +243,7 @@ namespace WebGame.Controllers
             if (player.Gold < 0)
             {
                 // return RedirectToAction("MainGame", new { error = 1, Player1Id = player1Id, Player2Id = player2Id, WorldId = worldId, accountId = (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))) });
-                return Redirect("https://localhost:44331/Game/MainGameRazor/1/" + player1Id + "/" + player2Id + "/" + worldId + "/" + accountId);
+                return Redirect("http://localhost:51745/Game/MainGameRazor/1/" + player1Id + "/" + player2Id + "/" + worldId + "/" + accountId);
 
             }
             if (player.Gold >= 0)
@@ -248,7 +257,7 @@ namespace WebGame.Controllers
                 await _context.SaveChangesAsync();
             }
             //return RedirectToAction("MainGame", new { Player1Id = player1Id, Player2Id = player2Id, WorldId = worldId, accountId = (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))) });
-            return Redirect("https://localhost:44331/Game/MainGameRazor/0/" + player1Id + "/" + player2Id + "/" + worldId + "/" + accountId);
+            return Redirect("http://localhost:51745/Game/MainGameRazor/0/" + player1Id + "/" + player2Id + "/" + worldId + "/" + accountId);
         }
 
         [HttpGet("Game/CancelArmyMovement/{worldId}/{PlayerIdWhoClicks}/{player1Id}/{player2Id}")]
@@ -572,11 +581,9 @@ namespace WebGame.Controllers
                 _context.SaveChanges();
             }
 
-            var worldTowers = new List<int> { player1Id, player2Id }; // Viin alla poole?
 
             var towers = await (from ep in _context.Tower
                                 join e in _context.World on ep.WorldId equals e.WorldId
-                                //where worldTowers.Contains(ep.Owner)
                                 where e.WorldId == worldId
                                 select new TowerViewModel
                                 {
@@ -776,9 +783,9 @@ namespace WebGame.Controllers
             _context.SaveChanges();
 
             // Go to the same URL where the "READY" was pressed
-            string checkUrl = Redirect("https://localhost:44331/Game/MainGameRazor/0/" + world.Player1Id + "/" + world.Player2Id + "/" + worldId + "/" + (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier)))).Url;
+            //string checkUrl = Redirect("http://localhost:51745/Game/MainGameRazor/0/" + world.Player1Id + "/" + world.Player2Id + "/" + worldId + "/" + (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier)))).Url;
 
-            return Redirect("https://localhost:44331/Game/MainGameRazor/0/" + world.Player1Id + "/" + world.Player2Id + "/" + worldId + "/" + (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))));
+            return Redirect("http://localhost:51745/Game/MainGameRazor/0/" + world.Player1Id + "/" + world.Player2Id + "/" + worldId + "/" + (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))));
 
             //return RedirectToAction("MainGame", new { Player1Id = world.Player1Id, Player2Id = world.Player2Id, WorldId = world.WorldId, accountId = (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))) });
         }
@@ -949,7 +956,7 @@ namespace WebGame.Controllers
                     throw;
                 }
             }
-            return Redirect("https://localhost:44331/Game/MainGameRazor/0/" + player1Id + "/" + player2Id + "/" + worldId + "/" + (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))));
+            return Redirect("http://localhost:51745/Game/MainGameRazor/0/" + player1Id + "/" + player2Id + "/" + worldId + "/" + (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))));
 
             //return RedirectToAction("MainGame", new { Player1Id = towerViewModel.Player1Id, Player2Id = towerViewModel.Player2Id, WorldId = towerViewModel.WorldId, accountId = (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))) });
         }

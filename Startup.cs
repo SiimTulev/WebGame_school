@@ -32,8 +32,9 @@ namespace WebGame
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton<TestService>();
 
+            services.AddScoped<OverallStatsLogic>(); //AddSingleton does not work  BUT AddTransient and AddScoped works
+            services.AddScoped<MainGameLogic>(); //AddSingleton does not work  BUT AddTransient and AddScoped works
 
             services.AddRazorPages().AddRazorRuntimeCompilation(); // P2RAST MAHA V6TTA?
             services.AddMvc().AddRazorRuntimeCompilation();
@@ -48,9 +49,9 @@ namespace WebGame
 
             // Identity (takes the database location)
             services.AddDbContext<IdentityAppContext>(cfg =>
-           {
-               cfg.UseMySql(Configuration.GetConnectionString("WebGame"));
-           });
+               cfg.UseMySql(Configuration.GetConnectionString("WebGame")),
+            ServiceLifetime.Transient);
+
             // Identity
             services.Configure<IdentityOptions>(options =>
            {
@@ -64,8 +65,9 @@ namespace WebGame
            });
 
             services.AddDbContext<webgameContext>(options =>
-               options.UseMySql(Configuration.GetConnectionString("WebGame"))
-            );
+               options.UseMySql(Configuration.GetConnectionString("WebGame")),
+            ServiceLifetime.Transient);
+
             services.AddControllersWithViews();
             services.AddRazorPages();
             services.AddServerSideBlazor();
@@ -100,6 +102,8 @@ namespace WebGame
                    pattern: "{controller=Game}/{action=Tutorial}/{id?}");
                endpoints.MapRazorPages();
                endpoints.MapBlazorHub();
+               endpoints.MapHub<NotificationHub>("/notificationHub"); // VAJALIK
+
            });
         }
     }

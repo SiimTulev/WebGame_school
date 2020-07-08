@@ -1,0 +1,185 @@
+﻿@page "/OverallStats"
+
+
+@using System.Security.Claims;
+@using Microsoft.AspNetCore.SignalR.Client
+@using Microsoft.AspNetCore.Components.Forms
+@using WebGame.Data
+@using WebGame.ViewComponents
+@inject OverallStatsLogic _OverallStats
+@inject NavigationManager NavigationManager
+
+@{
+    @*if (_hubConnection.ConnectionId != _connectionId)
+        {
+
+            <div class="MenuStats">
+                <a> <span class="people" id="people">People now: (@overallStats.PeopleNow) @overallStats.PeopleGrowing @overallStats.SoonReturning </span></a>
+                <br />
+                <a><span id="gold">Gold now:   (@overallStats.FindPlayerGold) + Gold from towers (@overallStats.goldForTowers) </span></a>
+
+            </div>
+        }
+        else if (_hubConnection.ConnectionId == _connectionId)
+        {
+
+            <div class="MenuStats">
+                <a> <span class="people" id="people">People now: (@overallStats.PeopleNow) @overallStats.PeopleGrowing @overallStats.SoonReturning </span></a>
+                <br />
+                <a><span id="gold">Gold now:   (@overallStats.FindPlayerGold) + Gold from towers (@overallStats.goldForTowers) </span></a>
+
+            </div>
+        }*@
+    if (overallStats == null)
+    {
+
+        <div class="MenuStats">
+            <a> <span class="people" id="people">People now: (@overallStatsSingle.PeopleNow) @overallStatsSingle.PeopleGrowing @overallStatsSingle.SoonReturning </span></a>
+            <br />
+            <a><span id="gold">Gold now:   (@overallStatsSingle.FindPlayerGold) + Gold from towers (@overallStatsSingle.goldForTowers) </span></a>
+
+        </div>
+    }
+    else
+    {
+        if (_hubConnection.ConnectionId == _connectionId && playerId == overallStats.Player1Id)
+        {
+            <div class="MenuStats">
+                <a> <span class="people" id="people">People now: (@overallStats.PeopleNowPlayer1) @overallStats.PeopleGrowingPlayer1 @overallStats.SoonReturningPlayer1 </span></a>
+                <br />
+                <a><span id="gold">Gold now:   (@overallStats.FindPlayerGoldPlayer1) + Gold from towers (@overallStats.goldForTowersPlayer1) </span></a>
+
+            </div>
+        }
+        else if (_hubConnection.ConnectionId != _connectionId && playerId == overallStats.Player1Id)
+        {
+            <div class="MenuStats">
+                <a> <span class="people" id="people">People now: (@overallStats.PeopleNowPlayer1) @overallStats.PeopleGrowingPlayer1 @overallStats.SoonReturningPlayer1 </span></a>
+                <br />
+                <a><span id="gold">Gold now:   (@overallStats.FindPlayerGoldPlayer1) + Gold from towers (@overallStats.goldForTowersPlayer1) </span></a>
+
+            </div>
+        }
+
+        else if (_hubConnection.ConnectionId == _connectionId && playerId == overallStats.Player2Id)
+        {
+            <div class="MenuStats">
+                <a> <span class="people" id="people">People now: (@overallStats.PeopleNowPlayer2) @overallStats.PeopleGrowingPlayer2 @overallStats.SoonReturningPlayer2 </span></a>
+                <br />
+                <a><span id="gold">Gold now:   (@overallStats.FindPlayerGoldPlayer2) + Gold from towers (@overallStats.goldForTowersPlayer2) </span></a>
+
+            </div>
+        }
+        else if (_hubConnection.ConnectionId != _connectionId && playerId == overallStats.Player2Id)
+        {
+            <div class="MenuStats">
+                <a> <span class="people" id="people">People now: (@overallStats.PeopleNowPlayer2) @overallStats.PeopleGrowingPlayer2 @overallStats.SoonReturningPlayer2 </span></a>
+                <br />
+                <a><span id="gold">Gold now:   (@overallStats.FindPlayerGoldPlayer2) + Gold from towers (@overallStats.goldForTowersPlayer2) </span></a>
+
+            </div>
+        }
+    }
+
+
+
+}
+
+@*<h1>connection: @_hubConnection.ConnectionId</h1>*@
+<style>
+    .MenuStats {
+        left: 15.2%;
+        right: 30%;
+        top: 41.8px;
+        position: fixed;
+        z-index: 1;
+        padding: 0px;
+    }
+
+    #people {
+        color: red;
+    }
+
+    #gold {
+        color: darkgoldenrod;
+    }
+
+    a {
+        font-size: 20px;
+    }
+
+    @@media (max-width:929px) {
+        a {
+            font-size: 18px;
+        }
+    }
+
+    @@media (max-width:688px) {
+        a {
+            font-size: 16px;
+        }
+    }
+</style>
+
+@code{
+
+    int test = 0;
+    string _connectionId = "";
+    int test2 = 0;
+    private HubConnection _hubConnection;
+
+    private OverallStatsModel overallStats;
+    private OverallStatsSingleModel overallStatsSingle;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _hubConnection = new HubConnectionBuilder()
+       .WithUrl(NavigationManager.ToAbsoluteUri("/notificationHub"))
+       .Build();
+
+        overallStatsSingle = await _OverallStats.GetOverallStatsSingle(worldId, playerId); // queue matters. WorldId first, etc.
+
+
+        _hubConnection.On<OverallStatsModel, string>("ReceiveOverallStats", async (_overallStats, connectionId) =>
+        {
+            test++;
+
+            _connectionId = connectionId;
+            overallStats = _overallStats;
+            StateHasChanged();
+
+        });
+
+
+
+        await _hubConnection.StartAsync();
+    }
+
+    public bool IsConnected =>
+_hubConnection.State == HubConnectionState.Connected;
+
+
+
+    [Parameter]
+    public int worldId { get; set; }
+    [Parameter]
+    public int playerId { get; set; }
+
+    [Parameter]
+    public int PeopleNow { get; set; }
+
+    [Parameter]
+    public int PeopleGrowing { get; set; }
+
+    [Parameter]
+    public int SoonReturning { get; set; }
+
+    [Parameter]
+    public int FindPlayerGold { get; set; }
+
+    [Parameter]
+    public int goldForTowers { get; set; }
+
+
+
+}

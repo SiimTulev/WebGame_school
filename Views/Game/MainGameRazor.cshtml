@@ -4,10 +4,18 @@
     ViewData["Title"] = "MainGameRazor";
 }
 
-@await Component.InvokeAsync("OverallStats", new { worldId = ViewBag.WorldId, playerId = ViewBag.PlayerIdWhoClicks })
+@*@await Component.InvokeAsync("OverallStats", new { worldId = ViewBag.WorldId, playerId = ViewBag.PlayerIdWhoClicks })*@
+@*@await Component.InvokeAsync("Test", new { worldId = ViewBag.WorldId, playerId = ViewBag.PlayerIdWhoClicks })*@
+
 
 
 @*@(await Html.RenderComponentAsync<WebGame.Components.MainGameRazor>(RenderMode.ServerPrerendered))*@
+
+@(await Html.RenderComponentAsync<WebGame.Components.OverallStats>(RenderMode.ServerPrerendered,new
+    {
+        worldId = ViewBag.WorldId,
+        playerId = ViewBag.EnemyPlayerId,
+    }))
 @(await Html.RenderComponentAsync<WebGame.Components.MainGameRazor>(RenderMode.ServerPrerendered,new
 { towers = ViewBag.Towers, playerIdWhoClicks = ViewBag.PlayerIdWhoClicks, loggedInAccountId = Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier)),
     error = @ViewBag.Error, you = @ViewBag.You, enemy = @ViewBag.Enemy,
@@ -16,5 +24,9 @@
     YourName = ViewBag.YourName,
     EnemyId = ViewBag.EnemyId,
     EnemyName = ViewBag.EnemyName,
-    Winner = ViewBag.Winner
+    Winner = ViewBag.Winner,
+
+    WorldId = ViewBag.WorldId,
+    Player1Id = ViewBag.Player1Id,
+    Player2Id = ViewBag.Player2Id
 }))
