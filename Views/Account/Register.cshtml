@@ -47,24 +47,3 @@
 @section Scripts {
     @await Html.PartialAsync("_ValidationScriptsPartial")
 }
-
-
-
-
-
-
-
-
-
-
-@*@{
-        ViewData["Title"] = "Register";
-    }
-
-    @if (!User.Identity.IsAuthenticated) // If account is logged in
-    {
-        <div>
-            @ViewBag.Message
-        </div>
-    }*@
-

@@ -10,26 +10,6 @@
 @inject NavigationManager NavigationManager
 
 @{
-    @*if (_hubConnection.ConnectionId != _connectionId)
-        {
-
-            <div class="MenuStats">
-                <a> <span class="people" id="people">People now: (@overallStats.PeopleNow) @overallStats.PeopleGrowing @overallStats.SoonReturning </span></a>
-                <br />
-                <a><span id="gold">Gold now:   (@overallStats.FindPlayerGold) + Gold from towers (@overallStats.goldForTowers) </span></a>
-
-            </div>
-        }
-        else if (_hubConnection.ConnectionId == _connectionId)
-        {
-
-            <div class="MenuStats">
-                <a> <span class="people" id="people">People now: (@overallStats.PeopleNow) @overallStats.PeopleGrowing @overallStats.SoonReturning </span></a>
-                <br />
-                <a><span id="gold">Gold now:   (@overallStats.FindPlayerGold) + Gold from towers (@overallStats.goldForTowers) </span></a>
-
-            </div>
-        }*@
     if (overallStats == null)
     {
 
@@ -80,17 +60,14 @@
             </div>
         }
     }
-
-
-
 }
 
 @*<h1>connection: @_hubConnection.ConnectionId</h1>*@
 <style>
     .MenuStats {
-        left: 15.2%;
+        left: 100px;
         right: 30%;
-        top: 41.8px;
+        top: 0px;
         position: fixed;
         z-index: 1;
         padding: 0px;
@@ -123,9 +100,7 @@
 
 @code{
 
-    int test = 0;
     string _connectionId = "";
-    int test2 = 0;
     private HubConnection _hubConnection;
 
     private OverallStatsModel overallStats;
@@ -142,8 +117,6 @@
 
         _hubConnection.On<OverallStatsModel, string>("ReceiveOverallStats", async (_overallStats, connectionId) =>
         {
-            test++;
-
             _connectionId = connectionId;
             overallStats = _overallStats;
             StateHasChanged();
@@ -179,7 +152,4 @@ _hubConnection.State == HubConnectionState.Connected;
 
     [Parameter]
     public int goldForTowers { get; set; }
-
-
-
 }

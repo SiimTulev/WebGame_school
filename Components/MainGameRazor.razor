@@ -19,258 +19,214 @@
 @inject OverallStatsLogic _OverallStats
 @* TODO:
     Update Money, etc after update click
-
-
-
 *@
 
-@*@Component.InvokeAsync("OverallStats", new { worldId = ViewBag.WorldId, playerId = ViewBag.PlayerIdWhoClicks })
-    <OverallStats />*@
-@*<TestVar UserName="Siim"/>*@
+<body>
+    <div class="OverallStats">
+        @{
+            if (IsWinner != true)
+            {
+                <h1 class="ReadyLBL">
+                    @{
+                        // show enemy
+                        if (_enemy != "" && _you != "" && _you.Contains("NOT") == false && _enemy.Contains("NOT") && _hubConnection.ConnectionId != _connectionId)
+                        {
+                            <span class="NOT">YOU ARE NOT READY</span> <a class="white">-|-</a> <span> ENEMY IS READY</span>
+                        }
+                        // show enemy
+                        else if (_enemy != "" && _you != "" && _you.Contains("NOT") && _enemy.Contains("NOT") && _hubConnection.ConnectionId != _connectionId)
+                        {
+                            <span class="NOT">YOU ARE NOT READY</span> <a class="white">-|-</a> <span class="NOT"> ENEMY IS NOT READY</span>
+                        }
 
-@*<Test />*@
+                        // show clicker
+                        else if (_enemy != "" && _you != "" && _you.Contains("NOT") && _enemy.Contains("NOT") && _hubConnection.ConnectionId == _connectionId)
+                        {
+                            <span class="NOT">@_you</span> <a class="white">-|-</a> <span class="NOT"> @_enemy</span>
+                        }
+                        // show clicker
+                        else if (_enemy != "" && _you != "" && _you.Contains("NOT") == false && _enemy.Contains("NOT") && _hubConnection.ConnectionId == _connectionId)
+                        {
+                            <span>@_you</span> <a class="white">-|-</a> <span class="NOT"> @_enemy</span>
+                        }
+                        // show clicker
+                        else if (_enemy != "" && _you != "" && _you.Contains("NOT") == false && _enemy.Contains("NOT") == false && _hubConnection.ConnectionId == _connectionId)
+                        {
+                            <span class="NOT">@_you</span> <a class="white">-|-</a> <span> @_enemy</span>
+                        }
 
-<h1>test: @test</h1>
 
-<div class="OverallStats">
-    @{
-        if (IsWinner != true)
+                        if (_enemy == "")
+                        {
+                            if (you.Contains("NOT"))
+                            {
+                                <span class="NOT">@you</span> <a class="white">-|-</a>
+                            }
+                            else
+                            {
+                                @you <a class="white">-|-</a>
+                            }
+
+                            if (enemy.Contains("NOT"))
+                            {
+                                <span class="NOT">@enemy</span>
+                            }
+                            else
+                            {
+                                @enemy
+                            }
+                        }
+                    }
+
+                </h1>
+                <div class="buttons">
+                    <div class="content-3d Ready">
+                        <button class="btn-3d green" @onclick="@( () => Ready(towers[0].WorldId, playerIdWhoClicks))">Ready</button>
+                    </div>
+
+                    <div class="content-3d CancelArmyMovement">
+                        <a class="btn-3d red" href="/Game/CancelArmyMovement/@towers[0].WorldId/@playerIdWhoClicks/@towers[0].Player1Id/@towers[0].Player2Id">Movements</a>
+
+                    </div>
+                </div>
+            }
+            else
+            {
+                <h2>WINNER</h2>
+                <h1>@Winner</h1>
+                <h2>WINNER</h2>
+            }
+        }
+    </div>
+
+
+    <div class="Stats1">
+        <a class="PlayerNames btn btn-primary" href="/Game/Profile/@YourId">@YourName</a> @*@YourName*@
+        VS
+        <a class="PlayerNames btn btn-primary" href="/Game/Profile/@EnemyId">@EnemyName</a> @*@EnemyName*@
+        <br />
+        @{
+            if (error != null)
+            {
+                <div class="alert alert-danger Error" role="alert">  @error</div>
+            }
+        }
+    </div>
+
+    <br />
+    <br />
+
+    <div class="wrapper">
+
+        @{
+            int counter = 0;
+            string towerOwnerColor = "";
+        }
+        @foreach (var item in towerView)
         {
-            <h1 class="ReadyLBL">
+
+            counter++;
+            string box = "box" + counter;
+            if (item.Owner == playerIdWhoClicks)
+            {
+                towerOwnerColor = "friendly";
+            }
+            else if (item.Owner == 0)
+            {
+                towerOwnerColor = "empty";
+            }
+            else
+            {
+                towerOwnerColor = "enemy";
+            }
+
+            <div class="@box @towerOwnerColor">
+
                 @{
+                    int TowerLvl;
+                    int Defence;
+                    int costs;
+                    int nxtTowerLvl;
+                    int nxtDefence;
 
-
-                    // show enemy
-                    if (_enemy != "" && _you != "" && _you.Contains("NOT") == false && _enemy.Contains("NOT") && _hubConnection.ConnectionId != _connectionId)
+                    if (item.Owner == @playerIdWhoClicks)
                     {
-                        <span class="NOT">YOU ARE NOT READY</span> <a class="white">-|-</a> <span> ENEMY IS READY</span>
+                        TowerLvl = item.TowerLvl;
+                        Defence = (item.TowerLvl) * 5;
+                        costs = (item.TowerLvl + 1) * 100;
+                        nxtTowerLvl = item.TowerLvl + 1;
+                        nxtDefence = (item.TowerLvl + 1) * 5;
+                        <div class="darken">
+                            <img src="..\images\greenRing.jpg" asp-append-version="true" alt="greenRing" style="width:10vh;" @onmousedown="@(e => Friendly(e,TowerLvl, @Defence,@costs, @item.TowerId, @item.Owner, @item.Player1Id, @item.Player2Id, @item.WorldId, nxtTowerLvl, nxtDefence, @item.Attack ))">
+
+                            <a @onmousedown="@(e => Friendly(e,TowerLvl, @Defence,@costs, @item.TowerId, @item.Owner, @item.Player1Id, @item.Player2Id, @item.WorldId, nxtTowerLvl, nxtDefence, @item.Attack ))" class="inPicture">@item.TowerName.Substring(0, 1)</a>
+                        </div>
                     }
-                    // show enemy
-                    else if (_enemy != "" && _you != "" && _you.Contains("NOT") && _enemy.Contains("NOT") && _hubConnection.ConnectionId != _connectionId)
+                    else if (item.Owner != @playerIdWhoClicks && item.Owner != 0)
                     {
-                        <span class="NOT">YOU ARE NOT READY</span> <a class="white">-|-</a> <span class="NOT"> ENEMY IS NOT READY</span>
-                    }
+                        <div class="darken">
+                            <img src="..\images\redRing.jpg" asp-append-version="true" alt="redRing" style="width:10vh;" @onmousedown="@(e=> Enemy(e, @item.TowerId, @item.Owner, @item.Player1Id, @item.Player2Id, @item.WorldId))">
 
-                    // show clicker
-                    else if (_enemy != "" && _you != "" && _you.Contains("NOT") && _enemy.Contains("NOT") && _hubConnection.ConnectionId == _connectionId)
-                    {
-                        <span class="NOT">@_you</span> <a class="white">-|-</a> <span class="NOT"> @_enemy</span>
+                            <a @onmousedown="@(e=> Enemy(e, @item.TowerId, @item.Owner, @item.Player1Id, @item.Player2Id, @item.WorldId))" class="inPicture">@item.TowerName.Substring(0, 1)</a>
+                        </div>
                     }
-                    // show clicker
-                    else if (_enemy != "" && _you != "" && _you.Contains("NOT") == false && _enemy.Contains("NOT") && _hubConnection.ConnectionId == _connectionId)
+                    else if (item.Owner == 0)
                     {
-                        <span>@_you</span> <a class="white">-|-</a> <span class="NOT"> @_enemy</span>
-                    }
-                    // show clicker
-                    else if (_enemy != "" && _you != "" && _you.Contains("NOT") == false && _enemy.Contains("NOT") == false && _hubConnection.ConnectionId == _connectionId)
-                    {
-                        <span class="NOT">@_you</span> <a class="white">-|-</a> <span> @_enemy</span>
-                    }
+                        <div class="darken">
+                            <img src="..\images\greyRing.jpg" asp-append-version="true" alt="greyRing" style="width:10vh;" @onmousedown="@(e=> Enemy(e, @item.TowerId, @item.Owner, @item.Player1Id, @item.Player2Id, @item.WorldId))">
 
-
-                    if (_enemy == "")
-                    {
-                        if (you.Contains("NOT"))
-                        {
-                            <span class="NOT">@you</span> <a class="white">-|-</a>
-                        }
-                        else
-                        {
-                            @you <a class="white">-|-</a>
-                        }
-
-                        if (enemy.Contains("NOT"))
-                        {
-                            <span class="NOT">@enemy</span>
-                        }
-                        else
-                        {
-                            @enemy
-                        }
+                            @*<a class="towerBTN " @onmousedown="@(e => Enemy(e, @item.TowerId, @item.Owner, @item.Player1Id, @item.Player2Id, @item.WorldId))">@item.TowerName</a>*@
+                            <a @onmousedown="@(e=> Enemy(e, @item.TowerId, @item.Owner, @item.Player1Id, @item.Player2Id, @item.WorldId))" class="inPicture">@item.TowerName.Substring(0, 1)</a>
+                        </div>
                     }
                 }
-
-            </h1>
-            <div class="buttons">
-                <div class="content-3d Ready">
-                    @*<a asp-action="PlayerReady" asp-route-worldId="@ViewBag.WorldId" class="btn-3d green">Ready</a>*@
-
-                    <a class="btn-3d green" href="/Game/PlayerReady/@towers[0].WorldId">Ready</a>
-                    <button class="btn-3d green" @onclick="@( () => Ready(towers[0].WorldId, playerIdWhoClicks))">Ready SignalR</button>
-
-
-                </div>
-
-                <div class="content-3d CancelArmyMovement">
-                    @*<a asp-action="CancelArmyMovement" asp-route-worldId="@ViewBag.WorldId" asp-route-PlayerIdWhoClicks="@ViewBag.PlayerIdWhoClicks" asp-route-player1Id="@ViewBag.Player1Id" asp-route-player2Id="@ViewBag.Player2Id" class="btn-3d red">Movements</a>*@
-                    <a class="btn-3d red" href="/Game/CancelArmyMovement/@towers[0].WorldId/@playerIdWhoClicks/@towers[0].Player1Id/@towers[0].Player2Id">Movements</a>
-
-                </div>
             </div>
         }
-        else
-        {
-            <h2>WINNER</h2>
-            <h1>@Winner</h1>
-            <h2>WINNER</h2>
-        }
-    }
-</div>
-
-
-<div class="Stats1">
-    <a class="PlayerNames btn btn-primary" href="/Game/Profile/@YourId">@YourName</a>
-    VS
-    <a class="PlayerNames btn btn-primary" href="/Game/Profile/@EnemyId">@EnemyName</a>
-    <br />
-    @{
-        if (error != null)
-        {
-            <div class="alert alert-danger Error" role="alert">  @error</div>
-        }
-    }
-</div>
-
-<br />
-<br />
-
-@{
-    if (_notification && _hubConnection.ConnectionId != _connectionId) // Dont show updater NOTIFICATION
-    {
-        <h1>NOTIFICATED!</h1>
-    }
-}
-<h1>NOTIFICATION.....</h1>
-<h1>@_notification</h1>
-<h1>NOTIFICATION.....</h1>
-
-
-
-<h1>PLAYERS READY </h1>
-
-@*@foreach (var _world in world)
-    {
-        <h2>Player1: @_world.Player1Ready</h2>
-        <br />
-        <h2>Player2: @_world.Player2Ready</h2>
-        <h1>PLAYERS READY </h1>
-    }*@
-
-
-<div class="wrapper">
-
-    @{
-        int counter = 0;
-        string towerOwnerColor = "";
-    }
-    @*@foreach (var item in towers)*@
-    @foreach (var item in towerView)
-    {
-
-        counter++;
-        string box = "box" + counter;
-        if (item.Owner == playerIdWhoClicks)
-        {
-            towerOwnerColor = "friendly";
-        }
-        else if (item.Owner == 0)
-        {
-            towerOwnerColor = "empty";
-        }
-        else
-        {
-            towerOwnerColor = "enemy";
-        }
-
-        <div class="@box @towerOwnerColor">
-
-            @{
-                int TowerLvl;
-                int Defence;
-                int costs;
-                int nxtTowerLvl;
-                int nxtDefence;
-
-                if (item.Owner == @playerIdWhoClicks)
-                {
-                    TowerLvl = item.TowerLvl;
-                    Defence = (item.TowerLvl) * 5;
-                    costs = (item.TowerLvl + 1) * 100;
-                    nxtTowerLvl = item.TowerLvl + 1;
-                    nxtDefence = (item.TowerLvl + 1) * 5;
-                    <div class="darken">
-                        <img src="..\images\greenRing.jpg" asp-append-version="true" alt="greenRing" style="width:10vh;" @onmousedown="@(e => Friendly(e,TowerLvl, @Defence,@costs, @item.TowerId, @item.Owner, @item.Player1Id, @item.Player2Id, @item.WorldId, nxtTowerLvl, nxtDefence, @item.Attack ))">
-
-                        <a @onmousedown="@(e => Friendly(e,TowerLvl, @Defence,@costs, @item.TowerId, @item.Owner, @item.Player1Id, @item.Player2Id, @item.WorldId, nxtTowerLvl, nxtDefence, @item.Attack ))" class="inPicture">@item.TowerName.Substring(0, 1)</a>
-                    </div>
-                }
-                else if (item.Owner != @playerIdWhoClicks && item.Owner != 0)
-                {
-                    <div class="darken">
-                        <img src="..\images\redRing.jpg" asp-append-version="true" alt="redRing" style="width:10vh;" @onmousedown="@(e=> Enemy(e, @item.TowerId, @item.Owner, @item.Player1Id, @item.Player2Id, @item.WorldId))">
-                        @*<a class="towerBTN " @onmousedown="@(e => Enemy(e, @item.TowerId, @item.Owner, @item.Player1Id, @item.Player2Id, @item.WorldId))">@item.TowerName</a>*@
-
-                        <a @onmousedown="@(e=> Enemy(e, @item.TowerId, @item.Owner, @item.Player1Id, @item.Player2Id, @item.WorldId))" class="inPicture">@item.TowerName.Substring(0, 1)</a>
-                    </div>
-                }
-                else if (item.Owner == 0)
-                {
-                    <div class="darken">
-
-                        <a class="towerBTN " @onmousedown="@(e => Enemy(e, @item.TowerId, @item.Owner, @item.Player1Id, @item.Player2Id, @item.WorldId))">@item.TowerName</a>
-                        <a @onmousedown="@(e=> Enemy(e, @item.TowerId, @item.Owner, @item.Player1Id, @item.Player2Id, @item.WorldId))" class="inPicture">@item.TowerName.Substring(0, 1)</a>
-                    </div>
-                }
-            }
-        </div>
-    }
-</div>
-@{
-    <div style="@(@showMessage2Activated ? "display:block" : "display:none")">
-
-        <div class="cord">
-
-            <button @onmousedown="@(e => CloseMessage2(e, false))">Close</button>
-
-            @if (whoOwnsTower == 1)
-            {
-                <br />
-                <a>Size: @attack</a>
-                <br />
-                <a>Costs: @costs</a>
-                <br />
-                <a>Lvl: @towerLvl->@nxtTowerLvl  </a>
-                <br />
-                <a> Def: @defence->@nxtDefence</a>
-                <br />
-                <a> Borns: @towerLvl % ->@nxtTowerLvl %</a>
-                <br />
-                <a class="btn btn-danger" href="/Game/CreateArmyMission/@worldId/@owner/@player1Id/@player2Id/@towerId/@playerIdWhoClicks">Move</a>
-
-                <a class="btn btn-success" href="Game/UpgradeTower/@towerId/@loggedInAccountId/@owner/@player1Id/@player2Id/@worldId">Upgrade tower</a>
-
-            }
-            @if (whoOwnsTower == 2)
-            {
-                <br />
-                <a class="towerLayout" href="/Game/CreateArmyMission/@worldId/@owner/@player1Id/@player2Id/@towerId/@playerIdWhoClicks">Move</a>
-
-
-            }
-
-            @if (whoOwnsTower == 0)
-            {
-                <br />
-                <a class="btn btn-danger" href="/Game/CreateArmyMission/@worldId/@owner/@player1Id/@player2Id/@towerId/@playerIdWhoClicks">Move</a>
-            }
-        </div>
     </div>
-}
+    @{
+        <div style="@(@showMessage2Activated ? "display:block" : "display:none")">
+
+            <div class="cord">
+
+                <button @onmousedown="@(e => CloseMessage2(e, false))">Close</button>
+
+                @if (whoOwnsTower == 1)
+                {
+                    <br />
+                    <a>Size: @attack</a>
+                    <br />
+                    <a>Costs: @costs</a>
+                    <br />
+                    <a>Lvl: @towerLvl->@nxtTowerLvl  </a>
+                    <br />
+                    <a> Def: @defence->@nxtDefence</a>
+                    <br />
+                    <a> Borns: @towerLvl % ->@nxtTowerLvl %</a>
+                    <br />
+                    <a class="btn btn-danger" href="/Game/CreateArmyMission/@worldId/@owner/@player1Id/@player2Id/@towerId/@playerIdWhoClicks">Move</a>
+
+                    <a class="btn btn-success" href="Game/UpgradeTower/@towerId/@loggedInAccountId/@owner/@player1Id/@player2Id/@worldId">Upgrade tower</a>
+
+                }
+                @if (whoOwnsTower == 2)
+                {
+                    <br />
+                    <a class="towerLayout" href="/Game/CreateArmyMission/@worldId/@owner/@player1Id/@player2Id/@towerId/@playerIdWhoClicks">Move</a>
+                }
+
+                @if (whoOwnsTower == 0)
+                {
+                    <br />
+                    <a class="btn btn-danger" href="/Game/CreateArmyMission/@worldId/@owner/@player1Id/@player2Id/@towerId/@playerIdWhoClicks">Move</a>
+                }
+            </div>
+        </div>
+    }
+</body>
 
 
 @code {
 
-    int test = 0;
 
     private HubConnection _hubConnection;
 
@@ -284,8 +240,6 @@
 
     public List<TowerViewModel> world;
 
-
-
     protected override async Task OnInitializedAsync()
     {
         _hubConnection = new HubConnectionBuilder()
@@ -296,15 +250,9 @@
         _notification = false;
         _readyClicked = false;
 
-
-
-
-        //_hubConnection.On<bool, string, string, string, int, string, string, int, int>("ReceiveMessage", async (notification, connectionId,
-        //    enemy, you, peopleNow, peopleGrowing, soonReturning, findPlayerGold, goldForTowers) =>
         _hubConnection.On<bool, string, string, string, bool, List<TowerViewModel>>("ReceiveMessage", async (notification, connectionId,
         enemyNotification, clickerNotification, readyClicked, towerz) =>
         {
-            test++;
         //_context.Entry(_context).Reload();
 
         //towerView = await MainGame.MainGame(Player1Id, Player2Id, WorldId, 0);
@@ -324,36 +272,14 @@
         await _hubConnection.StartAsync();
     }
 
-
-
     private async Task Ready(int worldId, int playerId)
     {
 
         var towerz = await MainGame.PlayerReady(WorldId, playerId);
 
-
         var overallStats = await _OverallStats.GetOverallStats(worldId, towerz[0].Player1Id, towerz[0].Player2Id); // queue matters. WorldId first, etc.
 
-
         _hubConnection.SendAsync("SendOverallStats", overallStats, _hubConnection.ConnectionId);
-
-
-
-        // NavigationManager.NavigateTo("/Game/PlayerReady/" + worldId, true);
-
-        //        MainGame.PlayerReady(WorldId, playerId);
-        //var towerz = MainGame.PlayerReady(WorldId, playerId);
-
-        //var stats = OverallStats.GetOverallStats(worldId, playerIdWhoClicks);
-        //var towerz = await MainGame.MainGame(Player1Id, Player2Id, WorldId, 0);
-
-        //var data = GetAsync(worldId);
-
-        // MainGame.PlayerReady(worldId);
-        //_hubConnection.SendAsync("SendNotification", true, _hubConnection.ConnectionId, "ENEMY IS READY", "YOU ARE NOT READY");
-
-        //_hubConnection.SendAsync("SendNotification", true, _hubConnection.ConnectionId, "ENEMY IS READY", stats.Result.PeopleGrowing, true, towerz);
-
 
         if (towerz[0].Player1Ready == false && towerz[0].Player2Ready == false)
         {
@@ -376,24 +302,10 @@
         {
             _hubConnection.SendAsync("SendNotification", true, _hubConnection.ConnectionId, "ENEMY IS READY", "YOU ARE NOT READY", true, towerz);
         }
-
-
-
-
-        // _hubConnection.SendAsync("SendNotification", true, _hubConnection.ConnectionId, "ENEMY IS READY", true, towerz);
-
-
-        //_hubConnection.SendAsync("SendNotification", true, _hubConnection.ConnectionId, "ENEMY IS READY", "YOU ARE NOT READY",
-        //    stats.Result.PeopleNow, stats.Result.PeopleGrowing, stats.Result.SoonReturning,
-        //    stats.Result.FindPlayerGold, stats.Result.goldForTowers); // Send notification
     }
 
     public bool IsConnected =>
 _hubConnection.State == HubConnectionState.Connected;
-
-
-
-
 
     //private string cord;
     private int towerLvl;
@@ -417,9 +329,6 @@ _hubConnection.State == HubConnectionState.Connected;
 
     private int whoOwnsTower = 0; // 0 = neutral, 1 = Friendly, 2 = Enemy
 
-
-
-
     private void Enemy(MouseEventArgs e,
     int TowerId, int Owner, int Player1Id, int Player2Id, int WorldId)
     {
@@ -435,8 +344,6 @@ _hubConnection.State == HubConnectionState.Connected;
         player2Id = Player2Id;
         worldId = WorldId;
         // LoggedInAccountId
-
-
         showMessage2Activated = true;
     }
 
@@ -476,30 +383,20 @@ _hubConnection.State == HubConnectionState.Connected;
     public int Player1Id { get; set; }
     [Parameter]
     public int Player2Id { get; set; }
-
     [Parameter]
     public int YourId { get; set; }
-
     [Parameter]
     public string YourName { get; set; }
-
     [Parameter]
     public int EnemyId { get; set; }
-
     [Parameter]
     public string EnemyName { get; set; }
-
     [Parameter]
     public string Winner { get; set; }
-
-
-
     [Parameter]
     public bool IsWinner { get; set; }
-
     [Parameter]
     public string you { get; set; }
-
     [Parameter]
     public string enemy { get; set; }
 
@@ -510,45 +407,23 @@ _hubConnection.State == HubConnectionState.Connected;
 
     [Parameter]
     public string error { get; set; }
-
-
     [Parameter]
     public int playerIdWhoClicks { get; set; }
-
     [Parameter]
     public int loggedInAccountId { get; set; }
 
-    [Parameter]
-    public int? test1 { get; set; }
-    protected override void OnInitialized()
+    protected override void OnInitialized() // Not needed?
     {
-        test1 = test1 ?? 0;
-        //if (test1 != null)
-        //{
-        //    test1 = test1;
-        //}
-        //else
-        //{
-        //    test1 = 0;
-        //}
 
-        //base.OnInitialized();
     }
-
-
-
-
-    //protected override async Task OnInitializedAsync()
-    //{
-
-    //    //testmodel_ = await TestService.test2(DateTime.Now);
-    //    //testmodel_ = await ForecastService.test2(DateTime.Now);
-
-    //}
 }
 
-
 <style>
+
+
+    #container {
+        min-width: 1200px;
+    }
 
     .towerMenu {
         position: sticky;
@@ -583,21 +458,9 @@ _hubConnection.State == HubConnectionState.Connected;
 
 
     .inPicture {
-        /* display: inline-block !important;
-                position: relative;*/
-        /* display: inline-block !important;
-                position: absolute;
-                padding-left: 4vh;
-                padding-top: 3vh;
-                margin-top: -7vh;*/
-        /*   margin-top: -7vh;
-                display: inline-block !important;
-                position: absolute;
-                padding-left: 4vh;*/
         margin-top: 3vh;
         display: inline-block !important;
         position: absolute;
-        /* padding-left: 4vh; */
         margin-left: -5.7vh;
     }
 
@@ -615,9 +478,17 @@ _hubConnection.State == HubConnectionState.Connected;
     }
 
     .buttons {
-        margin-left: 200px;
+      /*  margin-left: 200px;
         text-align: center;
-        margin-top: -15px;
+        margin-top: -15px;*/
+
+        text-align: center;
+        display: grid;
+        position: absolute;
+        width: 775px;
+        top: 230px;
+        left: 50%;
+        margin: -100px 0 0 -387px;
     }
 
     .Ready {
@@ -626,14 +497,15 @@ _hubConnection.State == HubConnectionState.Connected;
     }
 
     .CancelArmyMovement {
-        width: 120%;
-        height: 0px; /* Siis tulevad mängija nimed üksteise kõrvale*/
+        width: 150%;
+/**/        height: 0px; /* Siis tulevad mängija nimed üksteise kõrvale*/
     }
 
-    @@media (max-width:991px) {
+    /*@@media (max-width:991px) {
         .Ready {
-            width: 30%;
-        }
+            width: 30%;*/
+/*            margin-left: 100px;
+*/        /*}
 
         .CancelArmyMovement {
             width: 130%;
@@ -645,10 +517,10 @@ _hubConnection.State == HubConnectionState.Connected;
             width: 10%;
         }
 
-        .CancelArmyMovement {
-            width: 200%;
-        }
-    }
+        .CancelArmyMovement {*/
+/*            width: 200%;
+*/        /*}
+    }*/
 
 
     .btn-container, .container {
@@ -756,7 +628,7 @@ _hubConnection.State == HubConnectionState.Connected;
     }
 
     .PlayerNames {
-        font-size: 35px;
+        font-size: 20px;
         color: mediumspringgreen;
         background-color: black;
         z-index: 1;
@@ -766,7 +638,7 @@ _hubConnection.State == HubConnectionState.Connected;
         font-size: 30px;
         left: 5%;
         right: 70%;
-        top: 30px;
+        top: 100px;
         position: fixed;
         z-index: 1;
     }
@@ -778,18 +650,18 @@ _hubConnection.State == HubConnectionState.Connected;
         }
     }
 
-
-
     body {
+        min-width: 1000px !important; /* Suppose you want minimum width of 1000px */
+        width: auto !important; /* Firefox will set width as auto */
         font-size: 100%;
     }
 
     .ReadyLBL {
-        font-size: 30px;
+        font-size: 25px;
         color: chartreuse;
         background-color: black;
         top: 50px;
-        left: 60%;
+        left: 65%;
         position: fixed;
         z-index: 1;
     }
@@ -797,14 +669,14 @@ _hubConnection.State == HubConnectionState.Connected;
     @@media (max-width:1588px) {
         .ReadyLBL {
             font-size: 23px;
-            top: 52px;
+            top: 50px;
         }
     }
 
     @@media (max-width:1180px) {
         .ReadyLBL {
             font-size: 20px;
-            top: 52px;
+            top: 50px;
         }
     }
 
@@ -843,83 +715,38 @@ _hubConnection.State == HubConnectionState.Connected;
     }
 
     .wrapper {
-        /*        border: 2px solid #f76707;*/
-        /*border-radius: 50px;*/
-        /*        background-color: #fff4e6;*/
-        /*display: grid;
-                        grid-template-columns: repeat(8, 11.25%);*/ /* 12.5%  185*/
-        /*grid-template-rows: repeat(3, 22.5%);*/ /* 225   100*/
-        /*width: 90%;*/ /*90%   1480px*/
-        /*position: absolute;
-                        left: 50%;
-                        top: 577px;
-                        transform: translate(-50%, -50%);
-                        text-align: center;*/
-        /*
-                        border-radius: 50px;
-                        display: inline-grid;
-                        grid-template-columns: repeat(8, 12.5%);
-                        grid-template-rows: repeat(3, 100%);
-                        width: 80%;
-                        position: absolute;
-                        left: 50%;
-                        top: 577px;
-                        transform: translate(-50%, -50%);
-                        margin-: auto;
-                        text-align: center;
-                        */
-        /*display: grid;
-                        grid-template-columns: repeat(8, 10vh);
-                        grid-template-rows: repeat(3, 30.5%);
-                        position: fixed;
-                        left: 50%;
-                        top: 577px;
-                        transform: translate(-50%, -50%);
-                        padding-right: 5%;
-                        grid-auto-rows: minmax(100px, auto);*/
-        /*   display: grid;
-                    top: 300px;
-                    width: 100%;
-                    position: relative;*/
-        /*        //////////////////*/
-        grid-template-columns: repeat(8,10vh);
-        /* width: 90%; */
+       /* grid-template-columns: repeat(8,10vh);
         display: grid;
         top: 300px;
-        /* width: 100%; */
         position: relative;
         padding-left: px;
-        left: 15%;
+        left: 15%;*/
+
+        display: grid;
+        position: absolute;
+        width: 775px;
+        /*  top: 50%;*/
+        top:350px;
+        left: 50%;
+        margin: -100px 0 0 -387px;
     }
 
         .wrapper > .friendly {
-            /*            border: 2px solid #ffa94d;
-            */ /*            border-radius: 10px;*/
             background-color: lightgreen;
-            /*            padding: 1em;*/
             color: black;
             width: 10vh;
             height: 10vh
         }
 
         .wrapper > .enemy {
-            /*            border: 2px solid #ffa94d;
-                        /*background-color: lightcoral;
-                        color: black;
-                        border: 2px solid #ffa94d;*/
-            /* border-radius: 10px; */
             background-color: lightcoral;
-            /* padding: 1em; */
             color: black;
             width: 10vh;
             height: 10vh
         }
 
         .wrapper > .empty {
-            /*            border: 2px solid #ffa94d;
-                        /*            border-radius: 10px;*/
             background-color: grey;
-            /*            padding: 1em;*/
             color: black;
             width: 10vh;
             height: 10vh

@@ -11,7 +11,6 @@ using Microsoft.AspNetCore.Components;
 
 namespace WebGame.Data
 {
-
     public class OverallStatsLogic : Controller
     {
         private readonly webgameContext _context;
@@ -25,11 +24,6 @@ namespace WebGame.Data
         public async Task<OverallStatsModel> GetOverallStats(int worldId, // queue matters. WorldId First, etc...
            int overallStatsPlayer1, int overallStatsPlayer2) // ENEMY playerId
         {
-
-            //var findPlayerGold = (from d in _context.Player
-            //                      where d.PlayerId == playerId && d.WorldId == worldId
-            //                      select d.Gold).FirstOrDefault();
-
             var findGoldPlayer1 = (from d in _context.Player
                                    where d.PlayerId == overallStatsPlayer1 && d.WorldId == worldId
                                    select d).FirstOrDefault();
@@ -41,8 +35,6 @@ namespace WebGame.Data
                                    select d).FirstOrDefault();
 
             _context.Entry(findGoldPlayer2).Reload();
-
-            // ViewBag.FindPlayerGold = findPlayerGold;
 
             var TowerSumPlayer1 = (from d in _context.Tower
                                    where d.Owner == overallStatsPlayer1 && d.WorldId == worldId
@@ -85,13 +77,13 @@ namespace WebGame.Data
 
             var soonReturnsPlayer1 = (from d in _context.AttDef
                                       where d.AttackerPlayerId == overallStatsPlayer1 && d.WorldId == worldId && d.ReturnBase == true
-                                      select d.Amount).ToList();
+                                      select d).ToList(); // removed Select  d.Amount
 
             foreach (var entity in soonReturnsPlayer1) if (entity != null) _context.Entry(entity).Reload();
 
             var soonReturnsPlayer2 = (from d in _context.AttDef
                                       where d.AttackerPlayerId == overallStatsPlayer2 && d.WorldId == worldId && d.ReturnBase == true
-                                      select d.Amount).ToList();
+                                      select d).ToList(); // removed Select  d.Amount
 
             foreach (var entity in soonReturnsPlayer2) if (entity != null) _context.Entry(entity).Reload();
 
@@ -99,19 +91,14 @@ namespace WebGame.Data
             int soonReturningPlayer1 = 0;
             foreach (var att in soonReturnsPlayer1)
             {
-                soonReturningPlayer1 += att;
+                soonReturningPlayer1 += att.Amount;
             }
 
             int soonReturningPlayer2 = 0;
             foreach (var att in soonReturnsPlayer2)
             {
-                soonReturningPlayer2 += att;
+                soonReturningPlayer2 += att.Amount;
             }
-            //if (soonReturning > 0)
-            //  ViewBag.SoonReturning = " + Army returning sometime (" + soonReturning + ")";
-
-            //string view = "OverallStats";
-            // string view = "Test";
 
             return new OverallStatsModel
             {
@@ -138,8 +125,6 @@ namespace WebGame.Data
                                   where d.PlayerId == playerId && d.WorldId == worldId
                                   select d.Gold).FirstOrDefault();
 
-            // ViewBag.FindPlayerGold = findPlayerGold;
-
             var towersSum = (from d in _context.Tower
                              where d.Owner == playerId && d.WorldId == worldId
                              select d).ToList();
@@ -157,11 +142,6 @@ namespace WebGame.Data
 
             }
 
-            //ViewBag.PeopleNow = peopleNow;
-            // if (peopleGrowing > 0)
-            // ViewBag.PeopleGrowing = " + People Growing (" + peopleGrowing + ")";
-            // ViewBag.goldForTowers = goldForTowers;
-
             var soonReturns = (from d in _context.AttDef
                                where d.AttackerPlayerId == playerId && d.WorldId == worldId && d.ReturnBase == true
                                select d.Amount).ToList();
@@ -171,11 +151,6 @@ namespace WebGame.Data
             {
                 soonReturning += att;
             }
-            //if (soonReturning > 0)
-            //  ViewBag.SoonReturning = " + Army returning sometime (" + soonReturning + ")";
-
-            //string view = "OverallStats";
-            // string view = "Test";
 
             return new OverallStatsSingleModel
             {

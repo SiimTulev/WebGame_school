@@ -14,20 +14,29 @@
 
 </head>
 <body>
+
     <header class="header" id="myHeader" id="fixed-menu">
+
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
-                <a class="navbar-brand" asp-controller="Game" asp-action="Tutorial">WebGame</a>
+
+
+
+                <div class="webgame">
+                    <a class="navbar-brand" asp-controller="Game" asp-action="Tutorial">WebGame</a>
+                </div>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                    <ul class="navbar-nav flex-grow-1">
+                    @if (User.Identity.IsAuthenticated) // If account is logged in
+                    {
 
+                        @*<div class="NavigationBar">*@
+                        <ul class="navbar-nav flex-grow-1">
 
-                        @if (User.Identity.IsAuthenticated) // If account is logged in
-                        {
+                            @*<div class="NavigationBar">*@
                             <li class="nav-item">
                                 <a class="btn btn-primary nav-link text-white" asp-area="" asp-route-AccountId="@Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))" asp-controller="Game" asp-action="Profile">Profile</a>
                             </li>
@@ -38,17 +47,36 @@
                             <li class="nav-item">
                                 <a class="btn btn-success nav-link text-white" asp-area="" asp-controller="Game" asp-action="NewGame">Find game</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="btn btn-outline-secondary nav-link " asp-controller="Game" asp-action="Tutorial">Tutorial</a>
+                            </li>
 
-                            <a class="btn btn-danger nav-link text-white" asp-controller="Account" asp-action="Logout">(@User.Identity.Name) Logout</a>
+                            @{
+                                if (User.Identity.Name.Length > 5)
+                                {
 
-                            <a class="btn btn-outline-secondary" asp-controller="Game" asp-action="Tutorial">Tutorial</a>
-                        }
-                        else
-                        {
+                                    string name = @User.Identity.Name.Substring(0, 5) + "...";
+                                    <a class="btn btn-danger nav-link text-white" asp-controller="Account" asp-action="Logout">(@name) Logout</a>
+                                }
+                                else
+                                {
+                                    <a class="btn btn-danger nav-link text-white" asp-controller="Account" asp-action="Logout">(@User.Identity.Name) Log out</a>
+                                }
+                            }
+
+
+                        </ul>
+                        @*</div>*@
+                    }
+                    else
+                    {
+                        <ul class="navbar-nav flex-grow-1">
+
                             <a class="btn btn-success nav-link text-white" asp-controller="Account" asp-action="Login">Login</a>
                             <a class="btn btn-info nav-link text-white" asp-controller="Account" asp-action="Register">Register</a>
-                        }
-                    </ul>
+                        </ul>
+
+                    }
                 </div>
             </div>
         </nav>
@@ -79,13 +107,19 @@
 </html>
 
 <style>
+
+
+    .webgame {
+        padding-left: 40px;
+    }
+
     header {
         position: fixed;
         width: 100%;
         height: 10%;
         z-index: 1;
-        left: 10%;
-        bottom: 90%;
+        /*        left: -8%;
+                   */ bottom: 90%;
     }
 
     .spacer {
@@ -108,19 +142,28 @@
             font-size: 25px;
         }
     }
-</style>
-<script>
-    window.onscroll = function () { myFunction() };
+
+    </ >
+    <script >
+    window.onscroll = function () {
+        myFunction()
+    }
+
+    ;
 
     var header = document.getElementById("myHeader");
     var sticky = header.offsetTop;
 
     function myFunction() {
-        if (window.pageYOffset > sticky) {
-            header.classList.add("sticky");
-        } else {
-            header.classList.remove("sticky");
-        }
-    }
-</script>
+        if (window.pageYOffset > sticky)
 
+    {
+        header .classList.add("sticky");
+    }
+
+    else {
+        header .classList.remove("sticky");
+    }
+
+    }
+    </script >

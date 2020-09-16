@@ -102,7 +102,7 @@ namespace WebGame.Controllers
                     if (result.Succeeded)
                     {
                         ViewBag.FirstLogin = true;
-                        return RedirectToAction(nameof(GameController.Tutorial), "", new { FirstLogin = true });
+                        return RedirectToAction(nameof(GameController.Tutorial), "Game", new { FirstLogin = true });
                     }
                     else
                     {

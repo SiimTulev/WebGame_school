@@ -10,8 +10,6 @@ namespace WebGame.Data
 {
     public class NotificationHub : Hub
     {
-
-
         public async Task SendNotification(bool notification, string connectionId, string enemyNotification, string clickerNotification, bool readyClicked, List<TowerViewModel> towerz)
         {
             await Clients.All.SendAsync("ReceiveMessage", notification, connectionId, enemyNotification, clickerNotification, readyClicked, towerz);
@@ -21,8 +19,5 @@ namespace WebGame.Data
         {
             await Clients.All.SendAsync("ReceiveOverallStats", overallStats, connectionId);
         }
-
-
-
     }
 }

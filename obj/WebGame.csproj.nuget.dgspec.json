@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\C#\\WebGame_database\\FileZillaLinuxGame\\WebGame_Blazor_SignalR_8_Doing_MainGame_in_blazor\\WebGame_school_AND_BLAZOR_21_Tower_display\\WebGame.csproj": {}
+    "C:\\C#\\WebGame_database\\FileZillaLinuxGame\\WebGame_Blazor_SignalR_35_WINDOWSVERSIONSIGNALRRRRRRRR\\WebGame.csproj": {}
   },
   "projects": {
-    "C:\\C#\\WebGame_database\\FileZillaLinuxGame\\WebGame_Blazor_SignalR_8_Doing_MainGame_in_blazor\\WebGame_school_AND_BLAZOR_21_Tower_display\\WebGame.csproj": {
+    "C:\\C#\\WebGame_database\\FileZillaLinuxGame\\WebGame_Blazor_SignalR_35_WINDOWSVERSIONSIGNALRRRRRRRR\\WebGame.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\C#\\WebGame_database\\FileZillaLinuxGame\\WebGame_Blazor_SignalR_8_Doing_MainGame_in_blazor\\WebGame_school_AND_BLAZOR_21_Tower_display\\WebGame.csproj",
+        "projectUniqueName": "C:\\C#\\WebGame_database\\FileZillaLinuxGame\\WebGame_Blazor_SignalR_35_WINDOWSVERSIONSIGNALRRRRRRRR\\WebGame.csproj",
         "projectName": "WebGame",
-        "projectPath": "C:\\C#\\WebGame_database\\FileZillaLinuxGame\\WebGame_Blazor_SignalR_8_Doing_MainGame_in_blazor\\WebGame_school_AND_BLAZOR_21_Tower_display\\WebGame.csproj",
+        "projectPath": "C:\\C#\\WebGame_database\\FileZillaLinuxGame\\WebGame_Blazor_SignalR_35_WINDOWSVERSIONSIGNALRRRRRRRR\\WebGame.csproj",
         "packagesPath": "C:\\Users\\Yorwet\\.nuget\\packages\\",
-        "outputPath": "C:\\C#\\WebGame_database\\FileZillaLinuxGame\\WebGame_Blazor_SignalR_8_Doing_MainGame_in_blazor\\WebGame_school_AND_BLAZOR_21_Tower_display\\obj\\",
+        "outputPath": "C:\\C#\\WebGame_database\\FileZillaLinuxGame\\WebGame_Blazor_SignalR_35_WINDOWSVERSIONSIGNALRRRRRRRR\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Microsoft\\Xamarin\\NuGet\\",
@@ -46,6 +46,10 @@
             "Dapper": {
               "target": "Package",
               "version": "[2.0.35, )"
+            },
+            "EntityFramework": {
+              "target": "Package",
+              "version": "[6.4.4, )"
             },
             "Microsoft.AspNet.Providers.Core": {
               "target": "Package",
@@ -146,7 +150,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "c:\\program files\\dotnet\\sdk\\3.1.301\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "c:\\program files\\dotnet\\sdk\\3.1.401\\RuntimeIdentifierGraph.json"
         }
       }
     }

@@ -21,13 +21,8 @@ namespace WebGame.Controllers
             _context = context;
         }
         [HttpGet("Game/MainGameRazor/{error}/{player1Id}/{player2Id}/{worldId}/{accountCheck}")]
-
-        //[HttpGet("Game/MainGameRazor/{player1Id}/{player2Id}/{worldId}/{accountCheck}")]error
-
         public async Task<IActionResult> MainGameRazor(int accountCheck, int player1Id, int player2Id, int? worldId, int? error)
         {
-
-
             if (!User.Identity.IsAuthenticated) // If account is logged in
             {
                 return RedirectToAction(nameof(SelectGame));
@@ -51,28 +46,59 @@ namespace WebGame.Controllers
                 ViewBag.Error = "You don't have enough money to upgrade this tower!";
             }
 
-
             ViewBag.WorldId = worldId;
-
 
             ViewBag.Player1Id = player1Id;
             ViewBag.Player2Id = player2Id;
             if (world.Player1IdAcc == (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))))
             {
                 var enemyName = _context.Playeraccount.FirstOrDefault(m => m.AccountId == world.Player2IdAcc);
-                ViewBag.EnemyName = enemyName.AccountName;
+                // If name is too long
+                if (enemyName.AccountName.Length > 5)
+                {
+                    ViewBag.EnemyName = enemyName.AccountName.Substring(0, 5) + "...";
+                }
+                else
+                {
+                    ViewBag.EnemyName = enemyName.AccountName;
+                }
                 ViewBag.EnemyId = enemyName.AccountId;
                 var yourName = _context.Playeraccount.FirstOrDefault(m => m.AccountId == world.Player1IdAcc);
-                ViewBag.YourName = yourName.AccountName;
+
+                // If name is too long
+                if (yourName.AccountName.Length > 5)
+                {
+                    ViewBag.YourName = yourName.AccountName.Substring(0, 5) + "...";
+                }
+                else
+                {
+                    ViewBag.YourName = yourName.AccountName;
+                }
                 ViewBag.YourId = yourName.AccountId;
             }
             else
             {
                 var enemyName = _context.Playeraccount.FirstOrDefault(m => m.AccountId == world.Player1IdAcc);
-                ViewBag.EnemyName = enemyName.AccountName;
+                if (enemyName.AccountName.Length > 5)
+                {
+                    ViewBag.EnemyName = enemyName.AccountName.Substring(0, 5) + "...";
+                }
+                else
+                {
+                    ViewBag.EnemyName = enemyName.AccountName;
+                }
                 ViewBag.EnemyId = enemyName.AccountId;
+
+
                 var yourName = _context.Playeraccount.FirstOrDefault(m => m.AccountId == world.Player2IdAcc);
-                ViewBag.YourName = yourName.AccountName;
+                if (yourName.AccountName.Length > 5)
+                {
+                    ViewBag.YourName = yourName.AccountName.Substring(0, 5) + "...";
+                }
+                else
+                {
+                    ViewBag.YourName = yourName.AccountName;
+                }
                 ViewBag.YourId = yourName.AccountId;
             }
 
@@ -169,7 +195,7 @@ namespace WebGame.Controllers
                 _context.Update(world);
                 _context.SaveChanges();
             }
-            ///////
+
             var towers = await (from ep in _context.Tower
                                 join e in _context.World on ep.WorldId equals e.WorldId
                                 //where worldTowers.Contains(ep.Owner)
@@ -195,7 +221,6 @@ namespace WebGame.Controllers
             return View(towers);
         }
 
-
         [HttpGet("Game/Profile/{accountId}")]
         public async Task<IActionResult> Profile(int accountId) // SAFE
         {
@@ -203,6 +228,7 @@ namespace WebGame.Controllers
                            where d.AccountId == accountId
                            select d).FirstOrDefault();
 
+            ViewBag.Name = profile.AccountName;
             ViewBag.Wins = profile.Wins;
             ViewBag.Losts = profile.Losts;
 
@@ -221,7 +247,6 @@ namespace WebGame.Controllers
 
         //Game/UpgradeTower/12?accountId=4&amp;owner=2&amp;player1Id=1&amp;player2Id=2&amp;worldId=1"
         [HttpGet("Game/UpgradeTower/{id}/{accountId}/{owner}/{player1Id}/{player2Id}/{worldId}")]
-
         public async Task<IActionResult> UpgradeTower(int id, int accountId, int owner, int player1Id, int player2Id, int worldId) // SAFE tänu playerId kontrollile?
 
         {
@@ -233,7 +258,6 @@ namespace WebGame.Controllers
             var upgradingTower = await _context.Tower.FindAsync(id);
 
             var player = (from d in _context.Player
-                              //where d.AccountId == (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))) && d.WorldId == towerViewModel.WorldId && d.PlayerId == towerViewModel.Owner
                           where d.AccountId == (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))) && d.WorldId == worldId && d.PlayerId == owner
 
                           select d).FirstOrDefault();
@@ -243,7 +267,8 @@ namespace WebGame.Controllers
             if (player.Gold < 0)
             {
                 // return RedirectToAction("MainGame", new { error = 1, Player1Id = player1Id, Player2Id = player2Id, WorldId = worldId, accountId = (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))) });
-                return Redirect("http://localhost:51745/Game/MainGameRazor/1/" + player1Id + "/" + player2Id + "/" + worldId + "/" + accountId);
+                //return Redirect("http://localhost:5003/Game/MainGameRazor/1/" + player1Id + "/" + player2Id + "/" + worldId + "/" + accountId);
+                return Redirect("http://siim.cc/Game/MainGameRazor/1/" + player1Id + "/" + player2Id + "/" + worldId + "/" + accountId);
 
             }
             if (player.Gold >= 0)
@@ -257,7 +282,9 @@ namespace WebGame.Controllers
                 await _context.SaveChangesAsync();
             }
             //return RedirectToAction("MainGame", new { Player1Id = player1Id, Player2Id = player2Id, WorldId = worldId, accountId = (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))) });
-            return Redirect("http://localhost:51745/Game/MainGameRazor/0/" + player1Id + "/" + player2Id + "/" + worldId + "/" + accountId);
+            //return Redirect("http://localhost:5003/Game/MainGameRazor/0/" + player1Id + "/" + player2Id + "/" + worldId + "/" + accountId);
+            return Redirect("http://siim.cc/Game/MainGameRazor/0/" + player1Id + "/" + player2Id + "/" + worldId + "/" + accountId);
+
         }
 
         [HttpGet("Game/CancelArmyMovement/{worldId}/{PlayerIdWhoClicks}/{player1Id}/{player2Id}")]
@@ -284,6 +311,7 @@ namespace WebGame.Controllers
                 return View();
 
             }
+
             List<int> towerIds = new List<int>();
 
             foreach (var moving in armyMovings.Result)
@@ -301,7 +329,6 @@ namespace WebGame.Controllers
             }
 
             ViewBag.TowerNames = towerNames;
-
 
             return View(await armyMovings);
         }
@@ -581,7 +608,6 @@ namespace WebGame.Controllers
                 _context.SaveChanges();
             }
 
-
             var towers = await (from ep in _context.Tower
                                 join e in _context.World on ep.WorldId equals e.WorldId
                                 where e.WorldId == worldId
@@ -703,8 +729,6 @@ namespace WebGame.Controllers
                             attackersDestination.Add(i);
                     }
 
-
-
                     bool destroyedTower = false;
                     for (int i = 0; i < attackersDestination.Count; i++)
                     {
@@ -782,12 +806,10 @@ namespace WebGame.Controllers
             _context.Update(world);
             _context.SaveChanges();
 
-            // Go to the same URL where the "READY" was pressed
-            //string checkUrl = Redirect("http://localhost:51745/Game/MainGameRazor/0/" + world.Player1Id + "/" + world.Player2Id + "/" + worldId + "/" + (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier)))).Url;
-
-            return Redirect("http://localhost:51745/Game/MainGameRazor/0/" + world.Player1Id + "/" + world.Player2Id + "/" + worldId + "/" + (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))));
-
             //return RedirectToAction("MainGame", new { Player1Id = world.Player1Id, Player2Id = world.Player2Id, WorldId = world.WorldId, accountId = (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))) });
+            //return Redirect("http://localhost:5003/Game/MainGameRazor/0/" + world.Player1Id + "/" + world.Player2Id + "/" + worldId + "/" + (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))));
+            return Redirect("http://siim.cc/Game/MainGameRazor/0/" + world.Player1Id + "/" + world.Player2Id + "/" + worldId + "/" + (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))));
+
         }
         [HttpPost("Game/CreateArmyMission/{worldId}/{Owner}/{player1Id}/{player2Id}/{SelectedTower}/{playerIdWhoClicks}")]
         //[HttpPost("Game/CreateArmyMission/{worldId}/{Owner}/{player1Id}/{player2Id}/{SelectedTower}")]
@@ -941,7 +963,7 @@ namespace WebGame.Controllers
 
                         attdefs.Add(new AttDef { Id = 0, WorldId = SelectedWorldId, AttackerPlayerId = playerId3, TargetTowerId = SelectedTowerId, Amount = attackSum, RoundsToArrive = arrival, AccountId = (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))) });
                     }
-                    _context.AddRange(attdefs); // don't remember exaxct syntaxt but this should be faster way
+                    _context.AddRange(attdefs);
                     await _context.SaveChangesAsync();
                 }
             }
@@ -956,9 +978,10 @@ namespace WebGame.Controllers
                     throw;
                 }
             }
-            return Redirect("http://localhost:51745/Game/MainGameRazor/0/" + player1Id + "/" + player2Id + "/" + worldId + "/" + (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))));
-
             //return RedirectToAction("MainGame", new { Player1Id = towerViewModel.Player1Id, Player2Id = towerViewModel.Player2Id, WorldId = towerViewModel.WorldId, accountId = (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))) });
+            //return Redirect("http://localhost:5003/Game/MainGameRazor/0/" + player1Id + "/" + player2Id + "/" + worldId + "/" + (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))));
+            return Redirect("http://siim.cc/Game/MainGameRazor/0/" + player1Id + "/" + player2Id + "/" + worldId + "/" + (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))));
+
         }
         [HttpGet("Game/CreateArmyMission/{worldId}/{Owner}/{player1Id}/{player2Id}/{SelectedTower}/{playerIdWhoClicks}")]
 
@@ -1092,7 +1115,6 @@ namespace WebGame.Controllers
                     ViewBag.Arrival = arrival; // Selle abil saadan need View ja Views ütleb, millal armee jõuab kohale. SIis ei pea ka Post'is enam seda kontrollima?
                     return View();
                 }
-
             }
             else
             {
@@ -1213,6 +1235,7 @@ namespace WebGame.Controllers
             return View(worlds);
         }
 
+        [HttpGet("Game/Tutorial/{FirstLogin}")]
         public async Task<IActionResult> Tutorial(bool FirstLogin)
         {
             ViewBag.FirstLogin = FirstLogin;
