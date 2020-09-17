@@ -66,7 +66,7 @@
                                                 @item.TowerName
 
                                                 @{ int maxSend = @item.Attack - 1; }
-                                                <input asp-for="TowerAttack[counter]" value="0" class="form-control" />
+                                                <input  max="@maxSend" asp-for="TowerAttack[counter]" value="0" class="form-control" />
                                                 MAX army to send - @maxSend
                                                 <input type="hidden" asp-for="TowerId[counter]" value="@item.TowerId" />
                                                 <br />
@@ -108,7 +108,7 @@
                                     <div class="form-group">
                                         @item.TowerName
                                         @{ int maxSend = @item.Attack - 1; }
-                                        <input asp-for="TowerAttack[counter]" value="0" class="form-control" />
+                                        <input  max="@maxSend" asp-for="TowerAttack[counter]" value="0" class="form-control" />
                                         MAX army to send - @maxSend
                                         <input type="hidden" asp-for="TowerId[counter]" value="@item.TowerId" />
                                         <br />
