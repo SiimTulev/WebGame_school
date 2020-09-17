@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "gmM9hMhi0q+iOT9dtTB4Wo7GDnCxo0g5CusFNdYE41J5DrcoEkDaLfzG476E7KvLRb+bTf1QSB2hFoQJxB/SkA==",
+  "dgSpecHash": "28JdAdYUFBvjqdCwrzdQIesIVQZQ+ZEqOBS+UmiTv151dbqO/JpxwuoTyxhw9J7Ec+2+HuncM3HzurHo/qLzUw==",
   "success": true,
-  "projectFilePath": "C:\\C#\\WebGame_database\\FileZillaLinuxGame\\WebGame_Blazor_SignalR_35_WINDOWSVERSIONSIGNALRRRRRRRR\\WebGame.csproj",
+  "projectFilePath": "C:\\C#\\WebGame_database\\FileZillaLinuxGame\\WebGame_Blazor_SignalR_35_WINDOWSVERSIONSIGNALRRRRRRRR _NEW COPY\\WebGame.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Yorwet\\.nuget\\packages\\bouncycastle.netcore\\1.8.3\\bouncycastle.netcore.1.8.3.nupkg.sha512",
     "C:\\Users\\Yorwet\\.nuget\\packages\\dapper\\2.0.35\\dapper.2.0.35.nupkg.sha512",

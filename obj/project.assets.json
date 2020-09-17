@@ -9212,11 +9212,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\C#\\WebGame_database\\FileZillaLinuxGame\\WebGame_Blazor_SignalR_35_WINDOWSVERSIONSIGNALRRRRRRRR\\WebGame.csproj",
+      "projectUniqueName": "C:\\C#\\WebGame_database\\FileZillaLinuxGame\\WebGame_Blazor_SignalR_35_WINDOWSVERSIONSIGNALRRRRRRRR _NEW COPY\\WebGame.csproj",
       "projectName": "WebGame",
-      "projectPath": "C:\\C#\\WebGame_database\\FileZillaLinuxGame\\WebGame_Blazor_SignalR_35_WINDOWSVERSIONSIGNALRRRRRRRR\\WebGame.csproj",
+      "projectPath": "C:\\C#\\WebGame_database\\FileZillaLinuxGame\\WebGame_Blazor_SignalR_35_WINDOWSVERSIONSIGNALRRRRRRRR _NEW COPY\\WebGame.csproj",
       "packagesPath": "C:\\Users\\Yorwet\\.nuget\\packages\\",
-      "outputPath": "C:\\C#\\WebGame_database\\FileZillaLinuxGame\\WebGame_Blazor_SignalR_35_WINDOWSVERSIONSIGNALRRRRRRRR\\obj\\",
+      "outputPath": "C:\\C#\\WebGame_database\\FileZillaLinuxGame\\WebGame_Blazor_SignalR_35_WINDOWSVERSIONSIGNALRRRRRRRR _NEW COPY\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Microsoft\\Xamarin\\NuGet\\",

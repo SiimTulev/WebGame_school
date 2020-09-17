@@ -99,7 +99,7 @@ namespace WebGame
            {
                endpoints.MapControllerRoute(
                    name: "default",
-                   pattern: "{controller=Main}/{action=Main}/{id?}");
+               pattern: "{controller=Game}/{action=Tutorial}");
                endpoints.MapRazorPages();
                endpoints.MapBlazorHub();
                endpoints.MapHub<NotificationHub>("/notificationHub"); // VAJALIK
