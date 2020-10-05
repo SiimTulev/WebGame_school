@@ -403,7 +403,7 @@ namespace WebGame.Controllers
                     var newTowersWorld = _context.World
               .FirstOrDefault(m => m.WorldId == newMaxWorldId);
 
-                    string[] baseName = { "Hotel", "India", "Juliett", "Kilo", "Lima", "Mike", "November", "MainBase2" };
+                    string[] baseName = { "India", "Juliett", "Kilo", "Lima", "Mike", "November", "November", "Oscar" };
                     int[] xCord = { 4, 5, 5, 5, 6, 6, 6, 7 };
                     int[] yCord = { 1, 0, 1, 2, 0, 1, 2, 1 };
 
@@ -449,7 +449,7 @@ namespace WebGame.Controllers
                     _context.Update(world);
                     await _context.SaveChangesAsync();
 
-                    string[] baseName = { "MainBase1", "Alpha", "Beta", "Charlie", "Delta", "Echo", "Foxtrot", "Golf" };
+                    string[] baseName = { "Alpha", "Beta", "Charlie", "Delta", "Echo", "Foxtrot", "Golf", "Hotel" };
                     int[] xCord = { 0, 1, 1, 1, 2, 2, 2, 3 };
                     int[] yCord = { 1, 0, 1, 2, 0, 1, 2, 1 };
 
