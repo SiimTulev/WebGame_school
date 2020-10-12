@@ -4,7 +4,7 @@ To see SignalR working, open 2 web browsers and open MainGame. So click "Ready" 
 
 
 
-It works with MySQL for sure, I am not sure about other databases.
+It's designed for MySQL, but it can be modified for Microsoft SQL Server too.
 
 TO START THE APPLICATION:
 
