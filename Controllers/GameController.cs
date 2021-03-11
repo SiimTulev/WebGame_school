@@ -340,8 +340,8 @@ namespace WebGame.Controllers
                 return RedirectToAction("CancelArmyMovement", new { worldId = worldId, accountId = (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))) });
             }
 
-            var mainBaseLocation = (from d in _context.Tower
-                                    where d.Owner == owner && d.WorldId == worldId && d.TowerName == "MainBase1" || d.TowerName == "MainBase2"
+              var mainBaseLocation = (from d in _context.Tower
+                                    where (d.TowerName == "MainBase1" || d.TowerName == "MainBase2") && d.Owner == owner && d.WorldId == worldId
                                     select d).FirstOrDefault();
 
             var movement = await _context.AttDef.FindAsync(id);
