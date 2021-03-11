@@ -281,6 +281,15 @@ namespace WebGame.Controllers
                 return RedirectToAction(nameof(SelectGame));
             }
 
+            var mainBaseLocation = (from d in _context.Tower
+                                    where (d.TowerName == "MainBase1" || d.TowerName == "MainBase2") && d.Owner == PlayerIdWhoClicks && d.WorldId == worldId
+                                    select d).FirstOrDefault();
+
+            if (mainBaseLocation == null)
+            {
+                ViewBag.MainBaseMissing = true;
+            }
+
             ViewBag.Player1Id = player1Id;
             ViewBag.Player2Id = player2Id;
 
@@ -334,20 +343,23 @@ namespace WebGame.Controllers
                                     where (d.TowerName == "MainBase1" || d.TowerName == "MainBase2") && d.Owner == owner && d.WorldId == worldId
                                     select d).FirstOrDefault();
 
+            if (mainBaseLocation == null)
+            {
+                return RedirectToAction("CancelArmyMovement", new
+                {
+                    worldId = worldId,
+                    PlayerIdWhoClicks = owner,
+                    player1Id = player1Id,
+                    player2Id = player2Id
+                });
+            }
             var movement = await _context.AttDef.FindAsync(id);
 
             // SEND ARMY BACK TO MAIN BASE
             attdef.Id = 0; // AutoIncrement
             attdef.WorldId = worldId;
             attdef.AttackerPlayerId = owner;
-            if (mainBaseLocation == null)
-            {
-                attdef.TargetTowerId = movement.TargetTowerId;
-            }
-            else
-            {
-                attdef.TargetTowerId = mainBaseLocation.TowerId;
-            }
+            attdef.TargetTowerId = mainBaseLocation.TowerId;
             attdef.Amount += movement.Amount;
             attdef.RoundsToArrive = 10; //Current round + (the value from tower distance to other tower)
             attdef.AccountId = (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier)));
