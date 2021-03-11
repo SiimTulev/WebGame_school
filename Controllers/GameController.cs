@@ -1,14 +1,14 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using WebGame.ViewModel;
-using System.Security.Claims;
-using System.Diagnostics;
 using WebGame.Models.GameViewModels;
 using WebGame.Models.WebGame;
+using WebGame.ViewModel;
 
 namespace WebGame.Controllers
 {
@@ -20,6 +20,7 @@ namespace WebGame.Controllers
         {
             _context = context;
         }
+
         [HttpGet("Game/MainGameRazor/{error}/{player1Id}/{player2Id}/{worldId}/{accountCheck}")]
         public async Task<IActionResult> MainGameRazor(int accountCheck, int player1Id, int player2Id, int? worldId, int? error)
         {
@@ -29,7 +30,7 @@ namespace WebGame.Controllers
             }
 
             var world = _context.World
-    .FirstOrDefault(m => m.WorldId == worldId);
+                .FirstOrDefault(m => m.WorldId == worldId);
 
             // Security
             if (world.Player1IdAcc != (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))) && world.Player2IdAcc != (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))))
@@ -89,7 +90,6 @@ namespace WebGame.Controllers
                 }
                 ViewBag.EnemyId = enemyName.AccountId;
 
-
                 var yourName = _context.Playeraccount.FirstOrDefault(m => m.AccountId == world.Player2IdAcc);
                 if (yourName.AccountName.Length > 5)
                 {
@@ -110,9 +110,7 @@ namespace WebGame.Controllers
                 ViewBag.IsWinner = true;
             }
 
-            var playerIdWhoClicks = (from d in _context.Player
-                                     where d.WorldId == worldId && d.AccountId == (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier)))
-                                     select d.PlayerId).FirstOrDefault();
+            var playerIdWhoClicks = (from d in _context.Player where d.WorldId == worldId && d.AccountId == (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))) select d.PlayerId).FirstOrDefault();
 
             ViewBag.PlayerIdWhoClicks = playerIdWhoClicks;
 
@@ -125,15 +123,11 @@ namespace WebGame.Controllers
                 ViewBag.EnemyPlayerId = player1Id;
             }
 
-            var findPlayerGold = (from d in _context.Player
-                                  where d.PlayerId == playerIdWhoClicks && d.WorldId == worldId
-                                  select d.Gold).FirstOrDefault();
+            var findPlayerGold = (from d in _context.Player where d.PlayerId == playerIdWhoClicks && d.WorldId == worldId select d.Gold).FirstOrDefault();
 
             ViewBag.FindPlayerGold = findPlayerGold;
 
-            var loggedInPlayerTowers = (from d in _context.Tower
-                                        where d.Owner == playerIdWhoClicks && d.WorldId == worldId
-                                        select d).ToList();
+            var loggedInPlayerTowers = (from d in _context.Tower where d.Owner == playerIdWhoClicks && d.WorldId == worldId select d).ToList();
 
             int peopleGrowingPlusPeopleAlive = 0;
             int peopleGrowing = 0;
@@ -155,9 +149,7 @@ namespace WebGame.Controllers
 
             ViewBag.WorldId = worldId;
 
-            var playerIds = (from d in _context.Player
-                             where d.AccountId == (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier)))
-                             select d.PlayerId).ToList();
+            var playerIds = (from d in _context.Player where d.AccountId == (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))) select d.PlayerId).ToList();
 
             // GET LOGGED IN ACCOUNT PLAYERID
             if (world.Player1Ready == true ^ world.Player2Ready == true) // IF ONLY ONE OF THEM IS READY
@@ -224,9 +216,7 @@ namespace WebGame.Controllers
         [HttpGet("Game/Profile/{accountId}")]
         public async Task<IActionResult> Profile(int accountId) // SAFE
         {
-            var profile = (from d in _context.Playeraccount
-                           where d.AccountId == accountId
-                           select d).FirstOrDefault();
+            var profile = (from d in _context.Playeraccount where d.AccountId == accountId select d).FirstOrDefault();
 
             ViewBag.Name = profile.AccountName;
             ViewBag.Wins = profile.Wins;
@@ -243,7 +233,6 @@ namespace WebGame.Controllers
             return View();
         }
         //public async Task<IActionResult> UpgradeTower(int id, TowerViewModel towerViewModel) // SAFE tänu playerId kontrollile?
-
 
         //Game/UpgradeTower/12?accountId=4&amp;owner=2&amp;player1Id=1&amp;player2Id=2&amp;worldId=1"
         [HttpGet("Game/UpgradeTower/{id}/{accountId}/{owner}/{player1Id}/{player2Id}/{worldId}")]
@@ -266,7 +255,8 @@ namespace WebGame.Controllers
 
             if (player.Gold < 0)
             {
-                return Redirect("http://localhost:5003/Game/MainGameRazor/1/" + player1Id + "/" + player2Id + "/" + worldId + "/" + accountId);
+                // return RedirectToAction("MainGame", new { error = 1, Player1Id = player1Id, Player2Id = player2Id, WorldId = worldId, accountId = (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))) });
+                return Redirect("http://siim.cc/Game/MainGameRazor/1/" + player1Id + "/" + player2Id + "/" + worldId + "/" + accountId);
 
             }
             if (player.Gold >= 0)
@@ -279,7 +269,7 @@ namespace WebGame.Controllers
 
                 await _context.SaveChangesAsync();
             }
-            return Redirect("http://localhost:5003/Game/MainGameRazor/0/" + player1Id + "/" + player2Id + "/" + worldId + "/" + accountId);
+            return Redirect("http://siim.cc/Game/MainGameRazor/0/" + player1Id + "/" + player2Id + "/" + worldId + "/" + accountId);
 
         }
 
@@ -294,9 +284,7 @@ namespace WebGame.Controllers
             ViewBag.Player1Id = player1Id;
             ViewBag.Player2Id = player2Id;
 
-            var armyMovings = (from d in _context.AttDef
-                               where d.AccountId == (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))) && d.WorldId == worldId && d.ReturnBase == false
-                               select d).ToListAsync();
+            var armyMovings = (from d in _context.AttDef where d.AccountId == (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))) && d.WorldId == worldId && d.ReturnBase == false select d).ToListAsync();
 
             ViewBag.PlayerIdWhoClicks = PlayerIdWhoClicks;
             ViewBag.WorldId = worldId;
@@ -318,9 +306,7 @@ namespace WebGame.Controllers
 
             for (int i = 0; i < towerIds.Count; i++)
             {
-                var towerName = (from d in _context.Tower
-                                 where d.TowerId == Convert.ToInt32(towerIds[i])
-                                 select d.TowerName).FirstOrDefault();
+                var towerName = (from d in _context.Tower where d.TowerId == Convert.ToInt32(towerIds[i]) select d.TowerName).FirstOrDefault();
                 towerNames.Add(towerName);
             }
 
@@ -337,10 +323,14 @@ namespace WebGame.Controllers
             }
             if (accountCheck != (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))))
             {
-                return RedirectToAction("CancelArmyMovement", new { worldId = worldId, accountId = (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))) });
+                return RedirectToAction("CancelArmyMovement", new
+                {
+                    worldId = worldId,
+                    accountId = (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier)))
+                });
             }
 
-              var mainBaseLocation = (from d in _context.Tower
+            var mainBaseLocation = (from d in _context.Tower
                                     where (d.TowerName == "MainBase1" || d.TowerName == "MainBase2") && d.Owner == owner && d.WorldId == worldId
                                     select d).FirstOrDefault();
 
@@ -350,7 +340,14 @@ namespace WebGame.Controllers
             attdef.Id = 0; // AutoIncrement
             attdef.WorldId = worldId;
             attdef.AttackerPlayerId = owner;
-            attdef.TargetTowerId = mainBaseLocation.TowerId;
+            if (mainBaseLocation == null)
+            {
+                attdef.TargetTowerId = movement.TargetTowerId;
+            }
+            else
+            {
+                attdef.TargetTowerId = mainBaseLocation.TowerId;
+            }
             attdef.Amount += movement.Amount;
             attdef.RoundsToArrive = 10; //Current round + (the value from tower distance to other tower)
             attdef.AccountId = (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier)));
@@ -358,7 +355,13 @@ namespace WebGame.Controllers
             _context.Add(attdef);
             _context.AttDef.Remove(movement); // kas on vaja AttDef osa?
             await _context.SaveChangesAsync();
-            return RedirectToAction("CancelArmyMovement", new { worldId = worldId, PlayerIdWhoClicks = owner, player1Id = player1Id, player2Id = player2Id });
+            return RedirectToAction("CancelArmyMovement", new
+            {
+                worldId = worldId,
+                PlayerIdWhoClicks = owner,
+                player1Id = player1Id,
+                player2Id = player2Id
+            });
         }
 
         public async Task<IActionResult> NewGame(World world, Player player) // 100% SAFE
@@ -368,9 +371,7 @@ namespace WebGame.Controllers
                 return RedirectToAction(nameof(SelectGame));
             }
 
-            var checkWorld = (from d in _context.World
-                              where d.Player1Id > 0 && d.Player2Id <= 0
-                              select d.WorldId).FirstOrDefault();
+            var checkWorld = (from d in _context.World where d.Player1Id > 0 && d.Player2Id <= 0 select d.WorldId).FirstOrDefault();
 
             var worldToEdit = _context.World.FirstOrDefault(m => m.WorldId == checkWorld);
 
@@ -379,9 +380,7 @@ namespace WebGame.Controllers
                 // JOIN A NEW GAME IF WORLD HAS BEEN ALREADY MADE (CREATE PlayerId & Towers 
                 if (checkWorld != null && checkWorld != 0)
                 {
-                    var findEmptyWorld = (from d in _context.World
-                                          where d.Player2Id == null || d.Player2Id == 0
-                                          select d.WorldId).First();
+                    var findEmptyWorld = (from d in _context.World where d.Player2Id == null || d.Player2Id == 0 select d.WorldId).First();
 
                     player.PlayerId = 0; // AutoIncrement
                     player.AccountId = (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier)));
@@ -401,21 +400,70 @@ namespace WebGame.Controllers
 
                     var newMaxWorldId = _context.World.Max(x => x.WorldId); // Find max WorldId 
                     var newTowersWorld = _context.World
-              .FirstOrDefault(m => m.WorldId == newMaxWorldId);
+                        .FirstOrDefault(m => m.WorldId == newMaxWorldId);
 
-                    string[] baseName = { "India", "Juliett", "Kilo", "Lima", "Mike", "November", "November", "Oscar" };
-                    int[] xCord = { 4, 5, 5, 5, 6, 6, 6, 7 };
-                    int[] yCord = { 1, 0, 1, 2, 0, 1, 2, 1 };
+                    string[] baseName = {
+                        "Hotel",
+                        "India",
+                        "Juliett",
+                        "Kilo",
+                        "Lima",
+                        "Mike",
+                        "November",
+                        "MainBase2"
+                    };
+                    int[] xCord = {
+                        4,
+                        5,
+                        5,
+                        5,
+                        6,
+                        6,
+                        6,
+                        7
+                    };
+                    int[] yCord = {
+                        1,
+                        0,
+                        1,
+                        2,
+                        0,
+                        1,
+                        2,
+                        1
+                    };
 
                     var tower_ = new List<Tower>();
                     for (int i = 0; i < 8; i++) // Make 8 Towers           
                     {
                         if (i == 7)
                         {
-                            tower_.Add(new Tower { TowerId = 0, WorldId = newMaxWorldId, Owner = player.PlayerId, TowerName = baseName[i], Attack = 1000, Defence = 10, LocationX = xCord[i], LocationY = yCord[i], TowerLvl = 10 });
+                            tower_.Add(new Tower
+                            {
+                                TowerId = 0,
+                                WorldId = newMaxWorldId,
+                                Owner = player.PlayerId,
+                                TowerName = baseName[i],
+                                Attack = 1000,
+                                Defence = 10,
+                                LocationX = xCord[i],
+                                LocationY = yCord[i],
+                                TowerLvl = 10
+                            });
                             continue;
                         }
-                        tower_.Add(new Tower { TowerId = 0, WorldId = newMaxWorldId, Owner = player.PlayerId, TowerName = baseName[i], Attack = 100, Defence = 5, LocationX = xCord[i], LocationY = yCord[i], TowerLvl = 1 });
+                        tower_.Add(new Tower
+                        {
+                            TowerId = 0,
+                            WorldId = newMaxWorldId,
+                            Owner = player.PlayerId,
+                            TowerName = baseName[i],
+                            Attack = 100,
+                            Defence = 5,
+                            LocationX = xCord[i],
+                            LocationY = yCord[i],
+                            TowerLvl = 1
+                        });
                     }
                     _context.AddRange(tower_);
                     await _context.SaveChangesAsync();
@@ -449,19 +497,68 @@ namespace WebGame.Controllers
                     _context.Update(world);
                     await _context.SaveChangesAsync();
 
-                    string[] baseName = { "Alpha", "Beta", "Charlie", "Delta", "Echo", "Foxtrot", "Golf", "Hotel" };
-                    int[] xCord = { 0, 1, 1, 1, 2, 2, 2, 3 };
-                    int[] yCord = { 1, 0, 1, 2, 0, 1, 2, 1 };
+                    string[] baseName = {
+                        "MainBase1",
+                        "Alpha",
+                        "Beta",
+                        "Charlie",
+                        "Delta",
+                        "Echo",
+                        "Foxtrot",
+                        "Golf"
+                    };
+                    int[] xCord = {
+                        0,
+                        1,
+                        1,
+                        1,
+                        2,
+                        2,
+                        2,
+                        3
+                    };
+                    int[] yCord = {
+                        1,
+                        0,
+                        1,
+                        2,
+                        0,
+                        1,
+                        2,
+                        1
+                    };
 
                     var tower_ = new List<Tower>();
                     for (int i = 0; i < 8; i++) // Make 8 Towers           
                     {
                         if (i == 0)
                         {
-                            tower_.Add(new Tower { TowerId = 0, WorldId = world.WorldId, Owner = player.PlayerId, TowerName = baseName[i], Attack = 1000, Defence = 10, LocationX = xCord[i], LocationY = yCord[i], TowerLvl = 10 });
+                            tower_.Add(new Tower
+                            {
+                                TowerId = 0,
+                                WorldId = world.WorldId,
+                                Owner = player.PlayerId,
+                                TowerName = baseName[i],
+                                Attack = 1000,
+                                Defence = 10,
+                                LocationX = xCord[i],
+                                LocationY = yCord[i],
+                                TowerLvl = 10
+                            });
                             continue;
                         }
-                        tower_.Add(new Tower { TowerId = 0, WorldId = world.WorldId, Owner = player.PlayerId, TowerName = baseName[i], Attack = 100, Defence = 5, LocationX = xCord[i], LocationY = yCord[i], TowerLvl = 1 });
+                        tower_.Add(new Tower
+                        {
+                            TowerId = 0,
+                            WorldId = world.WorldId,
+                            Owner = player.PlayerId,
+                            TowerName = baseName[i],
+                            Attack = 100,
+                            Defence = 5,
+                            LocationX = xCord[i],
+                            LocationY = yCord[i],
+                            TowerLvl = 1
+                        });
                     }
                     _context.AddRange(tower_);
                     await _context.SaveChangesAsync();
@@ -483,7 +580,7 @@ namespace WebGame.Controllers
             }
 
             var world = _context.World
-    .FirstOrDefault(m => m.WorldId == worldId);
+                .FirstOrDefault(m => m.WorldId == worldId);
 
             // Security
             if (world.Player1IdAcc != (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))) && world.Player2IdAcc != (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))))
@@ -527,21 +624,15 @@ namespace WebGame.Controllers
                 ViewBag.Winner = "Player " + PlayeraccountNameWin.AccountName + " won the game!";
                 ViewBag.IsWinner = true;
             }
-            var playerIdWhoClicks = (from d in _context.Player
-                                     where d.WorldId == worldId && d.AccountId == (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier)))
-                                     select d.PlayerId).FirstOrDefault();
+            var playerIdWhoClicks = (from d in _context.Player where d.WorldId == worldId && d.AccountId == (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))) select d.PlayerId).FirstOrDefault();
 
             ViewBag.PlayerIdWhoClicks = playerIdWhoClicks;
 
-            var findPlayerGold = (from d in _context.Player
-                                  where d.PlayerId == playerIdWhoClicks && d.WorldId == worldId
-                                  select d.Gold).FirstOrDefault();
+            var findPlayerGold = (from d in _context.Player where d.PlayerId == playerIdWhoClicks && d.WorldId == worldId select d.Gold).FirstOrDefault();
 
             ViewBag.FindPlayerGold = findPlayerGold;
 
-            var loggedInPlayerTowers = (from d in _context.Tower
-                                        where d.Owner == playerIdWhoClicks && d.WorldId == worldId
-                                        select d).ToList();
+            var loggedInPlayerTowers = (from d in _context.Tower where d.Owner == playerIdWhoClicks && d.WorldId == worldId select d).ToList();
 
             int peopleGrowingPlusPeopleAlive = 0;
             int peopleGrowing = 0;
@@ -563,9 +654,7 @@ namespace WebGame.Controllers
 
             ViewBag.WorldId = worldId;
 
-            var playerIds = (from d in _context.Player
-                             where d.AccountId == (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier)))
-                             select d.PlayerId).ToList();
+            var playerIds = (from d in _context.Player where d.AccountId == (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))) select d.PlayerId).ToList();
 
             // GET LOGGED IN ACCOUNT PLAYERID
             if (world.Player1Ready == true ^ world.Player2Ready == true) // IF ONLY ONE OF THEM IS READY
@@ -634,14 +723,14 @@ namespace WebGame.Controllers
             }
 
             var world = _context.World
-              .FirstOrDefault(m => m.WorldId == worldId);
+                .FirstOrDefault(m => m.WorldId == worldId);
 
             if (world == null)
             {
                 return NotFound();
             }
             var player = _context.Player
-              .FirstOrDefault(m => m.WorldId == worldId && m.AccountId == (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))));
+                .FirstOrDefault(m => m.WorldId == worldId && m.AccountId == (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))));
 
             if (world.Player1Id == player.PlayerId && world.WorldId == worldId)
             {
@@ -653,17 +742,15 @@ namespace WebGame.Controllers
             }
 
             List<Tower> towerList = new List<Tower>();
-            towerList = (from product in _context.Tower
-                         where product.WorldId == worldId
-                         select product).ToList();
+            towerList = (from product in _context.Tower where product.WorldId == worldId select product).ToList();
 
             if (world.Player1Ready == true && world.Player2Ready == true)
             {
                 var player1Gold = _context.Player
-                 .FirstOrDefault(m => m.WorldId == worldId && m.PlayerId == world.Player1Id);
+                    .FirstOrDefault(m => m.WorldId == worldId && m.PlayerId == world.Player1Id);
 
                 var player2Gold = _context.Player
-                 .FirstOrDefault(m => m.WorldId == worldId && m.PlayerId == world.Player2Id);
+                    .FirstOrDefault(m => m.WorldId == worldId && m.PlayerId == world.Player2Id);
 
                 foreach (var tower in towerList)
                 {
@@ -689,9 +776,7 @@ namespace WebGame.Controllers
                 _context.UpdateRange(towerList);
 
                 List<AttDef> moveChanging = new List<AttDef>(); // Army goes closer
-                moveChanging = (from m in _context.AttDef
-                                where m.WorldId == worldId
-                                select m).ToList();
+                moveChanging = (from m in _context.AttDef where m.WorldId == worldId select m).ToList();
 
                 if (moveChanging.Count > 0) // if there is any army moving
                 {
@@ -703,9 +788,7 @@ namespace WebGame.Controllers
                 }
 
                 List<AttDef> armyToTower = new List<AttDef>(); // do army action
-                armyToTower = (from m in _context.AttDef
-                               where m.WorldId == worldId && m.RoundsToArrive <= 0
-                               select m).ToList();
+                armyToTower = (from m in _context.AttDef where m.WorldId == worldId && m.RoundsToArrive <= 0 select m).ToList();
 
                 if (armyToTower.Count > 0)
                 {
@@ -714,9 +797,7 @@ namespace WebGame.Controllers
 
                     for (int i = 0; i < armyToTower.Count; i++) // Friendly army must arrive first
                     {
-                        whereArmyGoes[i] = (from d in _context.Tower
-                                            where d.TowerId == armyToTower[i].TargetTowerId
-                                            select d).First();
+                        whereArmyGoes[i] = (from d in _context.Tower where d.TowerId == armyToTower[i].TargetTowerId select d).First();
 
                         if (whereArmyGoes[i].Owner == armyToTower[i].AttackerPlayerId) // If army goes to friendly's base
                             whereArmyGoes[i].Attack += armyToTower[i].Amount;
@@ -770,11 +851,11 @@ namespace WebGame.Controllers
                     if (checkIfNoOwner1 == 0)
                     {
                         var PlayeraccountWin = _context.Playeraccount
-     .FirstOrDefault(m => m.AccountId == world.Player2IdAcc);
+                            .FirstOrDefault(m => m.AccountId == world.Player2IdAcc);
                         PlayeraccountWin.Wins += 1;
 
                         var PlayeraccountLost = _context.Playeraccount
-.FirstOrDefault(m => m.AccountId == world.Player1IdAcc);
+                            .FirstOrDefault(m => m.AccountId == world.Player1IdAcc);
                         PlayeraccountLost.Losts += 1;
 
                         world.WinnerAccountId = world.Player2IdAcc;
@@ -783,11 +864,11 @@ namespace WebGame.Controllers
                     else if (checkIfNoOwner1 == 16)
                     {
                         var PlayeraccountWin = _context.Playeraccount
-   .FirstOrDefault(m => m.AccountId == world.Player1IdAcc);
+                            .FirstOrDefault(m => m.AccountId == world.Player1IdAcc);
                         PlayeraccountWin.Wins += 1;
 
                         var PlayeraccountLost = _context.Playeraccount
-.FirstOrDefault(m => m.AccountId == world.Player2IdAcc);
+                            .FirstOrDefault(m => m.AccountId == world.Player2IdAcc);
                         PlayeraccountLost.Losts += 1;
 
                         world.WinnerAccountId = world.Player1IdAcc;
@@ -802,8 +883,10 @@ namespace WebGame.Controllers
             _context.Update(world);
             _context.SaveChanges();
 
-            return Redirect("http://localhost:5003/Game/MainGameRazor/0/" + world.Player1Id + "/" + world.Player2Id + "/" + worldId + "/" + (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))));
+            return Redirect("http://siim.cc/Game/MainGameRazor/0/" + world.Player1Id + "/" + world.Player2Id + "/" + worldId + "/" + (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))));
+
         }
+
         [HttpPost("Game/CreateArmyMission/{worldId}/{Owner}/{player1Id}/{player2Id}/{SelectedTower}/{playerIdWhoClicks}")]
         //[HttpPost("Game/CreateArmyMission/{worldId}/{Owner}/{player1Id}/{player2Id}/{SelectedTower}")]
         [ValidateAntiForgeryToken]
@@ -816,9 +899,7 @@ namespace WebGame.Controllers
             try
             {
                 int attackSum = 0;
-                var idWhereArmyGoes = (from d in _context.Tower
-                                       where d.TowerId == SelectedTowerId
-                                       select d).First();
+                var idWhereArmyGoes = (from d in _context.Tower where d.TowerId == SelectedTowerId select d).First();
 
                 if (connected == true) // All the armies go together
                 {
@@ -833,9 +914,7 @@ namespace WebGame.Controllers
                         // If not enough army men from tower
                         if (tower.Attack - editViewModel.TowerAttack[i] < 1)
                         {
-                            var playerId = (from d in _context.Player
-                                            where d.AccountId == (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))) && d.PlayerId == Owner
-                                            select d.PlayerId).FirstOrDefault();
+                            var playerId = (from d in _context.Player where d.AccountId == (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))) && d.PlayerId == Owner select d.PlayerId).FirstOrDefault();
 
                             List<Tower> towerList2 = new List<Tower>();
 
@@ -881,9 +960,7 @@ namespace WebGame.Controllers
                     }
                     int highestArrivalTime = towersWhatAttackArrivingTime.Max(); // Find the longest army moving time
 
-                    var whoAttacks = (from d in _context.Player
-                                      where d.AccountId == (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))) && d.WorldId == SelectedWorldId
-                                      select d.PlayerId).First();
+                    var whoAttacks = (from d in _context.Player where d.AccountId == (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))) && d.WorldId == SelectedWorldId select d.PlayerId).First();
 
                     attdef.Id = 0; // AutoIncrement
                     attdef.WorldId = SelectedWorldId;
@@ -898,9 +975,7 @@ namespace WebGame.Controllers
                 }
                 if (connected == false) // Army trip is separated from other's 
                 {
-                    var playerId3 = (from d in _context.Player
-                                     where d.AccountId == (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))) && d.WorldId == SelectedWorldId
-                                     select d.PlayerId).First();
+                    var playerId3 = (from d in _context.Player where d.AccountId == (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))) && d.WorldId == SelectedWorldId select d.PlayerId).First();
 
                     var attdefs = new List<AttDef>();
                     for (int i = 0; i < editViewModel.TowerAttack.Count; i++)
@@ -911,9 +986,7 @@ namespace WebGame.Controllers
 
                         if (tower.Attack - editViewModel.TowerAttack[i] < 1)
                         {
-                            var playerId = (from d in _context.Player
-                                            where d.AccountId == (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))) && d.PlayerId == Owner
-                                            select d.PlayerId).FirstOrDefault();
+                            var playerId = (from d in _context.Player where d.AccountId == (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))) && d.PlayerId == Owner select d.PlayerId).FirstOrDefault();
 
                             List<Tower> towerList2 = new List<Tower>();
 
@@ -954,7 +1027,16 @@ namespace WebGame.Controllers
 
                         int arrival = editViewModel.arrivingTime[i];
 
-                        attdefs.Add(new AttDef { Id = 0, WorldId = SelectedWorldId, AttackerPlayerId = playerId3, TargetTowerId = SelectedTowerId, Amount = attackSum, RoundsToArrive = arrival, AccountId = (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))) });
+                        attdefs.Add(new AttDef
+                        {
+                            Id = 0,
+                            WorldId = SelectedWorldId,
+                            AttackerPlayerId = playerId3,
+                            TargetTowerId = SelectedTowerId,
+                            Amount = attackSum,
+                            RoundsToArrive = arrival,
+                            AccountId = (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier)))
+                        });
                     }
                     _context.AddRange(attdefs);
                     await _context.SaveChangesAsync();
@@ -971,9 +1053,10 @@ namespace WebGame.Controllers
                     throw;
                 }
             }
-            return Redirect("http://localhost:5003/Game/MainGameRazor/0/" + player1Id + "/" + player2Id + "/" + worldId + "/" + (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))));
+            return Redirect("http://siim.cc/Game/MainGameRazor/0/" + player1Id + "/" + player2Id + "/" + worldId + "/" + (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))));
 
         }
+
         [HttpGet("Game/CreateArmyMission/{worldId}/{Owner}/{player1Id}/{player2Id}/{SelectedTower}/{playerIdWhoClicks}")]
 
         //[HttpGet("Game/CreateArmyMission/{worldId}/{Owner}/{player1Id}/{player2Id}/{SelectedTower}")]
@@ -988,7 +1071,7 @@ namespace WebGame.Controllers
             ViewBag.Player2Id = player2Id;
 
             var world = _context.World
-    .FirstOrDefault(m => m.WorldId == worldId);
+                .FirstOrDefault(m => m.WorldId == worldId);
 
             // Security
             if (world.Player1IdAcc != (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))) && world.Player2IdAcc != (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))))
@@ -1001,9 +1084,7 @@ namespace WebGame.Controllers
             ViewBag.SelectedTower = SelectedTower;
             ViewBag.WorldId = worldId;
 
-            var idWhereArmyGoes = (from d in _context.Tower
-                                   where d.TowerId == SelectedTower
-                                   select d).First();
+            var idWhereArmyGoes = (from d in _context.Tower where d.TowerId == SelectedTower select d).First();
 
             if (User.Identity.IsAuthenticated) // If account is logged in
             {
@@ -1016,15 +1097,11 @@ namespace WebGame.Controllers
                 if (playerId == Owner) // The clicked tower is his own
                 {
                     List<Player> mainBase = new List<Player>();
-                    mainBase = (from d in _context.Player
-                                where d.AccountId == (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))) && d.PlayerId == Owner
-                                select d).ToList();
+                    mainBase = (from d in _context.Player where d.AccountId == (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))) && d.PlayerId == Owner select d).ToList();
                     ViewBag.mainBase = mainBase;
 
                     List<Tower> towerList2 = new List<Tower>();
-                    towerList2 = (from product in _context.Tower
-                                  where product.Owner == playerIdWhoClicks && product.WorldId == worldId
-                                  select product).ToList();
+                    towerList2 = (from product in _context.Tower where product.Owner == playerIdWhoClicks && product.WorldId == worldId select product).ToList();
                     ViewBag.ListofTower = towerList2;
 
                     int[] roundsToArrives_X = new int[towerList2.Count];
@@ -1069,7 +1146,7 @@ namespace WebGame.Controllers
 
                     return View();
                 }
-                else  // The clicked tower is enemy's OR Nobody's
+                else // The clicked tower is enemy's OR Nobody's
                 {
                     List<Tower> towerList2 = new List<Tower>();
                     towerList2 = (from product in _context.Tower
@@ -1123,11 +1200,10 @@ namespace WebGame.Controllers
             {
                 ViewBag.Queue = TempData["Queue"].ToString();
             }
-            catch { }
+            catch
+            { }
 
-            var playerIds = (from d in _context.Player
-                             where d.AccountId == (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier)))
-                             select d.PlayerId).ToList();
+            var playerIds = (from d in _context.Player where d.AccountId == (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))) select d.PlayerId).ToList();
 
             var worlds = (from d in _context.World
                           where playerIds.Contains(d.Player1Id) || playerIds.Contains(d.Player2Id)
@@ -1150,14 +1226,10 @@ namespace WebGame.Controllers
 
             foreach (var world in worlds)
             {
-                string player1 = (from d in _context.Playeraccount
-                                  where d.AccountId == world.Player1IdAcc
-                                  select d.AccountName).FirstOrDefault();
+                string player1 = (from d in _context.Playeraccount where d.AccountId == world.Player1IdAcc select d.AccountName).FirstOrDefault();
                 playerNames1.Add(player1);
 
-                string player2 = (from d in _context.Playeraccount
-                                  where d.AccountId == world.Player2IdAcc
-                                  select d.AccountName).FirstOrDefault();
+                string player2 = (from d in _context.Playeraccount where d.AccountId == world.Player2IdAcc select d.AccountName).FirstOrDefault();
                 playerNames2.Add(player2);
             }
             ViewBag.playerNames1 = playerNames1;
@@ -1206,9 +1278,7 @@ namespace WebGame.Controllers
             {
                 if (world.GameFinished == true)
                 {
-                    string winner = (from d in _context.Playeraccount
-                                     where d.AccountId == world.WinnerAccountId
-                                     select d.AccountName).FirstOrDefault();
+                    string winner = (from d in _context.Playeraccount where d.AccountId == world.WinnerAccountId select d.AccountName).FirstOrDefault();
                     if (winner == null)
                         winnerNames.Add("Account ID is " + Convert.ToString(world.WinnerAccountId));
                     else
@@ -1226,7 +1296,7 @@ namespace WebGame.Controllers
             return View(worlds);
         }
 
-        //[HttpGet("Game/Tutorial/{FirstLogin?}")]
+        [HttpGet("Game/Tutorial/{FirstLogin?}")]
         public async Task<IActionResult> Tutorial(bool FirstLogin)
         {
             ViewBag.FirstLogin = FirstLogin;
