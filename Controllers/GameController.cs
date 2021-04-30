@@ -243,7 +243,7 @@ namespace WebGame.Controllers
         {
             if (!User.Identity.IsAuthenticated) // If account is logged in
             {
-                return RedirectToAction(nameof(SelectGame));
+                return RedirectToAction(nameof(SelectGame)); // ÄKKI PEAKS SAATMA SISSELOGIMIS LEHELE?
             }
 
             var upgradingTower = await _context.Tower.FindAsync(id);
