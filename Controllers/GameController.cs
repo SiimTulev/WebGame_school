@@ -237,7 +237,7 @@ namespace WebGame.Controllers
         //Game/UpgradeTower/12?accountId=4&amp;owner=2&amp;player1Id=1&amp;player2Id=2&amp;worldId=1"
         [HttpGet("Game/UpgradeTower/{id}/{accountId}/{owner}/{player1Id}/{player2Id}/{worldId}")]
         public async Task<IActionResult> UpgradeTower(int id, int accountId, int owner, int player1Id, int player2Id, int worldId) // SAFE tänu playerId kontrollile?
-
+        // VIST SAFE tänu sellele, kuna ta GET'ib? Peaks kontrollima URLi panna seda.playerId kontrollile?
         {
             if (!User.Identity.IsAuthenticated) // If account is logged in
             {
@@ -245,7 +245,8 @@ namespace WebGame.Controllers
             }
 
             var upgradingTower = await _context.Tower.FindAsync(id);
-
+            // peaks panema all olevast "player"
+            //väärtusest alla poole, kuna see pole praegu veel kasutusel?
             var player = (from d in _context.Player
                           where d.AccountId == (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))) && d.WorldId == worldId && d.PlayerId == owner
 
