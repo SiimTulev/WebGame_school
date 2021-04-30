@@ -238,6 +238,8 @@ namespace WebGame.Controllers
         [HttpGet("Game/UpgradeTower/{id}/{accountId}/{owner}/{player1Id}/{player2Id}/{worldId}")]
         public async Task<IActionResult> UpgradeTower(int id, int accountId, int owner, int player1Id, int player2Id, int worldId) // SAFE tänu playerId kontrollile?
         // VIST SAFE tänu sellele, kuna ta GET'ib? Peaks kontrollima URLi panna seda.playerId kontrollile?
+        // SAFE TÄNU SELLELE, KUNA TA KASUTAB "User.FindFirstValue(ClaimTypes.NameIdentifier)" ?
+
         {
             if (!User.Identity.IsAuthenticated) // If account is logged in
             {
@@ -247,9 +249,10 @@ namespace WebGame.Controllers
             var upgradingTower = await _context.Tower.FindAsync(id);
             // peaks panema all olevast "player"
             //väärtusest alla poole, kuna see pole praegu veel kasutusel?
+            
+            // SAFE TÄNU SELLELE, KUNA TA KASUTAB "User.FindFirstValue(ClaimTypes.NameIdentifier)" ?
             var player = (from d in _context.Player
                           where d.AccountId == (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))) && d.WorldId == worldId && d.PlayerId == owner
-
                           select d).FirstOrDefault();
 
             player.Gold -= (upgradingTower.TowerLvl + 1) * 100;
