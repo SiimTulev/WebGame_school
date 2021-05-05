@@ -13,3 +13,5 @@ TO START THE APPLICATION:
 2. Write in Package Manager Console: dotnet ef database update --context WebGameContext
 
 3. Chrome browser is highly recommended.
+
+4. Start application WITH "WebGame" NOT with "IIS Express".
