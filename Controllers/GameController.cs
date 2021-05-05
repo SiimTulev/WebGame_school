@@ -249,7 +249,7 @@ namespace WebGame.Controllers
             var upgradingTower = await _context.Tower.FindAsync(id);
             // peaks panema all olevast "player"
             //väärtusest alla poole, kuna see pole praegu veel kasutusel?
-            
+
             // SAFE TÄNU SELLELE, KUNA TA KASUTAB "User.FindFirstValue(ClaimTypes.NameIdentifier)" ?
             var player = (from d in _context.Player
                           where d.AccountId == (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))) && d.WorldId == worldId && d.PlayerId == owner
@@ -260,7 +260,7 @@ namespace WebGame.Controllers
             if (player.Gold < 0)
             {
                 // return RedirectToAction("MainGame", new { error = 1, Player1Id = player1Id, Player2Id = player2Id, WorldId = worldId, accountId = (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))) });
-                return Redirect("http://siim.cc/Game/MainGameRazor/1/" + player1Id + "/" + player2Id + "/" + worldId + "/" + accountId);
+                return Redirect("http://localhost:5003/Game/MainGameRazor/1/" + player1Id + "/" + player2Id + "/" + worldId + "/" + accountId);
 
             }
             if (player.Gold >= 0)
@@ -273,7 +273,7 @@ namespace WebGame.Controllers
 
                 await _context.SaveChangesAsync();
             }
-            return Redirect("http://siim.cc/Game/MainGameRazor/0/" + player1Id + "/" + player2Id + "/" + worldId + "/" + accountId);
+            return Redirect("http://localhost:5003/Game/MainGameRazor/0/" + player1Id + "/" + player2Id + "/" + worldId + "/" + accountId);
 
         }
 
@@ -899,7 +899,7 @@ namespace WebGame.Controllers
             _context.Update(world);
             _context.SaveChanges();
 
-            return Redirect("http://siim.cc/Game/MainGameRazor/0/" + world.Player1Id + "/" + world.Player2Id + "/" + worldId + "/" + (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))));
+            return Redirect("http://localhost:5003/Game/MainGameRazor/0/" + world.Player1Id + "/" + world.Player2Id + "/" + worldId + "/" + (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))));
 
         }
 
@@ -1069,7 +1069,7 @@ namespace WebGame.Controllers
                     throw;
                 }
             }
-            return Redirect("http://siim.cc/Game/MainGameRazor/0/" + player1Id + "/" + player2Id + "/" + worldId + "/" + (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))));
+            return Redirect("http://localhost:5003/Game/MainGameRazor/0/" + player1Id + "/" + player2Id + "/" + worldId + "/" + (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))));
 
         }
 

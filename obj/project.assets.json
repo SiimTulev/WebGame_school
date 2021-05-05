@@ -9212,11 +9212,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\C#\\CleanCode\\WebGame_school\\WebGame.csproj",
+      "projectUniqueName": "C:\\Lõputöö\\MÄNG2\\WebGame_school\\WebGame.csproj",
       "projectName": "WebGame",
-      "projectPath": "C:\\C#\\CleanCode\\WebGame_school\\WebGame.csproj",
+      "projectPath": "C:\\Lõputöö\\MÄNG2\\WebGame_school\\WebGame.csproj",
       "packagesPath": "C:\\Users\\Yorwet\\.nuget\\packages\\",
-      "outputPath": "C:\\C#\\CleanCode\\WebGame_school\\obj\\",
+      "outputPath": "C:\\Lõputöö\\MÄNG2\\WebGame_school\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Microsoft\\Xamarin\\NuGet\\",
@@ -9236,6 +9236,7 @@
       },
       "frameworks": {
         "netcoreapp3.0": {
+          "targetAlias": "netcoreapp3.0",
           "projectReferences": {}
         }
       },
@@ -9247,6 +9248,7 @@
     },
     "frameworks": {
       "netcoreapp3.0": {
+        "targetAlias": "netcoreapp3.0",
         "dependencies": {
           "Dapper": {
             "target": "Package",
@@ -9355,7 +9357,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "c:\\program files\\dotnet\\sdk\\3.1.401\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "c:\\program files\\dotnet\\sdk\\5.0.201\\RuntimeIdentifierGraph.json"
       }
     }
   },
