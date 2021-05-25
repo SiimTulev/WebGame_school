@@ -1,4 +1,4 @@
-﻿@model IEnumerable<WebGame.Models.WebGame.AttDef>
+@model IEnumerable<WebGame.Models.WebGame.AttDef>
 
 @using System;
 @using System.Collections.Generic;
@@ -53,7 +53,16 @@
                             @Html.DisplayFor(modelItem => item.Amount)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.RoundsToArrive)
+
+                            @if (item.RoundsToArrive == 0)
+                            {
+                                <p>Next round</p>
+                            }
+                            else
+                            {
+                                @(Convert.ToInt32(item.RoundsToArrive + 1)) // Add 1 to (RoundsToArrive. It's easier to read then)
+                            }
+
                         </td>
                         <td>
                             <a class="btn btn-warning" asp-action="CancelArmyMovement_" asp-route-accountCheck="@Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))" asp-route-id="@item.Id" asp-route-worldId="@item.WorldId" asp-route-owner="@item.AttackerPlayerId" asp-route-player1Id="@ViewBag.Player1Id" asp-route-player2Id="@ViewBag.Player2Id">Cancel</a>
