@@ -1312,7 +1312,6 @@ namespace WebGame.Controllers
             return View(worlds);
         }
 
-        [HttpGet("Game/Tutorial/{FirstLogin?}")]
         public async Task<IActionResult> Tutorial(bool FirstLogin)
         {
             ViewBag.FirstLogin = FirstLogin;

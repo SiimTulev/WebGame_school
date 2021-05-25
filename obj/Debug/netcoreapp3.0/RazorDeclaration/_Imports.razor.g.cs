@@ -13,7 +13,7 @@ namespace WebGame
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Components;
 #nullable restore
-#line 5 "C:\Lõputöö\MÄNG2\WebGame_school\_Imports.razor"
+#line 5 "C:\C#\WebgameGITHUB\WebGame_school\_Imports.razor"
 using Microsoft.AspNetCore.Components.Web;
 
 #line default
