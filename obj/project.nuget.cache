@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "sEs+gsQpDNvQURk9djCu4WYX0WTqTBoiONYtYdi/CpqKr/G7eoiJX4f8kfQVAszYJeqUg/D4rTklodcNCZYalQ==",
+  "dgSpecHash": "Vtu6C2+HkOykzGjh6S5MIppfEupQanSMFS55cqIpJIFO0WcgGTlSXVM+o75A+tnitnktTmcqjXfR8SuJIltX1g==",
   "success": true,
-  "projectFilePath": "C:\\C#\\WebgameGITHUB\\WebGame_school\\WebGame.csproj",
+  "projectFilePath": "C:\\Lõputöö\\MÄNG 2\\WebGame_school\\WebGame.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Yorwet\\.nuget\\packages\\bouncycastle.netcore\\1.8.3\\bouncycastle.netcore.1.8.3.nupkg.sha512",
     "C:\\Users\\Yorwet\\.nuget\\packages\\dapper\\2.0.35\\dapper.2.0.35.nupkg.sha512",

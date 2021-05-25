@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\C#\\WebgameGITHUB\\WebGame_school\\WebGame.csproj": {}
+    "C:\\Lõputöö\\MÄNG 2\\WebGame_school\\WebGame.csproj": {}
   },
   "projects": {
-    "C:\\C#\\WebgameGITHUB\\WebGame_school\\WebGame.csproj": {
+    "C:\\Lõputöö\\MÄNG 2\\WebGame_school\\WebGame.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\C#\\WebgameGITHUB\\WebGame_school\\WebGame.csproj",
+        "projectUniqueName": "C:\\Lõputöö\\MÄNG 2\\WebGame_school\\WebGame.csproj",
         "projectName": "WebGame",
-        "projectPath": "C:\\C#\\WebgameGITHUB\\WebGame_school\\WebGame.csproj",
+        "projectPath": "C:\\Lõputöö\\MÄNG 2\\WebGame_school\\WebGame.csproj",
         "packagesPath": "C:\\Users\\Yorwet\\.nuget\\packages\\",
-        "outputPath": "C:\\C#\\WebgameGITHUB\\WebGame_school\\obj\\",
+        "outputPath": "C:\\Lõputöö\\MÄNG 2\\WebGame_school\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Microsoft\\Xamarin\\NuGet\\",
