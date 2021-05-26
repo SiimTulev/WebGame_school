@@ -259,8 +259,23 @@ namespace WebGame.Controllers
 
             if (player.Gold < 0)
             {
+                // [HttpGet("Game/MainGameRazor/{error}/{player1Id}/{player2Id}/{worldId}/{accountCheck}")]
+                //public async Task<IActionResult> MainGameRazor(int accountCheck, int player1Id, int player2Id, int? worldId, int? error)
+
                 // return RedirectToAction("MainGame", new { error = 1, Player1Id = player1Id, Player2Id = player2Id, WorldId = worldId, accountId = (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))) });
-                return Redirect("http://localhost:5003/Game/MainGameRazor/1/" + player1Id + "/" + player2Id + "/" + worldId + "/" + accountId);
+                //return Redirect("http://localhost:5004/Game/MainGameRazor/1/" + player1Id + "/" + player2Id + "/" + worldId + "/" + accountId);
+
+                //return RedirectToAction("CancelArmyMovement", new
+                //{
+                //    player1Id = player1Id,
+                //    player2Id = player2Id,
+                //    worldId = worldId,
+                //    worldId = worldId,
+                //    accountId = (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier)))
+                //});
+
+                return RedirectToAction(nameof(GameController.MainGameRazor), "Game", new { error = 0, player1Id = player1Id, player2Id = player2Id, worldId = worldId, accountCheck = (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))) });
+
 
             }
             if (player.Gold >= 0)
@@ -273,7 +288,8 @@ namespace WebGame.Controllers
 
                 await _context.SaveChangesAsync();
             }
-            return Redirect("http://localhost:5003/Game/MainGameRazor/0/" + player1Id + "/" + player2Id + "/" + worldId + "/" + accountId);
+            //return Redirect("http://localhost:5004/Game/MainGameRazor/0/" + player1Id + "/" + player2Id + "/" + worldId + "/" + accountId);
+            return RedirectToAction(nameof(GameController.MainGameRazor), "Game", new { error = 0, player1Id = player1Id, player2Id = player2Id, worldId = worldId, accountCheck = (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))) });
 
         }
 
@@ -899,7 +915,8 @@ namespace WebGame.Controllers
             _context.Update(world);
             _context.SaveChanges();
 
-            return Redirect("http://localhost:5003/Game/MainGameRazor/0/" + world.Player1Id + "/" + world.Player2Id + "/" + worldId + "/" + (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))));
+            // return Redirect("http://localhost:5004/Game/MainGameRazor/0/" + world.Player1Id + "/" + world.Player2Id + "/" + worldId + "/" + (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))));
+            return RedirectToAction(nameof(GameController.MainGameRazor), "Game", new { error = 0, player1Id = world.Player1Id, player2Id = world.Player2Id, worldId = worldId, accountCheck = (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))) });
 
         }
 
@@ -1069,7 +1086,9 @@ namespace WebGame.Controllers
                     throw;
                 }
             }
-            return Redirect("http://localhost:5003/Game/MainGameRazor/0/" + player1Id + "/" + player2Id + "/" + worldId + "/" + (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))));
+            // return Redirect("http://localhost:5004/Game/MainGameRazor/0/" + player1Id + "/" + player2Id + "/" + worldId + "/" + (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))));
+            return RedirectToAction(nameof(GameController.MainGameRazor), "Game", new { error = 0, player1Id = world.Player1Id, player2Id = world.Player2Id, worldId = worldId, accountCheck = (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))) });
+
 
         }
 
