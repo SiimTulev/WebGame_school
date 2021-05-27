@@ -9,18 +9,15 @@
 
 @{
     Layout = "~/Views/Shared/_Layout_NEEDED.cshtml";
-    //Layout_NEEDED = "/Views/Shared/_Layout_NEEDED.cshtml";
-
 }
 
 
 
 
-<!---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- -- -->
 @(await Html.RenderComponentAsync<WebGame.Components.OverallStats>(RenderMode.ServerPrerendered,new
     {
         worldId = ViewBag.WorldId,
-        playerId = ViewBag.EnemyPlayerId,
+        playerId = ViewBag.PlayerIdWhoClicks,
     }))
 @(await Html.RenderComponentAsync<WebGame.Components.MainGameRazor>(RenderMode.ServerPrerendered,new
 {

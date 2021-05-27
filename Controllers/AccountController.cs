@@ -23,7 +23,6 @@ namespace WebGame.Controllers
         {
             UserMgr = userManager;
             SignInMgr = signInManager;
-
             _context = context;
         }
 

@@ -1,5 +1,4 @@
-﻿@*@page "/Game/MainGameRazor/{player1Id}/{player2Id}/{worldId}/{accountCheck}"*@
-@page "/Game/MainGameRazor/{error}/{player1Id}/{player2Id}/{worldId}/{accountCheck}"
+﻿@page "/Game/MainGameRazor/{error}/{player1Id}/{player2Id}/{worldId}/{accountCheck}"
 
 @using System.Security.Claims;
 @using Microsoft.AspNetCore.SignalR.Client
@@ -9,7 +8,6 @@
 @using WebGame.Models.WebGame
 @using Microsoft.EntityFrameworkCore
 
-@*@using WebGame.ViewComponents*@
 @using WebGame.Components
 @inject NavigationManager NavigationManager
 @inject OverallStatsLogic OverallStats
@@ -17,10 +15,6 @@
 @inject DbContextOptions<webgameContext> DbContextOptions
 
 @inject OverallStatsLogic _OverallStats
-@* TODO:
-    Update Money, etc after update click
-*@
-
 <body>
     <div class="OverallStats">
         @{
@@ -99,7 +93,6 @@
         }
     </div>
 
-
     <div class="Stats1">
         <a class="PlayerNames btn btn-primary" href="/Game/Profile/@YourId">@YourName</a> @*@YourName*@
         VS
@@ -158,7 +151,6 @@
                         nxtDefence = (item.TowerLvl + 1) * 5;
                         <div class="darken">
                             <img src="..\images\greenRing.jpg" asp-append-version="true" alt="greenRing" style="width:10vh;" @onmousedown="@(e => Friendly(e,TowerLvl, @Defence,@costs, @item.TowerId, @item.Owner, @item.Player1Id, @item.Player2Id, @item.WorldId, nxtTowerLvl, nxtDefence, @item.Attack ))">
-
                             <a @onmousedown="@(e => Friendly(e,TowerLvl, @Defence,@costs, @item.TowerId, @item.Owner, @item.Player1Id, @item.Player2Id, @item.WorldId, nxtTowerLvl, nxtDefence, @item.Attack ))" class="inPicture">@item.TowerName.Substring(0, 1)</a>
                         </div>
                     }
@@ -166,7 +158,6 @@
                     {
                         <div class="darken">
                             <img src="..\images\redRing.jpg" asp-append-version="true" alt="redRing" style="width:10vh;" @onmousedown="@(e=> Enemy(e, @item.TowerId, @item.Owner, @item.Player1Id, @item.Player2Id, @item.WorldId))">
-
                             <a @onmousedown="@(e=> Enemy(e, @item.TowerId, @item.Owner, @item.Player1Id, @item.Player2Id, @item.WorldId))" class="inPicture">@item.TowerName.Substring(0, 1)</a>
                         </div>
                     }
@@ -174,8 +165,6 @@
                     {
                         <div class="darken">
                             <img src="..\images\greyRing.jpg" asp-append-version="true" alt="greyRing" style="width:10vh;" @onmousedown="@(e=> Enemy(e, @item.TowerId, @item.Owner, @item.Player1Id, @item.Player2Id, @item.WorldId))">
-
-                            @*<a class="towerBTN " @onmousedown="@(e => Enemy(e, @item.TowerId, @item.Owner, @item.Player1Id, @item.Player2Id, @item.WorldId))">@item.TowerName</a>*@
                             <a @onmousedown="@(e=> Enemy(e, @item.TowerId, @item.Owner, @item.Player1Id, @item.Player2Id, @item.WorldId))" class="inPicture">@item.TowerName.Substring(0, 1)</a>
                         </div>
                     }
@@ -204,9 +193,7 @@
                     <a> Borns: @towerLvl % ->@nxtTowerLvl %</a>
                     <br />
                     <a class="btn btn-danger" href="/Game/CreateArmyMission/@worldId/@owner/@player1Id/@player2Id/@towerId/@playerIdWhoClicks">Move</a>
-
                     <a class="btn btn-success" href="Game/UpgradeTower/@towerId/@loggedInAccountId/@owner/@player1Id/@player2Id/@worldId">Upgrade tower</a>
-
                 }
                 @if (whoOwnsTower == 2)
                 {
@@ -226,8 +213,6 @@
 
 
 @code {
-
-
     private HubConnection _hubConnection;
 
     bool _notification = false;
@@ -245,7 +230,6 @@
         _hubConnection = new HubConnectionBuilder()
         .WithUrl(NavigationManager.ToAbsoluteUri("/notificationHub"))
         .Build();
-        //towerView = await MainGame.MainGame(Player1Id, Player2Id, WorldId, 0);
         if (_hubConnection.ConnectionId != null) _connectionId = _hubConnection.ConnectionId;
         _notification = false;
         _readyClicked = false;
@@ -253,10 +237,7 @@
         _hubConnection.On<bool, string, string, string, bool, List<TowerViewModel>>("ReceiveMessage", async (notification, connectionId,
         enemyNotification, clickerNotification, readyClicked, towerz) =>
         {
-        //_context.Entry(_context).Reload();
-
-        //towerView = await MainGame.MainGame(Player1Id, Player2Id, WorldId, 0);
-        towerView = towerz;
+            towerView = towerz;
 
             _notification = notification;
             _connectionId = connectionId;
@@ -265,7 +246,7 @@
             _you = clickerNotification;
 
             _readyClicked = readyClicked;
-            StateHasChanged(); // Updates foregin account View who is in chat
+            StateHasChanged(); // Saada teistele kasutajatele sellele URL'ile uuendus, kus nad praegu asuvad
     });
         towerView = await MainGame.MainGame(Player1Id, Player2Id, WorldId, 0);
 
@@ -277,7 +258,7 @@
 
         var towerz = await MainGame.PlayerReady(WorldId, playerId);
 
-        var overallStats = await _OverallStats.GetOverallStats(worldId, towerz[0].Player1Id, towerz[0].Player2Id); // queue matters. WorldId first, etc.
+        var overallStats = await _OverallStats.GetOverallStats(worldId, towerz[0].Player1Id, towerz[0].Player2Id); // Järjekord on tähtis. WorldId esimesena jne.
 
         _hubConnection.SendAsync("SendOverallStats", overallStats, _hubConnection.ConnectionId);
 
@@ -305,9 +286,8 @@
     }
 
     public bool IsConnected =>
-_hubConnection.State == HubConnectionState.Connected;
+    _hubConnection.State == HubConnectionState.Connected;
 
-    //private string cord;
     private int towerLvl;
     private int defence;
     private int costs;
@@ -336,7 +316,6 @@ _hubConnection.State == HubConnectionState.Connected;
 
         x = Convert.ToString(e.ClientX + 5) + "px";
         y = Convert.ToString(e.ClientY + 5) + "px";
-
 
         towerId = TowerId;
         owner = Owner;
@@ -399,12 +378,10 @@ _hubConnection.State == HubConnectionState.Connected;
     public string you { get; set; }
     [Parameter]
     public string enemy { get; set; }
-
     [Parameter]
     public List<WebGame.ViewModel.TowerViewModel>
     towers
     { get; set; }
-
     [Parameter]
     public string error { get; set; }
     [Parameter]
@@ -412,10 +389,7 @@ _hubConnection.State == HubConnectionState.Connected;
     [Parameter]
     public int loggedInAccountId { get; set; }
 
-    protected override void OnInitialized() // Not needed?
-    {
 
-    }
 }
 
 <style>
@@ -478,10 +452,6 @@ _hubConnection.State == HubConnectionState.Connected;
     }
 
     .buttons {
-      /*  margin-left: 200px;
-        text-align: center;
-        margin-top: -15px;*/
-
         text-align: center;
         display: grid;
         position: absolute;

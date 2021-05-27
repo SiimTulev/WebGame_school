@@ -24,9 +24,9 @@ namespace WebGame.Controllers
         [HttpGet("Game/MainGameRazor/{error}/{player1Id}/{player2Id}/{worldId}/{accountCheck}")]
         public async Task<IActionResult> MainGameRazor(int accountCheck, int player1Id, int player2Id, int? worldId, int? error)
         {
-            if (!User.Identity.IsAuthenticated) // If account is logged in
+            if (!User.Identity.IsAuthenticated) // Kas kasutaja on sisselogitud
             {
-                return RedirectToAction(nameof(SelectGame));
+                return RedirectToAction(nameof(Tutorial));
             }
 
             var world = _context.World
@@ -54,7 +54,7 @@ namespace WebGame.Controllers
             if (world.Player1IdAcc == (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))))
             {
                 var enemyName = _context.Playeraccount.FirstOrDefault(m => m.AccountId == world.Player2IdAcc);
-                // If name is too long
+                // Kui nimi on liiga pikk
                 if (enemyName.AccountName.Length > 5)
                 {
                     ViewBag.EnemyName = enemyName.AccountName.Substring(0, 5) + "...";
@@ -66,7 +66,7 @@ namespace WebGame.Controllers
                 ViewBag.EnemyId = enemyName.AccountId;
                 var yourName = _context.Playeraccount.FirstOrDefault(m => m.AccountId == world.Player1IdAcc);
 
-                // If name is too long
+                // Kui nimi on liiga pikk
                 if (yourName.AccountName.Length > 5)
                 {
                     ViewBag.YourName = yourName.AccountName.Substring(0, 5) + "...";
@@ -105,7 +105,6 @@ namespace WebGame.Controllers
             if (world.GameFinished == true)
             {
                 var PlayeraccountNameWin = _context.Playeraccount.FirstOrDefault(m => m.AccountId == world.WinnerAccountId);
-
                 ViewBag.Winner = "Player " + PlayeraccountNameWin.AccountName + " won the game!";
                 ViewBag.IsWinner = true;
             }
@@ -114,7 +113,7 @@ namespace WebGame.Controllers
 
             ViewBag.PlayerIdWhoClicks = playerIdWhoClicks;
 
-            if (playerIdWhoClicks == player1Id) // For SignalR function Dynamic OverallStats update
+            if (playerIdWhoClicks == player1Id) // SignalR dünaamilise uuenduse jaoks vaja
             {
                 ViewBag.EnemyPlayerId = player2Id;
             }
@@ -151,8 +150,8 @@ namespace WebGame.Controllers
 
             var playerIds = (from d in _context.Player where d.AccountId == (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))) select d.PlayerId).ToList();
 
-            // GET LOGGED IN ACCOUNT PLAYERID
-            if (world.Player1Ready == true ^ world.Player2Ready == true) // IF ONLY ONE OF THEM IS READY
+            // Saada mängijatele teavitus, kumb neist on valmis
+            if (world.Player1Ready == true ^ world.Player2Ready == true) // Kui ainult üks mängijatest on valmis
             {
                 if (playerIds.Contains(player1Id) && world.Player1Id == player1Id && world.Player1Ready == true)
                 {
@@ -175,12 +174,12 @@ namespace WebGame.Controllers
                     ViewBag.Enemy = "ENEMY IS READY";
                 }
             }
-            else if (world.Player1Ready == false && world.Player2Ready == false) // CHECK IF BOTH ARE NOT READY
+            else if (world.Player1Ready == false && world.Player2Ready == false) // Kontrolli, kas mõlemad mängijad pole valmis
             {
                 ViewBag.You = "YOU ARE NOT READY";
                 ViewBag.Enemy = "ENEMY IS NOT READY";
             }
-            else if (world.Player1Ready == true && world.Player2Ready == true) // CHECK IF BOTH ARE READY
+            else if (world.Player1Ready == true && world.Player2Ready == true) // Kontrolli, kas mõlemad mängijad on valmis
             {
                 world.Player1Ready = false;
                 world.Player2Ready = false;
@@ -190,7 +189,6 @@ namespace WebGame.Controllers
 
             var towers = await (from ep in _context.Tower
                                 join e in _context.World on ep.WorldId equals e.WorldId
-                                //where worldTowers.Contains(ep.Owner)
                                 where e.WorldId == worldId
                                 select new TowerViewModel
                                 {
@@ -209,12 +207,11 @@ namespace WebGame.Controllers
                                 }).ToListAsync();
 
             ViewBag.Towers = towers;
-
             return View(towers);
         }
 
         [HttpGet("Game/Profile/{accountId}")]
-        public async Task<IActionResult> Profile(int accountId) // SAFE
+        public async Task<IActionResult> Profile(int accountId) // Turvaline
         {
             var profile = (from d in _context.Playeraccount where d.AccountId == accountId select d).FirstOrDefault();
 
@@ -228,29 +225,21 @@ namespace WebGame.Controllers
             }
             else
             {
-                ViewBag.WinRate = (float)System.Math.Round(((float)profile.Wins / (profile.Wins + profile.Losts)) * 100, 2); // only 2 numbers after comma
+                ViewBag.WinRate = (float)System.Math.Round(((float)profile.Wins / (profile.Wins + profile.Losts)) * 100, 2); // Ainult 2 numbrit peale koma
             }
             return View();
         }
-        //public async Task<IActionResult> UpgradeTower(int id, TowerViewModel towerViewModel) // SAFE tänu playerId kontrollile?
 
-        //Game/UpgradeTower/12?accountId=4&amp;owner=2&amp;player1Id=1&amp;player2Id=2&amp;worldId=1"
         [HttpGet("Game/UpgradeTower/{id}/{accountId}/{owner}/{player1Id}/{player2Id}/{worldId}")]
-        public async Task<IActionResult> UpgradeTower(int id, int accountId, int owner, int player1Id, int player2Id, int worldId) // SAFE tänu playerId kontrollile?
-        // VIST SAFE tänu sellele, kuna ta GET'ib? Peaks kontrollima URLi panna seda.playerId kontrollile?
-        // SAFE TÄNU SELLELE, KUNA TA KASUTAB "User.FindFirstValue(ClaimTypes.NameIdentifier)" ?
-
+        public async Task<IActionResult> UpgradeTower(int id, int accountId, int owner, int player1Id, int player2Id, int worldId) // Turvaline tänu PlayerId kontrollile
         {
-            if (!User.Identity.IsAuthenticated) // If account is logged in
+            if (!User.Identity.IsAuthenticated) // Kas kasutaja on sisselogitud
             {
-                return RedirectToAction(nameof(SelectGame)); // ÄKKI PEAKS SAATMA SISSELOGIMIS LEHELE?
+                return RedirectToAction(nameof(Tutorial));
             }
 
             var upgradingTower = await _context.Tower.FindAsync(id);
-            // peaks panema all olevast "player"
-            //väärtusest alla poole, kuna see pole praegu veel kasutusel?
 
-            // SAFE TÄNU SELLELE, KUNA TA KASUTAB "User.FindFirstValue(ClaimTypes.NameIdentifier)" ?
             var player = (from d in _context.Player
                           where d.AccountId == (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))) && d.WorldId == worldId && d.PlayerId == owner
                           select d).FirstOrDefault();
@@ -266,7 +255,7 @@ namespace WebGame.Controllers
                 upgradingTower.TowerLvl += 1;
                 upgradingTower.Defence = upgradingTower.TowerLvl * 5;
 
-                _context.Update(player); // Võib ka kõrgemale tõsta? Võibolla tõstes läheb kood koledamaks
+                _context.Update(player);
                 _context.Update(upgradingTower);
 
                 await _context.SaveChangesAsync();
@@ -277,9 +266,9 @@ namespace WebGame.Controllers
         [HttpGet("Game/CancelArmyMovement/{worldId}/{PlayerIdWhoClicks}/{player1Id}/{player2Id}")]
         public async Task<IActionResult> CancelArmyMovement(int PlayerIdWhoClicks, int worldId, int player1Id, int player2Id, TowerViewModel towerViewModel) // SAFE
         {
-            if (!User.Identity.IsAuthenticated) // If account is logged in
+            if (!User.Identity.IsAuthenticated) // Kas kasutaja on sisselogitud
             {
-                return RedirectToAction(nameof(SelectGame));
+                return RedirectToAction(nameof(Tutorial));
             }
 
             var mainBaseLocation = (from d in _context.Tower
@@ -296,14 +285,15 @@ namespace WebGame.Controllers
 
             var armyMovings = (from d in _context.AttDef where d.AccountId == (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))) && d.WorldId == worldId && d.ReturnBase == false select d).ToListAsync();
 
-            ViewBag.PlayerIdWhoClicks = PlayerIdWhoClicks;
+            var playerIdWhoClicks = (from d in _context.Player where d.WorldId == worldId && d.AccountId == (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))) select d.PlayerId).FirstOrDefault();
+
+            ViewBag.PlayerIdWhoClicks = playerIdWhoClicks;
             ViewBag.WorldId = worldId;
 
             if (armyMovings.Result.Count == 0)
             {
                 ViewBag.Empty = true;
                 return View();
-
             }
 
             List<int> towerIds = new List<int>();
@@ -327,9 +317,9 @@ namespace WebGame.Controllers
 
         public async Task<IActionResult> CancelArmyMovement_(int accountCheck, int id, int worldId, int owner, int player1Id, int player2Id, TowerViewModel towerViewModel, AttDef attdef) // VIST SAFE
         {
-            if (!User.Identity.IsAuthenticated) // If account is logged in
+            if (!User.Identity.IsAuthenticated) // Kas kasutaja on sisselogitud
             {
-                return RedirectToAction(nameof(SelectGame));
+                return RedirectToAction(nameof(Tutorial));
             }
             if (accountCheck != (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))))
             {
@@ -344,6 +334,7 @@ namespace WebGame.Controllers
                                     where (d.TowerName == "MainBase1" || d.TowerName == "MainBase2") && d.Owner == owner && d.WorldId == worldId
                                     select d).FirstOrDefault();
 
+            // Kontrolli, kas mängija omab peabaasi
             if (mainBaseLocation == null)
             {
                 return RedirectToAction("CancelArmyMovement", new
@@ -354,9 +345,10 @@ namespace WebGame.Controllers
                     player2Id = player2Id
                 });
             }
+
             var movement = await _context.AttDef.FindAsync(id);
 
-            // SEND ARMY BACK TO MAIN BASE
+            // Saada armee tagasi peabaasi
             attdef.Id = 0; // AutoIncrement
             attdef.WorldId = worldId;
             attdef.AttackerPlayerId = owner;
@@ -379,9 +371,9 @@ namespace WebGame.Controllers
 
         public async Task<IActionResult> NewGame(World world, Player player) // 100% SAFE
         {
-            if (!User.Identity.IsAuthenticated) // If account is logged in
+            if (!User.Identity.IsAuthenticated) // Kas kasutaja on sisselogitud
             {
-                return RedirectToAction(nameof(SelectGame));
+                return RedirectToAction(nameof(Tutorial));
             }
 
             var checkWorld = (from d in _context.World where d.Player1Id > 0 && d.Player2Id <= 0 select d.WorldId).FirstOrDefault();
@@ -587,9 +579,9 @@ namespace WebGame.Controllers
         [HttpGet]
         public async Task<IActionResult> MainGame(int accountCheck, int player1Id, int player2Id, int? worldId, int? error)
         {
-            if (!User.Identity.IsAuthenticated) // If account is logged in
+            if (!User.Identity.IsAuthenticated) // Kas kasutaja on sisselogitud
             {
-                return RedirectToAction(nameof(SelectGame));
+                return RedirectToAction(nameof(Tutorial));
             }
 
             var world = _context.World
@@ -730,9 +722,9 @@ namespace WebGame.Controllers
         [HttpGet("Game/PlayerReady/{worldId}")]
         public IActionResult PlayerReady(int worldId, TowerViewModel towerViewModel) // SAFE
         {
-            if (!User.Identity.IsAuthenticated) // If account is logged in
+            if (!User.Identity.IsAuthenticated) // Kas kasutaja on sisselogitud
             {
-                return RedirectToAction(nameof(SelectGame));
+                return RedirectToAction(nameof(Tutorial));
             }
 
             var world = _context.World
@@ -904,9 +896,9 @@ namespace WebGame.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateArmyMission(int SelectedWorldId, int Owner, bool connected, int SelectedTowerId, EditViewModel editViewModel, AttDef attdef, Tower tower, World world, TowerViewModel towerViewModel, int worldId, int player1Id, int player2Id, int SelectedTower) // EI OLE SAFE?
         {
-            if (!User.Identity.IsAuthenticated) // If account is logged in
+            if (!User.Identity.IsAuthenticated) // Kas kasutaja on sisselogitud
             {
-                return RedirectToAction(nameof(SelectGame));
+                return RedirectToAction(nameof(Tutorial));
             }
             try
             {
@@ -1072,9 +1064,9 @@ namespace WebGame.Controllers
         //[HttpGet("Game/CreateArmyMission/{worldId}/{Owner}/{player1Id}/{player2Id}/{SelectedTower}")]
         public async Task<IActionResult> CreateArmyMission(int playerIdWhoClicks, int? worldId, int SelectedTower, int? Owner, int player1Id, int player2Id) // SAFE VIST, AGA POST EI OLE?
         {
-            if (!User.Identity.IsAuthenticated) // If account is logged in
+            if (!User.Identity.IsAuthenticated) // Kas kasutaja on sisselogitud
             {
-                return RedirectToAction(nameof(SelectGame));
+                return RedirectToAction(nameof(Tutorial));
             }
             // Important for going back to MainGame
             ViewBag.Player1Id = player1Id;
@@ -1200,11 +1192,11 @@ namespace WebGame.Controllers
             }
         }
 
-        public async Task<IActionResult> SelectGame() // VIST SAFE
+        public async Task<IActionResult> SelectGame() // Turvaline
         {
-            if (!User.Identity.IsAuthenticated) // If account is logged in
+            if (!User.Identity.IsAuthenticated) // Kas kasutaja on sisselogitud
             {
-                return View();
+                return RedirectToAction(nameof(Tutorial));
             }
             try
             {

@@ -13,63 +13,63 @@ namespace WebGame.Components
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Components;
 #nullable restore
-#line 5 "C:\Lõputöö\MÄNG 2\WebGame_school\_Imports.razor"
+#line 5 "C:\C#\WebgameGITHUB\NewGitHub\WebGame_school\_Imports.razor"
 using Microsoft.AspNetCore.Components.Web;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 4 "C:\Lõputöö\MÄNG 2\WebGame_school\Components\MainGameRazor.razor"
+#line 3 "C:\C#\WebgameGITHUB\NewGitHub\WebGame_school\Components\MainGameRazor.razor"
 using System.Security.Claims;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 5 "C:\Lõputöö\MÄNG 2\WebGame_school\Components\MainGameRazor.razor"
+#line 4 "C:\C#\WebgameGITHUB\NewGitHub\WebGame_school\Components\MainGameRazor.razor"
 using Microsoft.AspNetCore.SignalR.Client;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 6 "C:\Lõputöö\MÄNG 2\WebGame_school\Components\MainGameRazor.razor"
+#line 5 "C:\C#\WebgameGITHUB\NewGitHub\WebGame_school\Components\MainGameRazor.razor"
 using Microsoft.AspNetCore.Components.Forms;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 7 "C:\Lõputöö\MÄNG 2\WebGame_school\Components\MainGameRazor.razor"
+#line 6 "C:\C#\WebgameGITHUB\NewGitHub\WebGame_school\Components\MainGameRazor.razor"
 using WebGame.Data;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 8 "C:\Lõputöö\MÄNG 2\WebGame_school\Components\MainGameRazor.razor"
+#line 7 "C:\C#\WebgameGITHUB\NewGitHub\WebGame_school\Components\MainGameRazor.razor"
 using WebGame.ViewModel;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 9 "C:\Lõputöö\MÄNG 2\WebGame_school\Components\MainGameRazor.razor"
+#line 8 "C:\C#\WebgameGITHUB\NewGitHub\WebGame_school\Components\MainGameRazor.razor"
 using WebGame.Models.WebGame;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 10 "C:\Lõputöö\MÄNG 2\WebGame_school\Components\MainGameRazor.razor"
+#line 9 "C:\C#\WebgameGITHUB\NewGitHub\WebGame_school\Components\MainGameRazor.razor"
 using Microsoft.EntityFrameworkCore;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 13 "C:\Lõputöö\MÄNG 2\WebGame_school\Components\MainGameRazor.razor"
+#line 11 "C:\C#\WebgameGITHUB\NewGitHub\WebGame_school\Components\MainGameRazor.razor"
 using WebGame.Components;
 
 #line default
@@ -84,10 +84,8 @@ using WebGame.Components;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 228 "C:\Lõputöö\MÄNG 2\WebGame_school\Components\MainGameRazor.razor"
+#line 215 "C:\C#\WebgameGITHUB\NewGitHub\WebGame_school\Components\MainGameRazor.razor"
        
-
-
     private HubConnection _hubConnection;
 
     bool _notification = false;
@@ -105,7 +103,6 @@ using WebGame.Components;
         _hubConnection = new HubConnectionBuilder()
         .WithUrl(NavigationManager.ToAbsoluteUri("/notificationHub"))
         .Build();
-        //towerView = await MainGame.MainGame(Player1Id, Player2Id, WorldId, 0);
         if (_hubConnection.ConnectionId != null) _connectionId = _hubConnection.ConnectionId;
         _notification = false;
         _readyClicked = false;
@@ -113,10 +110,7 @@ using WebGame.Components;
         _hubConnection.On<bool, string, string, string, bool, List<TowerViewModel>>("ReceiveMessage", async (notification, connectionId,
         enemyNotification, clickerNotification, readyClicked, towerz) =>
         {
-        //_context.Entry(_context).Reload();
-
-        //towerView = await MainGame.MainGame(Player1Id, Player2Id, WorldId, 0);
-        towerView = towerz;
+            towerView = towerz;
 
             _notification = notification;
             _connectionId = connectionId;
@@ -125,7 +119,7 @@ using WebGame.Components;
             _you = clickerNotification;
 
             _readyClicked = readyClicked;
-            StateHasChanged(); // Updates foregin account View who is in chat
+            StateHasChanged(); // Saada teistele kasutajatele sellele URL'ile uuendus, kus nad praegu asuvad
     });
         towerView = await MainGame.MainGame(Player1Id, Player2Id, WorldId, 0);
 
@@ -137,7 +131,7 @@ using WebGame.Components;
 
         var towerz = await MainGame.PlayerReady(WorldId, playerId);
 
-        var overallStats = await _OverallStats.GetOverallStats(worldId, towerz[0].Player1Id, towerz[0].Player2Id); // queue matters. WorldId first, etc.
+        var overallStats = await _OverallStats.GetOverallStats(worldId, towerz[0].Player1Id, towerz[0].Player2Id); // Järjekord on tähtis. WorldId esimesena jne.
 
         _hubConnection.SendAsync("SendOverallStats", overallStats, _hubConnection.ConnectionId);
 
@@ -165,9 +159,8 @@ using WebGame.Components;
     }
 
     public bool IsConnected =>
-_hubConnection.State == HubConnectionState.Connected;
+    _hubConnection.State == HubConnectionState.Connected;
 
-    //private string cord;
     private int towerLvl;
     private int defence;
     private int costs;
@@ -196,7 +189,6 @@ _hubConnection.State == HubConnectionState.Connected;
 
         x = Convert.ToString(e.ClientX + 5) + "px";
         y = Convert.ToString(e.ClientY + 5) + "px";
-
 
         towerId = TowerId;
         owner = Owner;
@@ -259,12 +251,10 @@ _hubConnection.State == HubConnectionState.Connected;
     public string you { get; set; }
     [Parameter]
     public string enemy { get; set; }
-
     [Parameter]
     public List<WebGame.ViewModel.TowerViewModel>
     towers
     { get; set; }
-
     [Parameter]
     public string error { get; set; }
     [Parameter]
@@ -272,10 +262,7 @@ _hubConnection.State == HubConnectionState.Connected;
     [Parameter]
     public int loggedInAccountId { get; set; }
 
-    protected override void OnInitialized() // Not needed?
-    {
 
-    }
 
 #line default
 #line hidden

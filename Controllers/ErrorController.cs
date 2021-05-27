@@ -12,7 +12,6 @@ namespace WebGame.Controllers
         public IActionResult HttpStatusCodeHandler(int statusCode)
         {
             ViewBag.ErrorMessage = statusCode;
-
             return View("NotFound");
         }
     }
