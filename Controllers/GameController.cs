@@ -22,7 +22,7 @@ namespace WebGame.Controllers
         }
 
         [HttpGet("Game/MainGameRazor/{error}/{player1Id}/{player2Id}/{worldId}/{accountCheck}")]
-        public async Task<IActionResult> MainGameRazor(int accountCheck, int player1Id, int player2Id, int? worldId, int? error)
+        public async Task<IActionResult> MainGameRazor(int accountCheck, int player1Id, int player2Id, int? worldId, int? error) // DÜNAAMILINE VERSIOON MainGame lehest
         {
             if (!User.Identity.IsAuthenticated) // Kas kasutaja on sisselogitud
             {
@@ -576,7 +576,7 @@ namespace WebGame.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> MainGame(int accountCheck, int player1Id, int player2Id, int? worldId, int? error)
+        public async Task<IActionResult> MainGame(int accountCheck, int player1Id, int player2Id, int? worldId, int? error) // MITTE DÜNAAMILINE VERSIOON MainGame lehest
         {
             if (!User.Identity.IsAuthenticated) // Kas kasutaja on sisselogitud
             {
