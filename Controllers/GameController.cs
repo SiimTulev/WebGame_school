@@ -285,9 +285,10 @@ namespace WebGame.Controllers
 
             var armyMovings = (from d in _context.AttDef where d.AccountId == (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))) && d.WorldId == worldId && d.ReturnBase == false select d).ToListAsync();
 
-            var playerIdWhoClicks = (from d in _context.Player where d.WorldId == worldId && d.AccountId == (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))) select d.PlayerId).FirstOrDefault();
+            // CAUSES WebSocket BUG  on CancelArmyMovement... When I refresh the site about 10 times, atleast ONCE ERROR 500 comes.
+            //var playerIdWhoClicks = (from d in _context.Player where d.WorldId == worldId && d.AccountId == (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))) select d.PlayerId).FirstOrDefault();
 
-            ViewBag.PlayerIdWhoClicks = playerIdWhoClicks;
+            ViewBag.PlayerIdWhoClicks = PlayerIdWhoClicks;
             ViewBag.WorldId = worldId;
 
             if (armyMovings.Result.Count == 0)
