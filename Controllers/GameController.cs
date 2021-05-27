@@ -1071,7 +1071,7 @@ namespace WebGame.Controllers
             var world = _context.World
                 .FirstOrDefault(m => m.WorldId == worldId);
 
-            // Security
+            // Turvalisus
             if (world.Player1IdAcc != (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))) && world.Player2IdAcc != (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))))
             {
                 return RedirectToAction("SelectGame", "Game");

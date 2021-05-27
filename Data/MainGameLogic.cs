@@ -25,7 +25,7 @@ namespace WebGame.Data
         }
 
 
-        public async Task<List<TowerViewModel>> PlayerReady(int worldId, int playerId) // SAFE
+        public async Task<List<TowerViewModel>> PlayerReady(int worldId, int playerId)
         {
             var world = _context.World
               .FirstOrDefault(m => m.WorldId == worldId);
