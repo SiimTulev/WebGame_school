@@ -16,7 +16,7 @@
     @if (!User.Identity.IsAuthenticated)
     {
         <h2>How to try out WebGame?</h2>
-        <p>First you need register account on this website.</p>
+        <p>First, you need to register an account on this website.</p>
         <p>
             To register, click <span class="btn btn-info text-white">
                 <a class="btn btn-info nav-link text-white" asp-controller="Account" asp-action="Register">Register</a>
@@ -41,22 +41,22 @@
 
         <h2>How to attack?</h2>
         <div class="space">
-            <p>1. To attack a enemy's base, first click on the tower you want to attack, then cyan colored menu opens where you need to press <span class="btn btn-danger move">Move</span> button.</p>
-            <p>2. When you are in <span class="btn btn-danger">CreateArmyMission</span> page, you can choose the tower where you attack from.</p>
+            <p>1. To attack an enemy's base, first click on the tower you want to attack, then the cyan-colored menu opens where you need to press <span class="btn btn-danger move">Move</span> button.</p>
+            <p>2. When you are on <span class="btn btn-danger">CreateArmyMission</span> page, you can choose the tower where you attack from.</p>
             <p>
-                3. When you have chosen all the army for attacking the tower you chose, then you have an option to connect the army. Connecting means that
-                army goes for attack in the same round. The army, which is closer to the enemy, waits for the friendly army what is farther away. In general, connecting makes army weaker.
+                3.When you have chosen all the army for attacking the tower you chose, then you have an option to connect the army. 
+                Connecting means that the army goes for an attack in the same round. The army, which is closer to the enemy, waits for the friendly army that is farther away. In general, connecting makes the army weaker.
             </p>
-            <p>4. After the decision if you want to connect or not, you press <span class="btn btn-primary">Create</span> button.</p>
+            <p>4. After the decision, if you want to connect or not, you press <span class="btn btn-primary">Create</span> button.</p>
         </div>
 
         <h2>How to send my army to another tower that I own?</h2>
-        <p>Do same like you are going to attack a tower. Just click the tower where you want to send your army.</p>
+        <p>Do the same like you are going to attack a tower. Just click the tower where you want to send your army.</p>
 
-        <h2>How to cancel attack?</h2>
+        <h2>How to cancel an attack?</h2>
         <div class="content-3d CancelArmyMovement">
 
-            <p>1. To cancel attack you need press <span class="btn-3d red">Movements</span> button.</p>
+            <p>1. To cancel the attack you need to press <span class="btn-3d red">Movements</span> button.</p>
             <p>2. Then you can choose, what army movement you want to cancel by clicking <span class="btn btn-warning">Cancel</span> button.</p>
             <p>3. After cancelling, you can see on top of the page written with red "<span style="color:red; font-size:20px;">People now:... + Army returning sometime (<a style="color:black; font-size:15px">[the amount of army]</a>)</span>".</p>
         </div>
