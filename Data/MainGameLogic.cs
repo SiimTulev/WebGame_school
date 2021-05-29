@@ -98,7 +98,7 @@ namespace WebGame.Data
                                 select m).ToList();
 
 
-                if (moveChanging.Count > 0) // if there is any army moving
+                if (moveChanging.Count > 0) // Kui on mõni armee liikumas, liiguta armeed ühe roundi võrra lähedamale
                 {
                     for (int i = 0; i < moveChanging.Count; i++)
                     {
@@ -131,20 +131,18 @@ namespace WebGame.Data
                             attackersDestination.Add(i);
                     }
 
-                    //await _context.Entry(whereArmyGoes).ReloadAsync();
-                    foreach (var entity in towerList) if (entity != null) await _context.Entry(entity).ReloadAsync();
+                    foreach (var tower in towerList) if (tower != null) await _context.Entry(tower).ReloadAsync();
 
 
                     bool destroyedTower = false;
                     for (int i = 0; i < attackersDestination.Count; i++)
                     {
-                        // && check if it's still the last attacker tower. If not, then enemy attacks it.
-                        // tower is destroyed and add attacker's army to the base
+                        // Kui on torn ära hävitatud ründaja poolt && mängija omab seda torni. Siis lisa ründaja armee torni
                         if (destroyedTower == true && whereArmyGoes[attackersDestination[i]].Owner == armyToTower[i].AttackerPlayerId)
                         {
                             whereArmyGoes[attackersDestination[i]].Attack += armyToTower[attackersDestination[i]].Amount;
                         }
-                        else // attack tower
+                        else // Ründa torni, kui pole veel hävitatud
                         {
                             // Calculate also the tower strength percentage (defence) 
                             float prepare = (100 - (whereArmyGoes[attackersDestination[i]].Defence)) / 100f;
@@ -153,18 +151,20 @@ namespace WebGame.Data
                             // another idea would be that it adds percentage to the army what is in army. So dont change army amount number instead tower's army amount.
                             whereArmyGoes[attackersDestination[i]].Attack -= Convert.ToInt32(strength);
                         }
-                        if (whereArmyGoes[attackersDestination[i]].Attack < 0)
+
+                        if (whereArmyGoes[attackersDestination[i]].Attack < 0) // Kui torn on hävitatud peale rünnakut
                         {
-                            whereArmyGoes[attackersDestination[i]].Owner = armyToTower[i].AttackerPlayerId;
-                            whereArmyGoes[attackersDestination[i]].Attack *= -1;
+                            whereArmyGoes[attackersDestination[i]].Owner = armyToTower[i].AttackerPlayerId; // Pane torni omanikuks ründaja
+                            whereArmyGoes[attackersDestination[i]].Attack *= -1; // Muuda negatiivne arv positiivseks peale rünnakut
                             destroyedTower = true;
                         }
-                        if (whereArmyGoes[attackersDestination[i]].Attack == 0)
+
+                        if (whereArmyGoes[attackersDestination[i]].Attack == 0) // Kui torni ei oma keegi
                         {
-                            whereArmyGoes[attackersDestination[i]].Owner = 0;
+                            whereArmyGoes[attackersDestination[i]].Owner = 0; // Omanik puudub
                         }
                     }
-                    _context.UpdateRange(whereArmyGoes); // would it be better if it's in LOOP?
+                    _context.UpdateRange(whereArmyGoes);
                 }
                 _context.AttDef.RemoveRange(_context.AttDef.Where(x => x.WorldId == worldId && x.RoundsToArrive <= 0));
 
@@ -173,7 +173,7 @@ namespace WebGame.Data
 
                 _context.Update(world);
 
-                // Check if a player won the game
+                // Kontrolli, kas mängija võitis mängu
                 var checkIfNoOwner1 = 0;
                 checkIfNoOwner1 = towerList.Count(p => p.Owner == world.Player1Id);
 
@@ -182,11 +182,13 @@ namespace WebGame.Data
                     if (checkIfNoOwner1 == 0)
                     {
                         var PlayeraccountWin = _context.Playeraccount
-     .FirstOrDefault(m => m.AccountId == world.Player2IdAcc);
+                            .FirstOrDefault(m => m.AccountId == world.Player2IdAcc);
+
                         PlayeraccountWin.Wins += 1;
 
                         var PlayeraccountLost = _context.Playeraccount
-.FirstOrDefault(m => m.AccountId == world.Player1IdAcc);
+                            .FirstOrDefault(m => m.AccountId == world.Player1IdAcc);
+
                         PlayeraccountLost.Losts += 1;
 
                         world.WinnerAccountId = world.Player2IdAcc;
@@ -205,7 +207,7 @@ namespace WebGame.Data
                         world.WinnerAccountId = world.Player1IdAcc;
                         world.GameFinished = true;
                     }
-                    // Make space in database after game has ended
+                    // Kustuta andmebaasist lõppenud mängu andmed, et andmebaasi ruumi juurde teha.
                     _context.AttDef.RemoveRange(_context.AttDef.Where(x => x.WorldId == worldId));
                     _context.Tower.RemoveRange(_context.Tower.Where(x => x.WorldId == worldId));
                     _context.Player.RemoveRange(_context.Player.Where(x => x.WorldId == worldId));
@@ -217,7 +219,6 @@ namespace WebGame.Data
 
             var towers = (from ep in _context.Tower
                           join e in _context.World on ep.WorldId equals e.WorldId
-                          //where worldTowers.Contains(ep.Owner)
                           where e.WorldId == worldId
                           select new TowerViewModel
                           {
@@ -243,7 +244,6 @@ namespace WebGame.Data
         {
             var towers = (from ep in _context.Tower
                           join e in _context.World on ep.WorldId equals e.WorldId
-                          //where worldTowers.Contains(ep.Owner)
                           where e.WorldId == worldId
                           select new TowerViewModel
                           {

@@ -21,8 +21,8 @@ namespace WebGame.Data
             _context = context;
             _identityContext = identityContext;
         }
-        public async Task<OverallStatsModel> GetOverallStats(int worldId, // queue matters. WorldId First, etc...
-           int overallStatsPlayer1, int overallStatsPlayer2) // ENEMY playerId
+        public async Task<OverallStatsModel> GetOverallStats(int worldId, // Järjekord on muutujatel tähtis
+           int overallStatsPlayer1, int overallStatsPlayer2)
         {
             var findGoldPlayer1 = (from d in _context.Player
                                    where d.PlayerId == overallStatsPlayer1 && d.WorldId == worldId
@@ -74,16 +74,15 @@ namespace WebGame.Data
 
             }
 
-
             var soonReturnsPlayer1 = (from d in _context.AttDef
                                       where d.AttackerPlayerId == overallStatsPlayer1 && d.WorldId == worldId && d.ReturnBase == true
-                                      select d).ToList(); // removed Select  d.Amount
+                                      select d).ToList();
 
             foreach (var entity in soonReturnsPlayer1) if (entity != null) _context.Entry(entity).Reload();
 
             var soonReturnsPlayer2 = (from d in _context.AttDef
                                       where d.AttackerPlayerId == overallStatsPlayer2 && d.WorldId == worldId && d.ReturnBase == true
-                                      select d).ToList(); // removed Select  d.Amount
+                                      select d).ToList();
 
             foreach (var entity in soonReturnsPlayer2) if (entity != null) _context.Entry(entity).Reload();
 
@@ -117,8 +116,7 @@ namespace WebGame.Data
                 goldForTowersPlayer2 = goldForTowersPlayer2,
             };
         }
-        public async Task<OverallStatsSingleModel> GetOverallStatsSingle(int worldId, // queue matters. WorldId First, etc...
-       int playerId) // ENEMY playerId
+        public async Task<OverallStatsSingleModel> GetOverallStatsSingle(int worldId, int playerId) // Muutujate järjekord on tähtis
         {
 
             var findPlayerGold = (from d in _context.Player

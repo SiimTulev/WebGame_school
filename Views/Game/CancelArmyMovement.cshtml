@@ -60,7 +60,8 @@
                             }
                             else
                             {
-                                @(Convert.ToInt32(item.RoundsToArrive + 1))// Add 1 to (RoundsToArrive. It's easier to read then)
+                                @(Convert.ToInt32(item.RoundsToArrive + 1))// Lisa number 1 RoundsToArrive muutujale, kuna siis on seda lihtsam lugeda tavakasutajal
+
                             }
 
                         </td>
@@ -73,9 +74,7 @@
             </tbody>
         </table>
         <div>
-            @*<a class="btn btn-info" asp-action="MainGame" asp-route-player1Id="@ViewBag.Player1Id" asp-route-player2Id="@ViewBag.Player2Id" asp-route-worldId="@ViewBag.WorldId" asp-route-accountCheck="@Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))">Back to map</a>*@
             <a class="btn btn-info" asp-area="" asp-route-error="0" asp-route-player1Id="@ViewBag.Player1Id" asp-route-player2Id="@ViewBag.Player2Id" asp-route-worldId="@ViewBag.WorldId" asp-route-accountCheck="@Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))" asp-controller="Game" asp-action="MainGameRazor">Back to map</a>
-
         </div>
     }
 }

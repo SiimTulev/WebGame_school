@@ -29,25 +29,22 @@ namespace WebGame
             get;
         }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddScoped<OverallStatsLogic>(); //AddSingleton does not work  BUT AddTransient and AddScoped works
-            services.AddScoped<MainGameLogic>(); //AddSingleton does not work  BUT AddTransient and AddScoped works
+            services.AddScoped<OverallStatsLogic>(); //AddSingleton ei tööta, aga AddTransient ja AddScoped töötavad
+            services.AddScoped<MainGameLogic>(); //AddSingleton ei tööta, aga AddTransient ja AddScoped töötavad
 
-            services.AddRazorPages().AddRazorRuntimeCompilation(); // P2RAST MAHA V6TTA?
+            services.AddRazorPages().AddRazorRuntimeCompilation(); // PÄRAST MAHA V6TTA?
             services.AddMvc().AddRazorRuntimeCompilation();
 
-            // For Developing only
 
             ///////// IDENTITY
             services.AddIdentity<AppUser, AppRole>(options =>
            {
-               // options.User.RequireUniqueEmail = true;
            }).AddEntityFrameworkStores<IdentityAppContext>();
 
-            // Identity (takes the database location)
+            // Identity (võtab andmebaasi andmete asukoha)
             services.AddDbContext<IdentityAppContext>(cfg =>
                cfg.UseMySql(Configuration.GetConnectionString("WebGame")),
             ServiceLifetime.Transient);
@@ -73,7 +70,6 @@ namespace WebGame
             services.AddServerSideBlazor();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
 

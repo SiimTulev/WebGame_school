@@ -24,7 +24,5 @@ namespace WebGame.ViewModel
 
         public int SelectedTowerId { get; set; }
         public int SelectedWorldId { get; set; }
-        //public bool Connected { get; set; }
-        //public int ArmyGoesTo { get; set; }
     }
 }
