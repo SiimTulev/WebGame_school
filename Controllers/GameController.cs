@@ -285,7 +285,7 @@ namespace WebGame.Controllers
 
             var armyMovings = (from d in _context.AttDef where d.AccountId == (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))) && d.WorldId == worldId && d.ReturnBase == false select d).ToListAsync();
 
-            // CAUSES WebSocket BUG  on CancelArmyMovement... When I refresh the site about 10 times, atleast ONCE ERROR 500 comes.
+            // Tekitab WebSocket'i BUG'i. Bug tekib vähemalt korra, kui refreshin CancelArmyMovement lehte 10x. ERROR 500
             //var playerIdWhoClicks = (from d in _context.Player where d.WorldId == worldId && d.AccountId == (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))) select d.PlayerId).FirstOrDefault();
 
             ViewBag.PlayerIdWhoClicks = PlayerIdWhoClicks;
@@ -394,7 +394,7 @@ namespace WebGame.Controllers
                     _context.Add(player);
                     await _context.SaveChangesAsync();
 
-                    var maxWPlayerId = _context.Player.Max(x => x.PlayerId); // Find max PlayerId 
+                    var maxWPlayerId = _context.Player.Max(x => x.PlayerId); // Leia viimati tehtud PlayerId
 
                     worldToEdit.Player2Id = player.PlayerId;
                     worldToEdit.GameStarted = true;
@@ -403,11 +403,11 @@ namespace WebGame.Controllers
                     _context.Update(worldToEdit);
                     await _context.SaveChangesAsync();
 
-                    var newMaxWorldId = _context.World.Max(x => x.WorldId); // Find max WorldId 
+                    var newMaxWorldId = _context.World.Max(x => x.WorldId); // Leia viimati tehtud WorldId
                     var newTowersWorld = _context.World
                         .FirstOrDefault(m => m.WorldId == newMaxWorldId);
 
-                    string[] baseName = {
+                    string[] baseName = { // Tornide nimed
                         "Hotel",
                         "India",
                         "Juliett",
@@ -417,7 +417,7 @@ namespace WebGame.Controllers
                         "November",
                         "MainBase2"
                     };
-                    int[] xCord = {
+                    int[] xCord = { // Tornide koordinaadid
                         4,
                         5,
                         5,
@@ -427,7 +427,7 @@ namespace WebGame.Controllers
                         6,
                         7
                     };
-                    int[] yCord = {
+                    int[] yCord = { // Tornide koordinaadid
                         1,
                         0,
                         1,
@@ -439,7 +439,7 @@ namespace WebGame.Controllers
                     };
 
                     var tower_ = new List<Tower>();
-                    for (int i = 0; i < 8; i++) // Make 8 Towers           
+                    for (int i = 0; i < 8; i++) // Tee 8 torni          
                     {
                         if (i == 7)
                         {
@@ -502,7 +502,7 @@ namespace WebGame.Controllers
                     _context.Update(world);
                     await _context.SaveChangesAsync();
 
-                    string[] baseName = {
+                    string[] baseName = { // Tornide nimed
                         "MainBase1",
                         "Alpha",
                         "Beta",
@@ -512,7 +512,7 @@ namespace WebGame.Controllers
                         "Foxtrot",
                         "Golf"
                     };
-                    int[] xCord = {
+                    int[] xCord = { // Tornide koordinaadid
                         0,
                         1,
                         1,
@@ -522,7 +522,7 @@ namespace WebGame.Controllers
                         2,
                         3
                     };
-                    int[] yCord = {
+                    int[] yCord = { // Tornide koordinaadid
                         1,
                         0,
                         1,
@@ -603,6 +603,7 @@ namespace WebGame.Controllers
 
             ViewBag.Player1Id = player1Id;
             ViewBag.Player2Id = player2Id;
+
             if (world.Player1IdAcc == (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))))
             {
                 var enemyName = _context.Playeraccount.FirstOrDefault(m => m.AccountId == world.Player2IdAcc);
@@ -661,7 +662,7 @@ namespace WebGame.Controllers
 
             var playerIds = (from d in _context.Player where d.AccountId == (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))) select d.PlayerId).ToList();
 
-            // GET LOGGED IN ACCOUNT PLAYERID
+            // Leia mängija PlayerId selles maailmas, kus ta praegu mängib
             if (world.Player1Ready == true ^ world.Player2Ready == true) // Kui ainult üks mängijatest on valmis
             {
                 if (playerIds.Contains(player1Id) && world.Player1Id == player1Id && world.Player1Ready == true)
@@ -685,12 +686,12 @@ namespace WebGame.Controllers
                     ViewBag.Enemy = "ENEMY IS READY";
                 }
             }
-            else if (world.Player1Ready == false && world.Player2Ready == false) // CHECK IF BOTH ARE NOT READY
+            else if (world.Player1Ready == false && world.Player2Ready == false) // Kontrolli, kas mõlemad mängijad ei ole valmis
             {
                 ViewBag.You = "YOU ARE NOT READY";
                 ViewBag.Enemy = "ENEMY IS NOT READY";
             }
-            else if (world.Player1Ready == true && world.Player2Ready == true) // CHECK IF BOTH ARE READY
+            else if (world.Player1Ready == true && world.Player2Ready == true) //  Kontrolli, kas mõlemad mängijad on valmis
             {
                 world.Player1Ready = false;
                 world.Player2Ready = false;
@@ -771,7 +772,7 @@ namespace WebGame.Controllers
                 _context.Update(player1Gold);
                 _context.Update(player2Gold);
 
-                // People born
+                // Inimesi sünnib iga torni kohta...
                 foreach (var tower in towerList)
                 {
                     float? peopleGrowingPercentage = (100 + tower.TowerLvl) / 100f;
@@ -783,7 +784,7 @@ namespace WebGame.Controllers
                 List<AttDef> moveChanging = new List<AttDef>();
                 moveChanging = (from m in _context.AttDef where m.WorldId == worldId select m).ToList();
 
-                if (moveChanging.Count > 0) // Kas mõni armee on liikumas
+                if (moveChanging.Count > 0) // Kas mõni armee on parasjagu liikumas
                 {
                     for (int i = 0; i < moveChanging.Count; i++)
                     {
@@ -814,7 +815,7 @@ namespace WebGame.Controllers
                     bool destroyedTower = false;
                     for (int i = 0; i < attackersDestination.Count; i++)
                     {
-                        // && Kontrolli, kas ründaja juba omab seda torni. Kui ei oma, siis lahutab torni ründajate arvust kaitse % maha
+                        // Kui torn on hävitatud && Kui ründaja juba omab seda torni. Kui ei oma, siis lahutab torni ründajate arvust kaitse % maha
                         if (destroyedTower == true && whereArmyGoes[attackersDestination[i]].Owner == armyToTower[i].AttackerPlayerId)
                         {
                             whereArmyGoes[attackersDestination[i]].Attack += armyToTower[attackersDestination[i]].Amount;
@@ -823,7 +824,6 @@ namespace WebGame.Controllers
                         {
                             // Arvuta välja torni tugevus (defence)
                             float prepare = (100 - (whereArmyGoes[attackersDestination[i]].Defence)) / 100f;
-
                             float strength = armyToTower[attackersDestination[i]].Amount * prepare;
                             whereArmyGoes[attackersDestination[i]].Attack -= Convert.ToInt32(strength);
                         }
@@ -879,7 +879,7 @@ namespace WebGame.Controllers
                         world.WinnerAccountId = world.Player1IdAcc;
                         world.GameFinished = true;
                     }
-                    // Make space in database after game has ended
+                    // Kustuta andmebaasist lõppenud mängu andmed, et andmebaasi ruumi juurde teha.
                     _context.AttDef.RemoveRange(_context.AttDef.Where(x => x.WorldId == worldId));
                     _context.Tower.RemoveRange(_context.Tower.Where(x => x.WorldId == worldId));
                     _context.Player.RemoveRange(_context.Player.Where(x => x.WorldId == worldId));
@@ -888,13 +888,20 @@ namespace WebGame.Controllers
             _context.Update(world);
             _context.SaveChanges();
 
-            return RedirectToAction(nameof(GameController.MainGameRazor), "Game", new { error = 0, player1Id = world.Player1Id, player2Id = world.Player2Id, worldId = worldId, accountCheck = (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))) });
-
+            return RedirectToAction(nameof(GameController.MainGameRazor), "Game", new
+            {
+                error = 0,
+                player1Id = world.Player1Id,
+                player2Id = world.Player2Id,
+                worldId = worldId,
+                accountCheck = (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier)))
+            });
         }
 
         [HttpPost("Game/CreateArmyMission/{worldId}/{Owner}/{player1Id}/{player2Id}/{SelectedTower}/{playerIdWhoClicks}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateArmyMission(int SelectedWorldId, int Owner, bool connected, int SelectedTowerId, EditViewModel editViewModel, AttDef attdef, Tower tower, World world, TowerViewModel towerViewModel, int worldId, int player1Id, int player2Id, int SelectedTower) // EI OLE SAFE?
+        public async Task<IActionResult> CreateArmyMission(int SelectedWorldId, int Owner, bool connected, int SelectedTowerId,
+            EditViewModel editViewModel, AttDef attdef, Tower tower, World world, TowerViewModel towerViewModel, int worldId, int player1Id, int player2Id, int SelectedTower)
         {
             if (!User.Identity.IsAuthenticated) // Kas kasutaja on sisselogitud
             {
@@ -905,7 +912,7 @@ namespace WebGame.Controllers
                 int attackSum = 0;
                 var idWhereArmyGoes = (from d in _context.Tower where d.TowerId == SelectedTowerId select d).First();
 
-                if (connected == true) // Kõik armeed ründavad koos
+                if (connected == true) // Kui Kõik armeed ründavad KOOS
                 {
                     List<int> towersWhatAttackArrivingTime = new List<int>();
 
@@ -920,21 +927,21 @@ namespace WebGame.Controllers
                         {
                             var playerId = (from d in _context.Player where d.AccountId == (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))) && d.PlayerId == Owner select d.PlayerId).FirstOrDefault();
 
-                            List<Tower> towerList2 = new List<Tower>();
+                            List<Tower> towerList = new List<Tower>();
 
                             if (playerId == Owner) // Kui vajutaja vajutas oma enda torni
                             {
-                                towerList2 = (from product in _context.Tower
-                                              where product.Owner == Owner && product.WorldId == worldId
-                                              select product).ToList();
+                                towerList = (from product in _context.Tower
+                                             where product.Owner == Owner && product.WorldId == worldId
+                                             select product).ToList();
                             }
                             else
                             {
-                                towerList2 = (from product in _context.Tower
-                                              where product.Owner != Owner && product.WorldId == worldId
-                                              select product).ToList();
+                                towerList = (from product in _context.Tower
+                                             where product.Owner != Owner && product.WorldId == worldId
+                                             select product).ToList();
                             }
-                            ViewBag.ListofTower = towerList2;
+                            ViewBag.ListofTower = towerList;
                             ViewBag.Owner = Owner;
                             ViewBag.SelectedTower = SelectedTower;
                             ViewBag.WorldId = worldId;
@@ -944,7 +951,7 @@ namespace WebGame.Controllers
                             if (playerId == Owner) // Kui vajutaja vajutas oma enda torni
                             {
                                 List<int> LoggedInPlayerTowers = new List<int>();
-                                foreach (var item in towerList2) // Kopeeri andmed teise massiivi, et andmeid saaks kiiremini laadida
+                                foreach (var item in towerList) // Kopeeri andmed teise massiivi, et andmeid saaks kiiremini laadida
                                 {
                                     LoggedInPlayerTowers.Add(item.TowerId);
                                 }
@@ -961,7 +968,7 @@ namespace WebGame.Controllers
 
                         towersWhatAttackArrivingTime.Add(editViewModel.arrivingTime[i]);
                     }
-                    int highestArrivalTime = towersWhatAttackArrivingTime.Max(); //Leia pikim armee kohale jõudmise aeg armeede hulgast
+                    int highestArrivalTime = towersWhatAttackArrivingTime.Max(); // Leia pikim armee kohale jõudmise aeg armeede hulgast
 
                     var whoAttacks = (from d in _context.Player where d.AccountId == (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))) && d.WorldId == SelectedWorldId select d.PlayerId).First();
 
@@ -976,7 +983,7 @@ namespace WebGame.Controllers
                     _context.Add(attdef);
                     await _context.SaveChangesAsync();
                 }
-                if (connected == false) // Kui armeed ei ühenda oma jõud
+                if (connected == false) // Kui armeed EI ründa KOOS
                 {
                     var playerId3 = (from d in _context.Player where d.AccountId == (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))) && d.WorldId == SelectedWorldId select d.PlayerId).First();
 
@@ -990,21 +997,21 @@ namespace WebGame.Controllers
                         {
                             var playerId = (from d in _context.Player where d.AccountId == (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))) && d.PlayerId == Owner select d.PlayerId).FirstOrDefault();
 
-                            List<Tower> towerList2 = new List<Tower>();
+                            List<Tower> towerList = new List<Tower>();
 
-                            if (playerId == Owner) // Kui vajutaja vajutas oma enda torni
+                            if (playerId == Owner) // Kui vajutaja(mängija) vajutas oma enda torni
                             {
-                                towerList2 = (from product in _context.Tower
-                                              where product.Owner == Owner && product.WorldId == worldId
-                                              select product).ToList();
+                                towerList = (from product in _context.Tower
+                                             where product.Owner == Owner && product.WorldId == worldId
+                                             select product).ToList();
                             }
-                            else
+                            else // Kui vajutaja(mängija) vajutas vaenlase torni
                             {
-                                towerList2 = (from product in _context.Tower
-                                              where product.Owner != Owner && product.WorldId == worldId
-                                              select product).ToList();
+                                towerList = (from product in _context.Tower
+                                             where product.Owner != Owner && product.WorldId == worldId
+                                             select product).ToList();
                             }
-                            ViewBag.ListofTower = towerList2;
+                            ViewBag.ListofTower = towerList;
                             ViewBag.Owner = Owner;
                             ViewBag.SelectedTower = SelectedTower;
                             ViewBag.WorldId = worldId;
@@ -1014,7 +1021,7 @@ namespace WebGame.Controllers
                             if (playerId == Owner) // Kui vajutaja vajutas oma enda torni
                             {
                                 List<int> LoggedInPlayerTowers = new List<int>();
-                                foreach (var item in towerList2) // Kopeeri andmed teise massiivi, et andmeid saaks kiiremini laadida
+                                foreach (var item in towerList) // Kopeeri andmed teise massiivi, et andmeid saaks kiiremini laadida
                                 {
                                     LoggedInPlayerTowers.Add(item.TowerId);
                                 }
@@ -1099,21 +1106,21 @@ namespace WebGame.Controllers
                     mainBase = (from d in _context.Player where d.AccountId == (Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier))) && d.PlayerId == Owner select d).ToList();
                     ViewBag.mainBase = mainBase;
 
-                    List<Tower> towerList2 = new List<Tower>();
-                    towerList2 = (from product in _context.Tower where product.Owner == playerIdWhoClicks && product.WorldId == worldId select product).ToList();
-                    ViewBag.ListofTower = towerList2;
+                    List<Tower> towerList = new List<Tower>();
+                    towerList = (from product in _context.Tower where product.Owner == playerIdWhoClicks && product.WorldId == worldId select product).ToList();
+                    ViewBag.ListofTower = towerList;
 
-                    int[] roundsToArrives_X = new int[towerList2.Count];
-                    int[] roundsToArrives_Y = new int[towerList2.Count];
-                    int[] arrival = new int[towerList2.Count];
+                    int[] roundsToArrives_X = new int[towerList.Count];
+                    int[] roundsToArrives_Y = new int[towerList.Count];
+                    int[] arrival = new int[towerList.Count];
 
                     int counter = 0;
-                    for (int i = 0; i < towerList2.Count; i++)
+                    for (int i = 0; i < towerList.Count; i++)
                     {
-                        if (towerList2[i].TowerId != SelectedTower) // Ära näita torni andmeid, millele peale mängija peale vajutas. (Samast tornist samma torni ei saa saata)
+                        if (towerList[i].TowerId != SelectedTower) // Ära näita torni andmeid, millele peale mängija peale vajutas. (Samast tornist samma torni ei saa saata)
                         {
-                            int roundsToArriveCheckX = towerList2[i].LocationX - Convert.ToInt32(idWhereArmyGoes.LocationX);
-                            int roundsToArriveCheckY = towerList2[i].LocationY - Convert.ToInt32(idWhereArmyGoes.LocationY);
+                            int roundsToArriveCheckX = towerList[i].LocationX - Convert.ToInt32(idWhereArmyGoes.LocationX);
+                            int roundsToArriveCheckY = towerList[i].LocationY - Convert.ToInt32(idWhereArmyGoes.LocationY);
 
                             if (roundsToArriveCheckX >= 0)
                                 roundsToArrives_X[i] = roundsToArriveCheckX;
@@ -1137,7 +1144,7 @@ namespace WebGame.Controllers
                     ViewBag.Arrival = arrival;
 
                     List<int> LoggedInPlayerTowers = new List<int>();
-                    foreach (var item in towerList2) // Kopeeri andmed teise massiivi, et andmeid saaks kiiremini laadida
+                    foreach (var item in towerList) // Kopeeri andmed teise massiivi, et andmeid saaks kiiremini laadida
                     {
                         LoggedInPlayerTowers.Add(item.TowerId);
                     }
@@ -1147,20 +1154,20 @@ namespace WebGame.Controllers
                 }
                 else // Peale vajutatud torn on vaenlase või mitte kellegi oma
                 {
-                    List<Tower> towerList2 = new List<Tower>();
-                    towerList2 = (from product in _context.Tower
-                                  where product.Owner == playerIdWhoClicks && product.WorldId == worldId
-                                  select product).ToList();
-                    ViewBag.ListofTower = towerList2;
+                    List<Tower> towerList = new List<Tower>();
+                    towerList = (from product in _context.Tower
+                                 where product.Owner == playerIdWhoClicks && product.WorldId == worldId
+                                 select product).ToList();
+                    ViewBag.ListofTower = towerList;
 
-                    int[] roundsToArrives_X = new int[towerList2.Count];
-                    int[] roundsToArrives_Y = new int[towerList2.Count];
-                    int[] arrival = new int[towerList2.Count];
+                    int[] roundsToArrives_X = new int[towerList.Count];
+                    int[] roundsToArrives_Y = new int[towerList.Count];
+                    int[] arrival = new int[towerList.Count];
 
-                    for (int i = 0; i < towerList2.Count; i++)
+                    for (int i = 0; i < towerList.Count; i++)
                     {
-                        int roundsToArriveCheckX = towerList2[i].LocationX - Convert.ToInt32(idWhereArmyGoes.LocationX);
-                        int roundsToArriveCheckY = towerList2[i].LocationY - Convert.ToInt32(idWhereArmyGoes.LocationY);
+                        int roundsToArriveCheckX = towerList[i].LocationX - Convert.ToInt32(idWhereArmyGoes.LocationX);
+                        int roundsToArriveCheckY = towerList[i].LocationY - Convert.ToInt32(idWhereArmyGoes.LocationY);
 
                         if (roundsToArriveCheckX >= 0)
                             roundsToArrives_X[i] = roundsToArriveCheckX;

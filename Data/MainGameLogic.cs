@@ -36,6 +36,7 @@ namespace WebGame.Data
             {
                 // return NotFound();
             }
+
             var player = _context.Player
                             .FirstOrDefault(m => m.WorldId == worldId && m.PlayerId == playerId);
 
@@ -48,7 +49,6 @@ namespace WebGame.Data
             {
                 world.Player2Ready = true;
             }
-
 
             List<Tower> towerList = new List<Tower>();
             towerList = (from product in _context.Tower
@@ -83,16 +83,16 @@ namespace WebGame.Data
                 _context.Update(player1Gold);
                 _context.Update(player2Gold);
 
-                // People born
+                // Inimesed sünnivad
                 foreach (var tower in towerList)
                 {
-                    float? peopleGrowingPercentage = (100 + tower.TowerLvl) / 100f; // 5 percentage more poeple
+                    float? peopleGrowingPercentage = (100 + tower.TowerLvl) / 100f;
                     float? peopleGrowed = peopleGrowingPercentage * tower.Attack;
                     tower.Attack = Convert.ToInt32(peopleGrowed);
                 }
                 _context.UpdateRange(towerList);
 
-                List<AttDef> moveChanging = new List<AttDef>(); // Army goes closer
+                List<AttDef> moveChanging = new List<AttDef>(); // Salvesta armee lähenemine siia
                 moveChanging = (from m in _context.AttDef
                                 where m.WorldId == worldId
                                 select m).ToList();
@@ -102,12 +102,12 @@ namespace WebGame.Data
                 {
                     for (int i = 0; i < moveChanging.Count; i++)
                     {
-                        moveChanging[i].RoundsToArrive -= 1;
+                        moveChanging[i].RoundsToArrive -= 1; // Armee läheneb
                     }
                     _context.UpdateRange(moveChanging);
                 }
 
-                List<AttDef> armyToTower = new List<AttDef>(); // do army action
+                List<AttDef> armyToTower = new List<AttDef>(); // Salvesta armeed siia, mis jõuavad sellel roundil kohale
                 armyToTower = (from m in _context.AttDef
                                where m.WorldId == worldId && m.RoundsToArrive <= 0
                                select m).ToList();
@@ -115,19 +115,19 @@ namespace WebGame.Data
                 if (armyToTower.Count > 0)
                 {
                     Tower[] whereArmyGoes = new Tower[armyToTower.Count];
-                    List<int> attackersDestination = new List<int>(); // Store enemy's army destination
+                    List<int> attackersDestination = new List<int>(); // Salvesta vastase armee sihtmärk
 
-                    for (int i = 0; i < armyToTower.Count; i++) // Friendly army must arrive first
+                    for (int i = 0; i < armyToTower.Count; i++) // Sõbralik armee jõuab esimesena kohdale
                     {
                         whereArmyGoes[i] = (from d in _context.Tower
                                             where d.TowerId == armyToTower[i].TargetTowerId
                                             select d).First();
 
-                        if (whereArmyGoes[i].Owner == armyToTower[i].AttackerPlayerId) // If army goes to friendly's base
+                        if (whereArmyGoes[i].Owner == armyToTower[i].AttackerPlayerId) // Kui armee liigub sõbralikku baasi
 
                             whereArmyGoes[i].Attack += armyToTower[i].Amount;
 
-                        else // If army goes enemy's base OR it's neutral base
+                        else // Kui armee liigub vaenlase või neutraalsesse baasi
                             attackersDestination.Add(i);
                     }
 
