@@ -13,42 +13,42 @@ namespace WebGame.Components
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Components;
 #nullable restore
-#line 5 "C:\C#\WebgameGITHUB\NewGitHub\WebGame_school\_Imports.razor"
+#line 5 "C:\Lõputöö\Kood\WebGame_school\_Imports.razor"
 using Microsoft.AspNetCore.Components.Web;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 4 "C:\C#\WebgameGITHUB\NewGitHub\WebGame_school\Components\OverallStats.razor"
+#line 4 "C:\Lõputöö\Kood\WebGame_school\Components\OverallStats.razor"
 using System.Security.Claims;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 5 "C:\C#\WebgameGITHUB\NewGitHub\WebGame_school\Components\OverallStats.razor"
+#line 5 "C:\Lõputöö\Kood\WebGame_school\Components\OverallStats.razor"
 using Microsoft.AspNetCore.SignalR.Client;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 6 "C:\C#\WebgameGITHUB\NewGitHub\WebGame_school\Components\OverallStats.razor"
+#line 6 "C:\Lõputöö\Kood\WebGame_school\Components\OverallStats.razor"
 using Microsoft.AspNetCore.Components.Forms;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 7 "C:\C#\WebgameGITHUB\NewGitHub\WebGame_school\Components\OverallStats.razor"
+#line 7 "C:\Lõputöö\Kood\WebGame_school\Components\OverallStats.razor"
 using WebGame.Data;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 8 "C:\C#\WebgameGITHUB\NewGitHub\WebGame_school\Components\OverallStats.razor"
+#line 8 "C:\Lõputöö\Kood\WebGame_school\Components\OverallStats.razor"
 using WebGame.ViewComponents;
 
 #line default
@@ -63,7 +63,7 @@ using WebGame.ViewComponents;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 95 "C:\C#\WebgameGITHUB\NewGitHub\WebGame_school\Components\OverallStats.razor"
+#line 95 "C:\Lõputöö\Kood\WebGame_school\Components\OverallStats.razor"
       
     string _connectionId = "";
     private HubConnection _hubConnection;

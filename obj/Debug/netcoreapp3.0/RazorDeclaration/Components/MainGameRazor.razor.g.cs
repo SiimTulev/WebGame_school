@@ -13,63 +13,63 @@ namespace WebGame.Components
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Components;
 #nullable restore
-#line 5 "C:\C#\WebgameGITHUB\NewGitHub\WebGame_school\_Imports.razor"
+#line 5 "C:\Lõputöö\Kood\WebGame_school\_Imports.razor"
 using Microsoft.AspNetCore.Components.Web;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 3 "C:\C#\WebgameGITHUB\NewGitHub\WebGame_school\Components\MainGameRazor.razor"
+#line 3 "C:\Lõputöö\Kood\WebGame_school\Components\MainGameRazor.razor"
 using System.Security.Claims;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 4 "C:\C#\WebgameGITHUB\NewGitHub\WebGame_school\Components\MainGameRazor.razor"
+#line 4 "C:\Lõputöö\Kood\WebGame_school\Components\MainGameRazor.razor"
 using Microsoft.AspNetCore.SignalR.Client;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 5 "C:\C#\WebgameGITHUB\NewGitHub\WebGame_school\Components\MainGameRazor.razor"
+#line 5 "C:\Lõputöö\Kood\WebGame_school\Components\MainGameRazor.razor"
 using Microsoft.AspNetCore.Components.Forms;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 6 "C:\C#\WebgameGITHUB\NewGitHub\WebGame_school\Components\MainGameRazor.razor"
+#line 6 "C:\Lõputöö\Kood\WebGame_school\Components\MainGameRazor.razor"
 using WebGame.Data;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 7 "C:\C#\WebgameGITHUB\NewGitHub\WebGame_school\Components\MainGameRazor.razor"
+#line 7 "C:\Lõputöö\Kood\WebGame_school\Components\MainGameRazor.razor"
 using WebGame.ViewModel;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 8 "C:\C#\WebgameGITHUB\NewGitHub\WebGame_school\Components\MainGameRazor.razor"
+#line 8 "C:\Lõputöö\Kood\WebGame_school\Components\MainGameRazor.razor"
 using WebGame.Models.WebGame;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 9 "C:\C#\WebgameGITHUB\NewGitHub\WebGame_school\Components\MainGameRazor.razor"
+#line 9 "C:\Lõputöö\Kood\WebGame_school\Components\MainGameRazor.razor"
 using Microsoft.EntityFrameworkCore;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 11 "C:\C#\WebgameGITHUB\NewGitHub\WebGame_school\Components\MainGameRazor.razor"
+#line 11 "C:\Lõputöö\Kood\WebGame_school\Components\MainGameRazor.razor"
 using WebGame.Components;
 
 #line default
@@ -84,7 +84,7 @@ using WebGame.Components;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 215 "C:\C#\WebgameGITHUB\NewGitHub\WebGame_school\Components\MainGameRazor.razor"
+#line 215 "C:\Lõputöö\Kood\WebGame_school\Components\MainGameRazor.razor"
        
     private HubConnection _hubConnection;
 

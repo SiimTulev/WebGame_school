@@ -1,17 +1,16 @@
-This game is made with MVC, Razor and SignalR.
-You can look beautiful work of SignalR on MainGameRazor file, when you have started a game with your opponent.
-To see SignalR working, open 2 web browsers and open MainGame. So click "Ready" in one of these web browsers and you see on the other web browser that overall stats top of the page, your bases stats and notification changes without manually refreshing the site!
+See mäng on tehtud MVC, Razor'i ja SignalR'iga.
+Põhiline Razor'i ja SignalR'i töö käib MainGameRazor'i vaates.
+Et näha, kuidas SignalR'i dünaamilisus töötab, ava 2 erinevat brauserit ja mängi kahe kasutajaga ühes maailmas üksteise vastu.
+Kui vajutad "Ready", siis näed, et andmed liiguvad kohe edasi ilma manuaalset värskendamist tegemata.
 
+See mäng on disainitud MySQL andmebaasile, kuigi on võimalik muuta ka mõnede koodide muutmistega MS SQL'ile sobivaks.
 
+ET ALUSTADA PROGRAMMI:
 
-It's designed for MySQL, but it can be modified for Microsoft SQL Server too.
+1.  Võta lahti fail appsettings.json ja kirjuta sinna kolmandale reale oma andmed. Näide on ka toodud rida 4-le. Kustuta rida 4 ära.
 
-TO START THE APPLICATION:
+2. Kirjuta Package Manager Console sisse "dotnet ef database update --context WebGameContext".
 
-1. On row 3 on appsettings.json put right data for your database
+3. Alusta programmi vajutades "WebGame", MITTE "IIS Express".
 
-2. Write in Package Manager Console: dotnet ef database update --context WebGameContext
-
-3. Chrome browser is highly recommended.
-
-4. Start application WITH "WebGame" NOT with "IIS Express".
+4. Kasuta Chrome, et sujuvamat veebilehe tööd näha. 
