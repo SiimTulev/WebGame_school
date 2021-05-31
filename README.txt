@@ -1,5 +1,7 @@
 See mäng on tehtud MVC, Razor'i ja SignalR'iga.
+
 Põhiline Razor'i ja SignalR'i töö käib MainGameRazor'i vaates.
+
 Et näha, kuidas SignalR'i dünaamilisus töötab, ava 2 erinevat brauserit ja mängi kahe kasutajaga ühes maailmas üksteise vastu.
 Kui vajutad "Ready", siis näed, et andmed liiguvad kohe edasi ilma manuaalset värskendamist tegemata.
 
