@@ -68,7 +68,7 @@
                                                 MAX army to send - @maxSend
                                                 <input type="hidden" asp-for="TowerId[counter]" value="@item.TowerId" />
                                                 <br />
-                                                <a>Arrival -> @arrival[counter]</a>
+                                                <a>Arrival -> @(arrival[counter] + 1)</a>
                                                 <input type="hidden" asp-for="arrivingTime[counter]" value="@arrival[counter]" />
                                             </div>
                                             <input type="hidden" asp-for="xCord[counter]" value="@item.LocationX" class="form-control" /> @* PEIDA SEE*@
@@ -110,7 +110,7 @@
                                         MAX army to send - @maxSend
                                         <input type="hidden" asp-for="TowerId[counter]" value="@item.TowerId" />
                                         <br />
-                                        <a>Arrival -> @arrival[counter]</a>
+                                        <a>Arrival -> @(arrival[counter] + 1)</a>
                                         <input type="hidden" asp-for="arrivingTime[counter]" value="@arrival[counter]" />
                                     </div>
                                     <input type="hidden" asp-for="xCord[counter]" value="@item.LocationX" class="form-control" /> @* PEIDA SEE*@
